@@ -117,6 +117,16 @@ main{margin-left:var(--side);min-height:100vh}
 @keyframes win{to{opacity:.55}}
 .smoke{animation:drift 30s ease-in-out infinite alternate}
 .flag{animation:sway 2s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:left center}
+.bob{animation:bob 5s ease-in-out infinite alternate}
+@keyframes bob{to{transform:translateY(-8px)}}
+.glide{animation:glide 12s ease-in-out infinite alternate}
+@keyframes glide{from{transform:translate(-40px,6px)}to{transform:translate(60px,-10px)}}
+.rise{animation:rise 7s linear infinite}
+@keyframes rise{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(-220px);opacity:0}}
+.zap{animation:zap 3.2s steps(1) infinite}
+@keyframes zap{0%,86%{opacity:0}88%{opacity:1}91%{opacity:.15}93%,96%{opacity:1}97%,100%{opacity:0}}
+.arrow{animation:arrow 3.3s linear infinite}
+@keyframes arrow{from{transform:translateX(0);opacity:1}to{transform:translateX(600px);opacity:0}}
 @media (prefers-reduced-motion: reduce){ .scene *{animation:none!important} }
 
 /* ---------- page body ---------- */
@@ -717,7 +727,7 @@ const SCENES = {
 };
 function sceneSVG(name, seed, cls){
   CUR = GID++;
-  const r = rng(seed||name), sc = (SCENES[name]||SCENES.dusk)(r);
+  const r = rng(seed||name), sc = name.startsWith("set:") ? setScene(r, BY_ID[name.slice(4)]) : (SCENES[name]||SCENES.dusk)(r);
   const id = "sky"+CUR;
   const filters = [1,2,3,4,6,18].map(n=>`<filter id="${fid("b"+n)}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="${n}"/></filter>`).join("");
   return {sc, svg:`<svg class="${cls||"scene"}" viewBox="0 0 ${SW} ${SH}" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><defs>${filters}<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sc.sky[0]}"/><stop offset="1" stop-color="${sc.sky[1]}"/></linearGradient></defs><rect width="${SW}" height="${SH}" fill="url(#${id})"/>${sc.art}</svg>`};
@@ -757,6 +767,461 @@ function startFX(canvas, type, acc){
     ctx.globalAlpha=1; };
   tick();
 }
+
+/* ================= MORE SCENES: one unique scene per page ================= */
+const SIL = {
+  wolf:"M-14,-2 C-18,-10 -10,-14 0,-8 C2,-22 6,-34 18,-46 C24,-54 28,-62 29,-72 L27,-82 L33,-75 L37,-84 L39,-73 C42,-78 46,-86 50,-93 L53,-90 C50,-84 47,-79 45,-72 C44,-66 45,-56 47,-46 C50,-34 50,-18 51,-4 L55,0 L40,0 L41,-14 C36,-10 30,-6 24,0 Z",
+  knight:"M-24,0 L-18,-46 L-22,-58 Q-14,-68 -7,-66 L-6,-72 Q0,-86 6,-72 L7,-66 Q14,-68 22,-58 L18,-46 L24,0 Z",
+  hood:"M-11,0 L-9,-30 C-9,-41 -5,-47 0,-48 C5,-47 9,-41 9,-30 L11,0 Z",
+  crouch:"M-14,0 C-16,-8 -12,-18 -4,-24 C-2,-32 4,-38 12,-38 C20,-37 23,-30 21,-24 C26,-20 28,-12 26,-6 L30,0 Z",
+  cat:"M0,0 C-2,-10 -1,-20 4,-26 L3,-36 L8,-31 L12,-31 L16,-36 L15,-26 C19,-20 19,-10 17,0 Z",
+  dragon:"M-70,14 C-40,10 -20,4 0,0 C10,-20 -10,-50 -36,-74 C-28,-56 -30,-46 -20,-40 C-26,-34 -22,-26 -14,-22 C-16,-16 -10,-10 -2,-8 C12,-14 26,-40 40,-70 C38,-50 40,-42 46,-36 C42,-30 44,-24 50,-20 C46,-14 46,-8 40,-4 C52,-6 62,-10 72,-8 L80,-4 L70,0 C56,4 40,6 20,8 C0,10 -30,18 -70,14 Z",
+  archer:"M-6,0 L-4,-24 L-10,-30 L-6,-38 L-2,-36 C-4,-42 -2,-48 2,-48 C6,-48 7,-43 5,-38 L14,-34 L13,-31 L4,-32 L6,-24 L8,0 L3,0 L1,-18 L-1,0 Z",
+  fighter:"M-20,0 L-10,-26 L-14,-40 C-14,-48 -8,-52 -3,-50 C2,-52 4,-46 2,-40 L10,-34 L8,-30 L0,-32 L2,-20 L14,0 L8,0 L-2,-16 L-12,0 Z",
+  walker:"M-7,0 L-5,-26 L-9,-40 C-9,-46 -5,-50 0,-50 C5,-50 9,-46 9,-40 L5,-26 L7,0 L2,0 L0,-18 L-2,0 Z",
+  windmill:"M-14,0 L-9,-60 L9,-60 L14,0 Z M-10,-60 L0,-74 L10,-60 Z",
+};
+const fig = (k, x, y, s, color, flip, extra="") => `<path ${extra} transform="translate(${f1(x)},${f1(y)}) scale(${flip?-s:s},${s})" d="${SIL[k]}" fill="${color}"/>`;
+
+function sword(x, y, len, color, glowc, rot=0){
+  return `<g transform="translate(${x},${y}) rotate(${rot})">${glowc?glow(0,-len*.45,len*.5,glowc,.45):""}<path d="M-3,0 L-3,${-len} L0,${-len-10} L3,${-len} L3,0 Z" fill="${color}"/><rect x="-16" y="-2" width="32" height="5" rx="2" fill="${color}"/><rect x="-2.5" y="3" width="5" height="16" fill="${color}"/><circle cx="0" cy="22" r="4" fill="${color}"/></g>`;
+}
+function wheat(r, base, color, n=140){
+  let s=`<g stroke="${color}" stroke-width="1.6" fill="none" stroke-linecap="round">`;
+  for(let i=0;i<n;i++){ const x=r()*SW, h=30+r()*40; s+=`<g class="sway" style="transform-origin:${f1(x)}px ${base}px;animation-delay:${f1(-r()*4)}s;animation-duration:${f1(3+r()*2)}s"><path d="M${f1(x)},${base} Q${f1(x+3)},${f1(base-h*.6)} ${f1(x+5)},${f1(base-h)}"/><ellipse cx="${f1(x+5)}" cy="${f1(base-h-5)}" rx="2.4" ry="6" fill="${color}"/></g>`; }
+  return s+`</g>`;
+}
+function bamboo(r, x0, x1, base, color){
+  let s=`<g fill="${color}">`;
+  for(let x=x0;x<x1;x+=18+r()*16){ const h=180+r()*160, w=6+r()*4;
+    s+=`<g class="sway slow" style="transform-origin:${f1(x)}px ${base}px;animation-delay:${f1(-r()*5)}s"><rect x="${f1(x)}" y="${f1(base-h)}" width="${f1(w)}" height="${f1(h)}"/>`;
+    for(let y=base-30;y>base-h;y-=26+r()*14) s+=`<rect x="${f1(x-1)}" y="${f1(y)}" width="${f1(w+2)}" height="2"/>`;
+    for(let k=0;k<3;k++){ const ly=base-h+20+r()*60, dir=r()<.5?-1:1; s+=`<path d="M${f1(x+w/2)},${f1(ly)} q${f1(dir*14)},-6 ${f1(dir*30)},4 q${f1(-dir*14)},2 ${f1(-dir*30)},-4 Z"/>`; }
+    s+=`</g>`; }
+  return s+`</g>`;
+}
+function cauldron(cx, base, color, liquid){
+  return glow(cx, base-70, 150, liquid, .45)+`<ellipse cx="${cx}" cy="${base-62}" rx="70" ry="12" fill="${liquid}"/><path d="M${cx-74},${base-64} C${cx-80},${base-10} ${cx+80},${base-10} ${cx+74},${base-64} Z" fill="${color}"/><path d="M${cx-50},${base-14} L${cx-60},${base} M${cx+50},${base-14} L${cx+60},${base}" stroke="${color}" stroke-width="8" stroke-linecap="round"/>`+
+    glow(cx, base, 90, "#ff7a2b", .5)+`<path class="fl" style="transform-origin:${cx}px ${base}px" d="M${cx-40},${base} Q${cx-30},${base-22} ${cx-18},${base-8} Q${cx-6},${base-30} ${cx+6},${base-8} Q${cx+20},${base-26} ${cx+36},${base} Z" fill="#ff8a2b"/>`;
+}
+function alembic(x, base, color, liquid){
+  return glow(x, base-60, 90, liquid, .4)+`<circle cx="${x}" cy="${base-40}" r="40" fill="${color}"/><path d="M${x-40},${base-40} A40,40 0 0 0 ${x+40},${base-40} Z" fill="${liquid}" opacity=".85"/><rect x="${x-8}" y="${base-110}" width="16" height="36" fill="${color}"/><path d="M${x+4},${base-106} Q${x+60},${base-150} ${x+120},${base-80}" stroke="${color}" stroke-width="7" fill="none"/>`;
+}
+function bookshelves(r, color, spines){
+  let s=""; for(let x=-10;x<SW;x+=150){ s+=`<rect x="${x}" y="0" width="140" height="${SH}" fill="${color}"/>`;
+    for(let y=40;y<SH-30;y+=62){ s+=`<rect x="${x}" y="${y+50}" width="140" height="6" fill="#00000055"/>`; let bx=x+8; while(bx<x+132){ const w=6+r()*8, h=32+r()*16; s+=`<rect x="${f1(bx)}" y="${f1(y+50-h)}" width="${f1(w)}" height="${f1(h)}" fill="${spines[Math.floor(r()*spines.length)]}" opacity=".9"/>`; bx+=w+1.5; } } }
+  return s;
+}
+function floatingBooks(r, n, color, page){
+  let s=""; for(let i=0;i<n;i++){ const x=200+r()*800, y=60+r()*150;
+    s+=`<g class="bob" style="animation-delay:${f1(-r()*5)}s"><g transform="translate(${f1(x)},${f1(y)}) rotate(${f1((r()-.5)*30)})">${glow(0,0,40,"#ffe7a3",.3)}<path d="M-22,0 Q-11,-8 0,-2 Q11,-8 22,0 L22,12 Q11,6 0,12 Q-11,6 -22,12 Z" fill="${page}"/><path d="M-24,12 Q-12,6 0,14 Q12,6 24,12 L24,15 Q12,9 0,17 Q-12,9 -24,15 Z" fill="${color}"/></g></g>`; }
+  return s;
+}
+function colosseum(r, base, color, lit){
+  let s=`<path d="M-20,${base} L-20,${base-120} Q600,${base-200} ${SW+20},${base-120} L${SW+20},${base} Z" fill="${color}"/>`;
+  for(let row=0;row<3;row++){ const y=base-110+row*34; for(let x=10;x<SW;x+=46){ const yy=y-Math.sin(x/SW*Math.PI)*58*(1-row*.2); s+=`<path d="M${x},${f1(yy+26)} L${x},${f1(yy+8)} A9,9 0 0 1 ${x+18},${f1(yy+8)} L${x+18},${f1(yy+26)} Z" fill="${lit}" opacity="${f1(.15+r()*.35)}"/>`; } }
+  return s+`<ellipse cx="600" cy="${base+6}" rx="520" ry="40" fill="#5a3a1c" opacity=".7"/>`;
+}
+function hornedSkull(cx, cy, s, color, eye){
+  return `<g transform="translate(${cx},${cy}) scale(${s})"><path d="M-30,-20 C-60,-30 -80,-70 -64,-110 C-62,-80 -48,-52 -20,-40 Z M30,-20 C60,-30 80,-70 64,-110 C62,-80 48,-52 20,-40 Z" fill="${color}"/><path d="M-36,-10 C-40,-56 40,-56 36,-10 L30,10 L22,38 L-22,38 L-30,10 Z" fill="${color}"/>`+
+    glow(-14,-8,26,eye,.7)+glow(14,-8,26,eye,.7)+`<path d="M-22,-14 L-6,-10 L-12,0 Z M22,-14 L6,-10 L12,0 Z" fill="${eye}"/><path d="M-14,38 L-10,48 L-6,38 M-2,38 L2,50 L6,38 M10,38 L14,48" stroke="${color}" stroke-width="5"/></g>`;
+}
+function crownRelic(cx, cy, s, gold, gem){
+  return `<g class="bob" style="transform-origin:${cx}px ${cy}px"><g transform="translate(${cx},${cy}) scale(${s})">${glow(0,0,140,gold,.5)}<path d="M-46,22 L-46,-16 L-24,4 L0,-34 L24,4 L46,-16 L46,22 Z" fill="${gold}"/><rect x="-48" y="18" width="96" height="12" rx="3" fill="${gold}"/>`+
+    [-30,0,30].map(x=>glow(x,24,16,gem,.8)+`<circle cx="${x}" cy="24" r="4.5" fill="${gem}"/>`).join("")+`<circle cx="0" cy="-34" r="5" fill="${gem}"/></g></g>`;
+}
+function brokenTower(cx, base, color, glowc){
+  let s=glow(cx, base-180, 220, glowc, .45)+`<path d="M${cx-60},${base} L${cx-46},${base-150} L${cx-30},${base-136} L${cx-10},${base-170} L${cx+8},${base-140} L${cx+30},${base-160} L${cx+48},${base-130} L${cx+60},${base} Z" fill="${color}"/>`;
+  [[-40,-230,26,18],[10,-260,34,22],[50,-215,22,16],[-10,-300,18,14],[34,-320,14,12]].forEach(([dx,dy,w,h],i)=>{ s+=`<g class="bob" style="animation-delay:${-i*.7}s"><rect x="${cx+dx}" y="${base+dy}" width="${w}" height="${h}" fill="${color}" transform="rotate(${i*17-20} ${cx+dx+w/2} ${base+dy+h/2})"/></g>`; });
+  return s+`<path class="lava" d="M${cx},${base-170} L${cx-6},${base-210} L${cx+4},${base-250} L${cx-2},${base-300}" stroke="${glowc}" stroke-width="2" fill="none"/>`;
+}
+function weaponRack(r, base, color){
+  let s=`<rect x="140" y="${base-12}" width="920" height="12" fill="${color}"/><rect x="140" y="${base-196}" width="920" height="10" fill="${color}"/>`;
+  const items=[
+    x=>sword(x,base-30,120,color),
+    x=>`<path d="M${x},${base-20} L${x},${base-190} M${x-14},${base-176} Q${x},${base-200} ${x+14},${base-176}" stroke="${color}" stroke-width="5" fill="none"/><circle cx="${x}" cy="${base-176}" r="9" fill="${color}"/>`,
+    x=>`<path d="M${x},${base-16} L${x},${base-186}" stroke="${color}" stroke-width="5"/><path d="M${x},${base-186} C${x+40},${base-180} ${x+52},${base-150} ${x+44},${base-128} C${x+36},${base-150} ${x+20},${base-164} ${x},${base-164} Z" fill="${color}"/>`,
+    x=>`<path d="M${x-14},${base-30} C${x+20},${base-80} ${x+20},${base-140} ${x-14},${base-186}" stroke="${color}" stroke-width="5" fill="none"/><line x1="${x-14}" y1="${base-30}" x2="${x-14}" y2="${base-186}" stroke="${color}" stroke-width="1.2"/>`,
+    x=>`<path d="M${x},${base-16} L${x},${base-190}" stroke="${color}" stroke-width="5"/><path d="M${x},${base-190} L${x-6},${base-170} L${x+6},${base-170} Z M${x},${base-168} L${x+24},${base-160} L${x+24},${base-140} L${x},${base-148} Z" fill="${color}"/>`,
+    x=>`<path d="M${x-32},${base-130} A34,34 0 1,0 ${x+32},${base-130} A34,34 0 1,0 ${x-32},${base-130}" fill="${color}"/>`,
+    x=>sword(x-10,base-30,70,color,null,-12)+sword(x+10,base-30,70,color,null,12),
+    x=>sword(x,base-24,150,color),
+  ];
+  items.forEach((it,i)=>{ s+=it(200+i*112); });
+  return s;
+}
+function armorStand(x, base, color, glowc){
+  return glow(x, base-100, 90, glowc, .35)+`<rect x="${x-3}" y="${base-150}" width="6" height="150" fill="${color}"/><rect x="${x-26}" y="${base-6}" width="52" height="6" fill="${color}"/>`+
+    `<path d="M${x-30},${base-120} Q${x-36},${base-138} ${x-18},${base-142} L${x+18},${base-142} Q${x+36},${base-138} ${x+30},${base-120} L${x+24},${base-70} L${x-24},${base-70} Z" fill="${color}"/><path d="M${x-14},${base-144} Q${x-16},${base-176} ${x},${base-178} Q${x+16},${base-176} ${x+14},${base-144} Z" fill="${color}"/><rect x="${x-9}" y="${base-164}" width="18" height="3" fill="${glowc}" opacity=".8"/>`;
+}
+function stairs(cx, base, color, torch){
+  let s=glow(cx, base-120, 160, torch, .35)+`<path d="M${cx-110},${base} L${cx-110},${base-150} A110,110 0 0 1 ${cx+110},${base-150} L${cx+110},${base} Z" fill="${color}"/><path d="M${cx-80},${base} L${cx-80},${base-140} A80,80 0 0 1 ${cx+80},${base-140} L${cx+80},${base} Z" fill="#000"/>`;
+  for(let i=0;i<7;i++){ const w=150-i*16, y=base-i*9; s+=`<rect x="${cx-w/2}" y="${y-9}" width="${w}" height="9" fill="${color}" opacity="${1-i*.11}"/>`; }
+  [cx-140,cx+140].forEach(tx=>{ s+=glow(tx,base-150,60,torch,.6)+`<rect x="${tx-3}" y="${base-150}" width="6" height="30" fill="${color}"/><path class="fl" style="transform-origin:${tx}px ${base-150}px" d="M${tx-8},${base-150} Q${tx},${base-180} ${tx+8},${base-150} Z" fill="${torch}"/>`; });
+  return s;
+}
+function signpost(x, base, color){
+  return `<rect x="${x-4}" y="${base-120}" width="8" height="120" fill="${color}"/><path d="M${x},${base-112} L${x+80},${base-112} L${x+96},${base-102} L${x+80},${base-92} L${x},${base-92} Z M${x},${base-82} L${x-74},${base-82} L${x-90},${base-72} L${x-74},${base-62} L${x},${base-62} Z" fill="${color}"/>`;
+}
+function road(base, color){ return `<path d="M520,${SH} C560,${base+20} 640,${base} 700,${base-30} C760,${base-56} 820,${base-60} 880,${base-66} L890,${base-62} C830,${base-50} 770,${base-40} 720,${base-12} C660,${base+20} 640,${SH-10} 680,${SH} Z" fill="${color}"/>`; }
+function crypt(cx, base, color, glowc){
+  return glow(cx, base-40, 120, glowc, .35)+`<path d="M${cx-90},${base} L${cx-90},${base-90} L${cx},${base-140} L${cx+90},${base-90} L${cx+90},${base} Z" fill="${color}"/><path d="M${cx-30},${base} L${cx-30},${base-60} A30,30 0 0 1 ${cx+30},${base-60} L${cx+30},${base} Z" fill="${glowc}" opacity=".55"/><path d="M${cx-4},${base-170} L${cx+4},${base-170} L${cx+4},${base-150} L${cx+14},${base-150} L${cx+14},${base-142} L${cx+4},${base-142} L${cx+4},${base-124} L${cx-4},${base-124} L${cx-4},${base-142} L${cx-14},${base-142} L${cx-14},${base-150} L${cx-4},${base-150} Z" fill="${color}"/>`;
+}
+function souls(r, n, color){
+  let s=""; for(let i=0;i<n;i++){ const x=380+r()*440, y=200+r()*90;
+    s+=`<g class="rise" style="animation-delay:${f1(-r()*7)}s;animation-duration:${f1(6+r()*4)}s"><g transform="translate(${f1(x)},${f1(y)})">${glow(0,0,22,color,.6)}<path d="M0,-10 C6,-10 8,-2 6,6 C4,14 0,20 -2,26 C-3,18 -8,12 -7,4 C-6,-4 -4,-10 0,-10 Z" fill="${color}" opacity=".85"/></g></g>`; }
+  return s;
+}
+function eclipse(cx, cy, rad, corona){
+  return glow(cx,cy,rad*4,corona,.45)+`<g class="spin" style="transform-origin:${cx}px ${cy}px;animation-duration:90s">`+Array.from({length:24},(_,i)=>{const a=i/24*Math.PI*2, l=rad*(1.25+(i%3)*.18); return `<line x1="${f1(cx+Math.cos(a)*rad*1.02)}" y1="${f1(cy+Math.sin(a)*rad*1.02)}" x2="${f1(cx+Math.cos(a)*l)}" y2="${f1(cy+Math.sin(a)*l)}" stroke="${corona}" stroke-width="1.6" opacity=".7"/>`;}).join("")+`</g><circle cx="${cx}" cy="${cy}" r="${rad}" fill="#05040a"/><circle cx="${cx}" cy="${cy}" r="${rad+1.5}" fill="none" stroke="${corona}" stroke-width="2"/>`;
+}
+function sun(cx, cy, rad, color){
+  return glow(cx,cy,rad*6,color,.6)+`<g class="spin" style="transform-origin:${cx}px ${cy}px;animation-duration:80s">`+Array.from({length:16},(_,i)=>{const a=i/16*Math.PI*2; return `<polygon points="${f1(cx+Math.cos(a-.06)*rad*1.2)},${f1(cy+Math.sin(a-.06)*rad*1.2)} ${f1(cx+Math.cos(a)*rad*(i%2?2.1:2.8))},${f1(cy+Math.sin(a)*rad*(i%2?2.1:2.8))} ${f1(cx+Math.cos(a+.06)*rad*1.2)},${f1(cy+Math.sin(a+.06)*rad*1.2)}" fill="${color}" opacity=".55"/>`;}).join("")+`</g><circle cx="${cx}" cy="${cy}" r="${rad}" fill="#fff6dc"/>`;
+}
+function rooftops(r, base, color, win){
+  let s="", x=-20;
+  while(x<SW){ const w=70+r()*90, h=40+r()*90, roof=r();
+    s+=`<rect x="${f1(x)}" y="${f1(base-h)}" width="${f1(w)}" height="${f1(h+40)}" fill="${color}"/>`;
+    s+= roof<.5 ? `<path d="M${f1(x-6)},${f1(base-h)} L${f1(x+w/2)},${f1(base-h-w*.4)} L${f1(x+w+6)},${f1(base-h)} Z" fill="${color}"/>` : `<rect x="${f1(x+w*.2)}" y="${f1(base-h-18)}" width="10" height="18" fill="${color}"/>`;
+    if(win&&r()<.7) s+=`<rect class="win" style="animation-delay:${f1(-r()*5)}s" x="${f1(x+w*.3)}" y="${f1(base-h+16)}" width="8" height="10" fill="${win}"/>`;
+    x+=w; }
+  return s;
+}
+function lightning(x, y0, y1, color){
+  let d=`M${x},${y0}`, cx=x; for(let y=y0;y<y1;y+=24){ cx+= (Math.sin(y*12.9)*22); d+=` L${f1(cx)},${y+24}`; }
+  return `<g class="zap"><path d="${d}" stroke="${color}" stroke-width="3" fill="none" ${BLUR(2)}/><path d="${d}" stroke="#fff" stroke-width="1.2" fill="none"/></g>`;
+}
+function stone(x, base, w, h, color){ return `<path d="M${x-w/2},${base} L${x-w*.45},${base-h*.7} Q${x-w*.3},${base-h} ${x},${base-h} Q${x+w*.35},${base-h} ${x+w*.45},${base-h*.6} L${x+w/2},${base} Z" fill="${color}"/>`; }
+function shieldShape(x, y, s, fill, trim, sigil){
+  return `<g transform="translate(${x},${y}) scale(${s})"><path d="M0,-36 L30,-26 C30,6 19,26 0,36 C-19,26 -30,6 -30,-26 Z" fill="${fill}"/><path d="M0,-30 L24,-22 C24,4 15,21 0,30 C-15,21 -24,4 -24,-22 Z" fill="none" stroke="${trim}" stroke-width="2"/>${sigil||""}</g>`;
+}
+function cliffEdge(color, side){ return side==="r" ? `<path d="M860,${SH} L880,250 L940,236 L1010,244 L1080,226 L1220,232 L1220,${SH} Z" fill="${color}"/>` : `<path d="M-20,${SH} L-20,222 L120,214 L210,226 L280,220 L320,250 L340,${SH} Z" fill="${color}"/>`; }
+function pillars(r, color, glowc){
+  let s=""; [120,330,870,1080].forEach(x=>{ s+=`<rect x="${x-26}" y="20" width="52" height="${SH}" fill="${color}"/><rect x="${x-34}" y="10" width="68" height="16" fill="${color}"/>`; }); return s;
+}
+function glyphStones(cx, base, color, glows){
+  let s=`<path d="M${cx-130},${base} L${cx-110},${base-46} L${cx+110},${base-46} L${cx+130},${base} Z" fill="${color}"/>`;
+  [-90,0,90].forEach((dx,i)=>{ const y=base-130-(i===1?30:0); s+=`<g class="bob" style="animation-delay:${-i*1.1}s">`+glow(cx+dx,y,60,glows[i],.55)+`<rect x="${cx+dx-20}" y="${y-26}" width="40" height="52" rx="8" fill="${color}" transform="rotate(${(i-1)*10} ${cx+dx} ${y})"/><path d="${["M-8,-12 L0,12 L8,-12","M-10,0 L10,0 M0,-12 L0,12 M-7,-8 L7,8","M-9,10 L0,-12 L9,10 M-5,2 L5,2"][i]}" transform="translate(${cx+dx},${y}) rotate(${(i-1)*10})" stroke="${glows[i]}" stroke-width="2.5" fill="none" stroke-linecap="round"/></g>`+
+      `<line x1="${cx+dx}" y1="${y+26}" x2="${cx+dx*.3}" y2="${base-46}" stroke="${glows[i]}" stroke-width="1.5" opacity=".5" class="win"/>`; });
+  return s;
+}
+
+/* ---------- emblems for item-set pages ---------- */
+const EMB = {
+  shield:(c,g)=>`<path d="M0,-36 L30,-26 C30,6 19,26 0,36 C-19,26 -30,6 -30,-26 Z" fill="${c}"/><path d="M0,-28 L22,-20 C22,4 14,19 0,27 C-14,19 -22,4 -22,-20 Z" fill="none" stroke="${g}" stroke-width="2"/>`,
+  sword:(c,g)=>`<path d="M-2.5,-40 L0,-50 L2.5,-40 L2.5,16 L-2.5,16 Z M-16,16 L16,16 L16,21 L-16,21 Z M-2.5,21 L2.5,21 L2.5,34 L-2.5,34 Z" fill="${c}"/><circle cy="38" r="4" fill="${g}"/><path d="M0,-44 L0,12" stroke="${g}" stroke-width="1" opacity=".7"/>`,
+  staff:(c,g)=>`<path d="M-2.5,-12 L2.5,-12 L3.5,46 L-3.5,46 Z M-12,-24 Q0,-6 12,-24 L8,-12 L-8,-12 Z" fill="${c}"/><circle cy="-30" r="10" fill="${g}"/>`,
+  lantern:(c,g)=>`<path d="M-10,-30 L10,-30 L16,-20 C20,0 18,16 12,24 L-12,24 C-18,16 -20,0 -16,-20 Z" fill="${c}"/><path d="M-8,-18 L8,-18 C12,0 10,12 6,18 L-6,18 C-10,12 -12,0 -8,-18 Z" fill="${g}"/><path d="M0,-30 L0,-42 M-8,-46 A8,8 0 0 1 8,-46" stroke="${c}" stroke-width="3" fill="none"/>`,
+  flame:(c,g)=>`<path d="M0,-42 C16,-20 24,-6 20,12 C16,30 -16,30 -20,12 C-24,-6 -10,-14 -6,-30 C-2,-18 6,-14 0,-42 Z" fill="${g}"/><path d="M0,-6 C8,4 10,12 8,18 C5,26 -5,26 -8,18 C-10,10 -4,4 0,-6 Z" fill="#fff3c4"/>`,
+  moon:(c,g)=>`<path d="M10,-34 A36,36 0 1,0 10,34 A28,28 0 1,1 10,-34 Z" fill="${g}"/>`,
+  bell:(c,g)=>`<path d="M-24,18 C-24,-6 -18,-26 0,-28 C18,-26 24,-6 24,18 L30,24 L-30,24 Z" fill="${c}"/><circle cy="30" r="6" fill="${g}"/><path d="M-6,-28 A6,6 0 0 1 6,-28" stroke="${c}" stroke-width="4" fill="none"/><path d="M-16,10 C-16,-6 -12,-18 -4,-20" stroke="${g}" stroke-width="2" fill="none" opacity=".7"/>`,
+  chain:(c,g)=>[-24,0,24].map((x,i)=>`<ellipse cx="${x}" cy="${i*6-6}" rx="${i%2?7:13}" ry="${i%2?13:9}" fill="none" stroke="${i===1?g:c}" stroke-width="5" transform="rotate(-30 ${x} ${i*6-6})"/>`).join(""),
+  crown:(c,g)=>`<path d="M-32,16 L-32,-14 L-16,2 L0,-24 L16,2 L32,-14 L32,16 Z" fill="${c}"/><rect x="-34" y="14" width="68" height="9" rx="2" fill="${c}"/>`+[-18,0,18].map(x=>`<circle cx="${x}" cy="18" r="3.5" fill="${g}"/>`).join(""),
+  skull:(c,g)=>`<path d="M-24,4 C-28,-34 28,-34 24,4 L20,12 L16,26 L-16,26 L-20,12 Z" fill="${c}"/><circle cx="-10" cy="-2" r="7" fill="${g}"/><circle cx="10" cy="-2" r="7" fill="${g}"/><path d="M0,6 L-4,14 L4,14 Z" fill="${g}"/>`,
+  bow:(c,g)=>`<path d="M-8,-40 C24,-24 24,24 -8,40" stroke="${c}" stroke-width="5" fill="none"/><line x1="-8" y1="-40" x2="-8" y2="40" stroke="${g}" stroke-width="1.4"/><path d="M-34,0 L30,0 M30,0 L22,-6 M30,0 L22,6 M-34,0 L-40,-5 M-34,0 L-40,5" stroke="${g}" stroke-width="2.5" fill="none"/>`,
+  eye:(c,g)=>`<path d="M-38,0 C-18,-24 18,-24 38,0 C18,24 -18,24 -38,0 Z" fill="${c}"/><circle r="12" fill="${g}"/><ellipse rx="3" ry="10" fill="${c}"/>`,
+  star:(c,g)=>`<path d="${Array.from({length:16},(_,i)=>{const a=i/16*Math.PI*2-Math.PI/2, rr=i%2?12:(i%4?28:40); return (i?"L":"M")+f1(Math.cos(a)*rr)+","+f1(Math.sin(a)*rr);}).join(" ")} Z" fill="${g}"/>`,
+  wave:(c,g)=>`<path d="M-40,8 C-28,-8 -16,-8 -8,4 C0,16 12,16 20,2 C26,-10 36,-12 42,-4 C34,-4 30,4 26,12 C18,26 0,26 -8,14 C-16,2 -28,4 -40,8 Z" fill="${g}"/><path d="M-40,22 C-24,12 -12,30 4,22 C20,14 30,30 42,22" stroke="${c}" stroke-width="4" fill="none"/>`,
+  leaf:(c,g)=>`<path d="M0,-40 C26,-20 26,20 0,40 C-26,20 -26,-20 0,-40 Z" fill="${g}"/><path d="M0,-34 L0,38 M0,-10 L-12,-20 M0,4 L12,-8 M0,18 L-12,8" stroke="${c}" stroke-width="2" fill="none"/>`,
+  key:(c,g)=>`<circle cx="-22" cy="0" r="14" fill="none" stroke="${g}" stroke-width="6"/><path d="M-8,-3 L38,-3 L38,3 L-8,3 Z M24,3 L24,14 M32,3 L32,10" stroke="${g}" stroke-width="5" fill="${g}"/>`,
+  book:(c,g)=>`<path d="M-38,-18 Q-18,-30 0,-20 Q18,-30 38,-18 L38,24 Q18,14 0,24 Q-18,14 -38,24 Z" fill="${g}"/><path d="M0,-20 L0,24" stroke="${c}" stroke-width="2"/><path d="M-30,-8 L-8,-12 M-30,0 L-8,-4 M8,-12 L30,-8 M8,-4 L30,0" stroke="${c}" stroke-width="1.5"/>`,
+  drop:(c,g)=>`<path d="M0,-40 C14,-16 24,0 24,14 A24,24 0 0,1 -24,14 C-24,0 -14,-16 0,-40 Z" fill="${g}"/><path d="M-10,8 A10,10 0 0 0 0,20" stroke="#fff" stroke-width="2.5" fill="none" opacity=".6"/>`,
+  scales:(c,g)=>[0,1,2].map(row=>[0,1,2,3].map(col=>{const x=-30+col*20+(row%2)*10, y=-16+row*16; return `<path d="M${x-10},${y} A10,12 0 0 0 ${x+10},${y}" fill="${row===1&&col===1?g:c}" stroke="${g}" stroke-width="1.3"/>`;}).join("")).join(""),
+  pick:(c,g)=>`<path d="M-34,-12 Q0,-34 34,-12 L30,-8 Q0,-24 -30,-8 Z" fill="${g}"/><path d="M-3,-22 L3,-22 L4,40 L-4,40 Z" fill="${c}"/>`,
+  fang:(c,g)=>`<path d="M-26,-30 L-6,-30 L-14,30 Z M6,-30 L26,-30 L18,26 Z" fill="${g}"/><path d="M-30,-34 L30,-34" stroke="${c}" stroke-width="6"/>`,
+  bolt:(c,g)=>`<path d="M8,-42 L-16,4 L0,4 L-10,42 L18,-8 L2,-8 Z" fill="${g}"/>`,
+  hourglass:(c,g)=>`<path d="M-22,-36 L22,-36 L4,0 L22,36 L-22,36 L-4,0 Z" fill="none" stroke="${c}" stroke-width="5"/><path d="M-12,-26 L12,-26 L2,-6 L-2,-6 Z M-14,30 L14,30 L0,14 Z" fill="${g}"/>`,
+  moth:(c,g)=>`<path d="M0,0 C-10,-26 -38,-26 -36,-4 C-34,8 -16,8 0,2 Z M0,0 C10,-26 38,-26 36,-4 C34,8 16,8 0,2 Z M0,4 C-8,8 -22,22 -14,28 C-6,30 -2,16 0,6 Z M0,4 C8,8 22,22 14,28 C6,30 2,16 0,6 Z" fill="${g}"/><rect x="-2" y="-10" width="4" height="26" rx="2" fill="${c}"/>`,
+  rune:(c,g)=>`<circle r="34" fill="none" stroke="${g}" stroke-width="2.5"/><path d="M-14,-18 L0,20 L14,-18 M-20,0 L20,0" stroke="${g}" stroke-width="3" fill="none"/>`,
+  wing:(c,g)=>`<path d="M-30,24 C-30,-10 0,-36 38,-38 C26,-28 30,-22 18,-16 C28,-12 24,-4 12,0 C20,4 14,12 4,12 C10,18 0,22 -30,24 Z" fill="${g}"/>`,
+  gauntlet:(c,g)=>`<path d="M-18,36 L-20,-2 L-22,-24 C-22,-30 -14,-30 -14,-24 L-12,-6 L-10,-34 C-10,-40 -2,-40 -2,-34 L-1,-6 L2,-36 C2,-42 10,-42 10,-36 L9,-6 L13,-30 C13,-36 21,-36 21,-30 L18,4 L24,-6 C27,-11 33,-7 30,-2 L16,36 Z" fill="${g}"/>`,
+};
+const EMB_KEYS = [
+  [/lantern|lamp|lamplight|light/,"lantern"],[/ember|cinder|flame|pyre|firedamp|brand|kiss/,"flame"],[/moon|lunar|vigil|vesper|night/,"moon"],[/rose|thorn|saint|rite/,"rose"],[/bell/,"bell"],
+  [/chain|shackle/,"chain"],[/crown|throne|sovereign/,"crown"],[/grave|barrow|dead|root-mother|whisper|cultist/,"skull"],[/ranger|hunter|quarrel|starsong|bow/,"bow"],[/witch|eye|touched/,"eye"],
+  [/comet|star|arcanist|lattice|spire/,"star"],[/tide|drown/,"wave"],[/oak|root|wild|heart|pilgrim|thornweaver/,"leaf"],[/keys/,"key"],[/lesson|master|due|mercy|creed/,"book"],
+  [/blood|sanguine|crimson|velvet|oath/,"drop"],[/wyrm|scale|dragon|ashjaw/,"scales"],[/pick|brigade|delver|foreman|mine/,"pick"],[/fang|gutter|prowl|stalker|splinter|vault|raider/,"fang"],[/storm|crownmage|shock/,"bolt"],
+  [/sandglass/,"hourglass"],[/moth/,"moth"],[/wing|abbess/,"wing"],[/breaker|warden|gauntlet|quickstep|twice|riposter|pitmaster/,"gauntlet"],
+  [/shield|wall|bulwark|aegis|guard|ward|plate|mail|bark|keeper/,"shield"],[/blade|edge|sword|sworn|knight|crescent|harrowed|dervish|favour/,"sword"],[/staff|mender|laurel|emberwake|ritualist/,"staff"],
+];
+const PK_EMB = {"Mana damage":"rune","Stamina damage":"sword","Tank":"shield","Healer":"lantern","Hybrid":"eye"};
+const PK_GLOW = {"Mana damage":"#80b0ff","Stamina damage":"#7fe0a0","Tank":"#ffc46a","Healer":"#fff0a0","Hybrid":"#c9a8ff"};
+function emblemFor(s){ const n=s.name.toLowerCase(); for(const [re,k] of EMB_KEYS) if(re.test(n)) return k; return PK_EMB[s.package]||"rune"; }
+function emblem(k, cx, cy, sc, color, g, rot=0){
+  const body = k==="rose" ? `<g transform="scale(2.6)">${rose(0,0,1,g,"#5a0d1a")}</g>` : EMB[k](color,g);
+  return `<g class="bob" style="transform-origin:${cx}px ${cy}px">${glow(cx,cy,sc*70,g,.5)}<g transform="translate(${cx},${cy}) rotate(${rot}) scale(${sc})">${body}</g></g>`;
+}
+const BACKDROP = {
+  "Oakhaven":   {sky:[["#17212b","#66746f"],["#1d1a2e","#8a5a48"],["#0f1824","#3a5a6a"]], ground:"#141c1f", far:"#38464a", acc:"#e9c46a", fx:"motes", el:(r,c)=>castle(r,80+r()*80,420+r()*120,286,c,"#f6c66b")},
+  "Dracoria":   {sky:[["#170c0b","#45190f"],["#1d0c08","#6a2a12"],["#120808","#3a1410"]], ground:"#120908", far:"#2c1511", acc:"#ff8a3d", fx:"embers", el:(r,c)=>volcano(r,240+r()*200,300,110+r()*50,c,"#ff6a2b")},
+  "Aethelwing": {sky:[["#0b0e26","#2c2b60"],["#120b2a","#4a3070"],["#08102a","#26407a"]], ground:"#0e0e28", far:"#1a1a44", acc:"#ffd27a", fx:"motes", el:(r,c)=>spire(180+r()*200,330,150+r()*60,30,c,"#ffd27a")+lanterns(r,6,"#ffcf6e","#00000066")},
+  "Deepspire":  {sky:[["#07131a","#17404f"],["#081018","#203a5a"],["#06141a","#1a4a4a"]], ground:"#06141b", far:"#0f2a36", acc:"#7fe0ff", fx:"fireflies", el:(r,c)=>{let s="";for(let i=0;i<5;i++)s+=spire(80+i*90+r()*30,330,110+r()*140,20+r()*10,c,"#7fe0ff");return s;}},
+  "Eloria":     {sky:[["#0a1a12","#2f5c3b"],["#101a0a","#4a5a2a"],["#08161a","#2a5048"]], ground:"#0a1810", far:"#2c5a3a", acc:"#d8ff8a", fx:"fireflies", el:(r,c)=>{let s="";for(let i=0;i<5;i++)s+=elfTree(r,60+i*110+r()*40,300,170+r()*70,c,"#bfe88a");return s;}},
+  "The Sixth Realm":{sky:[["#140708","#521510"],["#100606","#3a0c0c"],["#180806","#6a2010"]], ground:"#120604", far:"#1e0b0a", acc:"#ff7a2e", fx:"embers", el:(r,c)=>flames(r,330,90,14,"#ffe08a","#ff5a1f","#8a1208")},
+};
+const DUNGEON_BD = {
+  "Oakhaven Gaol":["#0d0f12","#2c3238","#e3a857"], "Cinderdeep Mines":["#160b06","#4a2210","#ff9a4a"], "The Drowned Abbey":["#06121a","#14384a","#7fd6ff"],
+  "Vaults of the Ashen Crown":["#120e06","#3e2f0c","#ffd56a"], "Hollowroot Barrow":["#0b130f","#233a2d","#9df5b0"], "Thornveil Cathedral":["#13060a","#4d1020","#ff6a8a"],
+  "The Sundered Spire":["#0a0a22","#2a2270","#9fb4ff"], "Throne of Ash":["#140708","#521510","#ff7a2e"],
+};
+function setScene(r, s){
+  const k=emblemFor(s), g=PK_GLOW[s.package]||"#ffd27a", rot=f1((r()-.5)*24);
+  let sky, art="", fx="motes", acc=g;
+  if(s.cat==="overland"){ const b=BACKDROP[s.source]; sky=b.sky[Math.floor(r()*3)]; fx=b.fx; acc=b.acc;
+    art = stars(r,40,"#fff")+hills(r,250+r()*20,40,b.far,.8)+b.el(r,b.ground)+hills(r,305,16,b.ground,1); }
+  else if(s.cat==="dungeon"||s.cat==="trial"){ const d=DUNGEON_BD[s.source]; sky=[d[0],d[1]]; acc=d[2]; fx=s.cat==="trial"?"embers":"ash";
+    art = glow(300+r()*200,200,240,d[2],.3)+`<g opacity=".9">`+pillars(r,"#000000aa",d[2])+`</g>`+stairs(380+r()*120,330,"#0a0a0a",d[2]); }
+  else if(s.cat==="crafted"){ sky=["#140e08","#3d2814"]; acc="#ffb054"; fx="sparks";
+    art = glow(300,300,280,"#ff8a2b",.4)+anvil(320+r()*80,326,"#0f0a07")+`<rect x="0" y="0" width="${SW}" height="16" fill="#0f0a07"/>`; }
+  else if(s.cat==="monster"){ sky=["#0f0808","#3a1612"]; acc="#ff6a4a"; fx="ash";
+    art = hornedSkull(330+r()*60,250,.9+r()*.3,"#120808","#ff5a3a")+hills(r,316,12,"#0a0606",1); }
+  else if(s.cat==="arena"){ sky=["#1a0e08","#5a2e14"]; acc="#ffb35a"; fx="sparks";
+    art = colosseum(r,326,"#1a0e08","#ffb35a"); }
+  else { sky=["#05060f","#1d1640"]; acc="#d6c6ff"; fx="motes"; art=stars(r,180,"#fff",SH)+glow(600,170,300,"#8a6cff",.3); }
+  art += emblem(k, 860+r()*80, 160+r()*20, 1.5+r()*.5, "#0d0b10", g, rot);
+  return {sky, fx, acc, art};
+}
+
+/* ---------- the unique page scenes ---------- */
+Object.assign(SCENES, {
+  /* world group */
+  world: r=>({sky:["#140c18","#4a2430"], fx:"ash", acc:"#ffb38a", art:
+    glow(300,280,300,"#ffd9a0",.3)+glow(1000,260,320,"#ff5a1f",.45)+crags(r,240,60,"#2a1e2c",.7,80)+
+    castle(r,60,260,288,"#1b1420","#f6c66b")+spire(380,288,120,22,"#1b1420","#ffd27a")+elfTree(r,500,290,140,"#1b1420")+elfTree(r,560,290,120,"#1b1420")+volcano(r,720,290,90,"#1b1420","#ff6a2b")+
+    `<g transform="translate(820,0) scale(.32,1)">${flames(r,300,60,12,"#ffe08a","#ff5a1f","#8a1208")}</g>`+hills(r,302,14,"#100b12",1)}),
+  enemies: r=>({sky:["#0b0d10","#262b30"], fx:"ash", acc:"#e3a857", art:
+    glow(600,190,280,"#e3a857",.25)+`<path d="M470,${SH} L470,120 A130,130 0 0 1 730,120 L730,${SH} Z" fill="#06080a"/>`+
+    `<g transform="translate(600,320) scale(2.2)">${`<path d="${SIL.knight}" fill="#020304"/>`}</g>`+glow(588,138,14,"#ff4a2a",.9)+glow(612,138,14,"#ff4a2a",.9)+
+    `<g class="sway" style="transform-origin:540px 160px"><path d="M540,160 Q470,250 420,300" stroke="#3a3f45" stroke-width="5" fill="none" stroke-dasharray="8 4"/></g><g class="sway" style="transform-origin:660px 160px;animation-delay:-2s"><path d="M660,160 Q730,250 790,300" stroke="#3a3f45" stroke-width="5" fill="none" stroke-dasharray="8 4"/></g>`+
+    bars("#090b0d","#3a4047").replace(/<rect x="(5[0-9][0-9]|6[0-9][0-9])" y="-5"[^>]*>/g,"")+fog(230,"#000",.6)}),
+  guilds: r=>({sky:["#120c08","#3a2814"], fx:"motes", acc:"#ffe7a3", art:
+    bookshelves(r,"#160f0a",["#5a2a1a","#2a3a5a","#3a5a2a","#6a5a2a","#4a2a4a"])+`<rect x="0" y="0" width="${SW}" height="${SH}" fill="#00000066"/>`+glow(600,170,360,"#ffd27a",.35)+floatingBooks(r,7,"#4a2a1a","#f3e6c8")+`<rect x="0" y="300" width="${SW}" height="40" fill="#0a0705"/>`}),
+  housing: SCENES.hearth,
+  /* characters */
+  races: SCENES.realms,
+  "races/drakari": r=>({sky:["#1a0c0a","#7a2a14"], fx:"embers", acc:"#ff9a4a", art:
+    glow(820,90,200,"#ffb04a",.5)+`<circle cx="820" cy="96" r="40" fill="#ffcf7a"/>`+smoke(r,"#000",4,.25)+crags(r,240,110,"#2c120c",.9,80)+
+    `<g class="glide">${fig("dragon",700,120,1.5,"#160806")}</g><g class="glide" style="animation-delay:-6s;animation-duration:16s">${fig("dragon",360,70,.7,"#2a100a")}</g>`+crags(r,310,60,"#120706",1,60)}),
+  "races/lunari": SCENES.aethelwing,
+  "races/vampyri": SCENES.vampyri,
+  "races/felyne": r=>({sky:["#061019","#163a54"], fx:"fireflies", acc:"#7fe0ff", art:
+    stars(r,140,"#dff6ff")+moon(780,110,70,"#e6f6ff","#9fe3ff")+spire(820,340,150,46,"#050d14")+
+    `<g transform="translate(806,${340-150-2})">${fig("cat",0,0,2.2,"#050d14")}${glow(14,-55,6,"#8fffe0",.9)}${glow(26,-55,6,"#8fffe0",.9)}<circle cx="14" cy="-55" r="2" fill="#c8fff0" class="win"/><circle cx="26" cy="-55" r="2" fill="#c8fff0" class="win"/><path class="sway" style="transform-origin:37px -4px" d="M37,-4 Q62,-8 58,-34" stroke="#050d14" stroke-width="5" fill="none" stroke-linecap="round"/></g>`+
+    rooftops(r,330,"#081620","#7fe0ff").replace(/<rect x="(7[5-9][0-9]|8[0-9][0-9])\.[0-9]"[^>]*>/g,"")+fog(200,"#0f3442",.6)}),
+  "races/overlander": r=>({sky:["#2a1a14","#d08a4a"], fx:"motes", acc:"#ffe3a0", art:
+    glow(900,260,420,"#ffd08a",.6)+`<circle cx="900" cy="250" r="46" fill="#ffe8b0"/>`+hills(r,250,40,"#6a4a2a",.7)+castle(r,620,1060,272,"#3a2818","#ffd27a")+
+    `<g transform="translate(260,280)"><path d="${SIL.windmill}" fill="#2a1a10"/><g class="spin" style="transform-origin:0px -60px;animation-duration:14s">${[0,90,180,270].map(a=>`<rect x="-4" y="-120" width="8" height="60" fill="#2a1a10" transform="rotate(${a} 0 -60)"/><rect x="2" y="-116" width="18" height="50" fill="#2a1a10" opacity=".85" transform="rotate(${a} 0 -60)"/>`).join("")}</g></g>`+
+    hills(r,290,16,"#4a3018",1)+wheat(r,340,"#c08a3a",160)}),
+  "races/dreadkin": r=>({sky:["#0a100d","#1f3428"], fx:"fireflies", acc:"#9df5b0", art:
+    moon(980,74,30,"#d9f2df","#9df5b0")+hills(r,232,30,"#16241c",.9)+crypt(620,300,"#0b130e","#9df5b0")+deadTree(r,240,300,210,"#0b130e")+graves(r,300,"#0e1712")+fog(150,"#5f8a70",.45,"fog drift")+hills(r,316,10,"#08100b",1)}),
+  "races/duskborn": r=>({sky:["#0b0b20","#3a2f63"], fx:"fireflies", acc:"#a9b8ff", art:
+    stars(r,90,"#e6e8ff")+moon(600,70,30,"#dfe3ff","#8f9bff")+
+    `<g ${BLUR(2)} opacity=".6">${(()=>{let t="";for(let i=0;i<10;i++)t+=elfTree(r,i*130+r()*50,240,150+r()*60,"#2a2560");return t;})()}</g>`+
+    `<rect x="0" y="240" width="${SW}" height="100" fill="#141238"/><g opacity=".35" transform="translate(0,480) scale(1,-1)">${(()=>{let t="";for(let i=0;i<10;i++)t+=elfTree(r,i*130+r()*50,240,150+r()*60,"#2a2560");return t;})()}</g>`+
+    `<ellipse cx="600" cy="270" rx="16" ry="4" fill="#dfe3ff" opacity=".6" class="win"/><path d="M380,260 L820,260" stroke="#a9b8ff" stroke-width="1" opacity=".25" class="drift"/>`+
+    elfTree(r,60,350,380,"#0a091a","#a9b8ff")+elfTree(r,1150,350,360,"#0a091a","#a9b8ff")+hills(r,330,8,"#0a091a",1)}),
+  "races/highborn": SCENES["eloria-high"],
+  "races/oakborn": r=>({sky:["#0a1a12","#2f5c3b"], fx:"fireflies", acc:"#d8ff8a", art:
+    forest(r,{light:"#e8ffb0",far:"#2c5a3a",mid:"#163020",near:"#0a1810",rim:"#bfe88a",fogc:"#3f6e4a"})+
+    `<g transform="translate(900,312)">${fig("archer",0,0,2,"#081208")}<path d="M10,-74 C34,-58 34,-34 10,-20" stroke="#081208" stroke-width="3" fill="none"/></g>`}),
+  "races/ashkin": r=>({sky:["#1a0806","#5a1a0c"], fx:"embers", acc:"#ff7a2e", art:
+    smoke(r,"#000",6,.4)+glow(600,330,380,"#ff5a1f",.5)+crags(r,250,70,"#1e0b0a",1,70)+
+    `<g ${BLUR(1)}>${Array.from({length:40},()=>`<circle cx="${f1(r()*SW)}" cy="${f1(300+r()*40)}" r="${f1(1+r()*3)}" fill="#ff7a2b" opacity="${f1(.4+r()*.6)}"/>`).join("")}</g>`+
+    `<g transform="translate(760,318)">${glow(0,-50,90,"#ff5a1f",.5)}${fig("walker",0,0,2.4,"#0c0403")}</g>`+
+    `<g class="smoke"><path d="M760,190 C740,160 790,140 770,110 C750,80 800,60 780,30" stroke="#4a3a36" stroke-width="10" fill="none" opacity=".35" ${BLUR(4)}/></g>`+hills(r,320,10,"#0e0403",1)}),
+  classes: r=>({sky:["#0c0b16","#2a2440"], fx:"motes", acc:"#e8d6a0", art:
+    glow(600,200,460,"#e8d6a0",.18)+pillars(r,"#08070e")+
+    [["#8a2a2a","#ffb04a"],["#2a4a8a","#a9b8ff"],["#2a6a3a","#9df5b0"],["#3a2a5a","#b9a6ff"],["#8a6a1a","#fff1c4"],["#1a3a4a","#7fe0ff"],["#7a4a1a","#ffc35a"],["#6a0f1f","#ff5470"]].map(([c,t],i)=>{const x=210+i*112; return `<g class="sway slow" style="transform-origin:${x}px 0;animation-delay:${-i*.6}s"><path d="M${x-26},0 L${x+26},0 L${x+26},${130+(i%2)*20} L${x},${152+(i%2)*20} L${x-26},${130+(i%2)*20} Z" fill="${c}"/><circle cx="${x}" cy="${60+(i%2)*10}" r="11" fill="none" stroke="${t}" stroke-width="2"/></g>`;}).join("")+hills(r,322,8,"#08070e",1)}),
+  "classes/wizard": SCENES.arcane,
+  "classes/berserker": r=>({sky:["#1a0804","#6a1e0a"], fx:"embers", acc:"#ff9a3d", art:
+    glow(760,120,260,"#ff6a2b",.5)+`<circle cx="760" cy="120" r="74" fill="#d8401e"/><circle cx="760" cy="120" r="74" fill="#ffb04a" opacity=".25"/>`+smoke(r,"#000",4,.3)+
+    crags(r,250,80,"#2a0e06",.9,90)+`<path d="M560,${SH} L600,250 L660,232 L760,236 L860,250 L900,${SH} Z" fill="#120504"/>`+`<g transform="translate(700,236)">${fig("wolf",0,0,1.5,"#120504")}</g>`+
+    brazier(160,310,"#120504")+brazier(1040,310,"#120504")}),
+  "classes/necromancer": r=>({sky:["#060d0a","#14301f"], fx:"fireflies", acc:"#7dffa8", art:
+    moon(980,70,26,"#c8ffd8","#7dffa8")+glow(600,260,300,"#4dff8a",.35)+`<path d="M360,${SH} C420,220 780,220 840,${SH} Z" fill="#081410"/><path d="M570,${SH} L570,290 A30,30 0 0 1 630,290 L630,${SH} Z" fill="#7dffa8" opacity=".6"/>`+
+    souls(r,9,"#9dffbf")+[420,480,720,780].map((x,i)=>`<g transform="translate(${x},320)">${fig("hood",0,0,1.6+(i%2)*.2,"#030806")}${glow(0,-62,8,"#7dffa8",.9)}</g>`).join("")+graves(r,330,"#050c08")}),
+  "classes/dark-knight": r=>({sky:["#07060c","#221c34"], fx:"ash", acc:"#b9a6ff", art:
+    eclipse(820,110,56,"#b9a6ff")+smoke(r,"#000",8,.5)+crags(r,270,40,"#110e1a",1,90)+
+    `<g transform="translate(600,312)">${glow(0,-80,120,"#7d6bd6",.35)}${`<path d="${SIL.knight}" transform="scale(2.4)" fill="#040308"/>`}${sword(0,-14,120,"#040308","#9d86ff")}<path d="M0,-150 L0,-26" stroke="#b9a6ff" stroke-width="2" opacity=".8" class="win"/></g>`+fog(200,"#2a2440",.6,"fog drift")}),
+  "classes/holy-knight": r=>({sky:["#3a2810","#f0d090"], fx:"motes", acc:"#fff1c4", art:
+    sun(600,70,34,"#fff3c8")+hills(r,250,30,"#b08c4c",.7)+castle(r,120,460,282,"#8a6a34","#fff1c4")+castle(r,760,1100,282,"#8a6a34","#fff1c4")+
+    `<g transform="translate(600,314)">${glow(0,-90,140,"#fff3c8",.5)}<path d="${SIL.knight}" transform="scale(2.3)" fill="#3a2a10"/>${sword(0,-10,130,"#3a2a10","#fff6d8")}<path d="M0,-150 L0,-20" stroke="#fff8e0" stroke-width="2.5"/></g>`+hills(r,312,12,"#5a4420",1)}),
+  "classes/shadowblade": r=>({sky:["#050a12","#122236"], fx:"ash", acc:"#9fd8ff", art:
+    stars(r,100,"#dfefff")+`<path d="M920,40 A40,40 0 1,0 920,120 A30,30 0 1,1 920,40 Z" fill="#e6f2ff"/>`+glow(905,80,110,"#9fd8ff",.3)+
+    rooftops(r,300,"#060c14","#ffcf7a")+`<path d="M560,${SH} L560,190 L600,160 L640,190 L640,${SH} Z" fill="#03060c"/>`+
+    `<g transform="translate(600,160)">${fig("crouch",0,0,2,"#03060c")}<path class="sway" style="transform-origin:-20px -20px" d="M-20,-20 C-50,-14 -70,0 -86,20" stroke="#03060c" stroke-width="7" fill="none" stroke-linecap="round"/><line class="win" x1="44" y1="-30" x2="68" y2="-8" stroke="#dff2ff" stroke-width="2"/></g>`+fog(220,"#0a1a2a",.6,"fog drift")}),
+  "classes/alchemist": r=>({sky:["#140e06","#4a3010"], fx:"motes", acc:"#ffc35a", art:
+    `<rect x="0" y="0" width="${SW}" height="${SH}" fill="#000" opacity=".25"/>`+lanterns(r,7,"#ffbe55","#00000088")+
+    `<rect x="0" y="290" width="${SW}" height="50" fill="#1a1006"/>`+alembic(380,290,"#0f0a05","#7dff9a")+cauldron(720,300,"#0a0604","#c4ff5a")+flasks(r,290,"#0f0a05","#ff8ad8").replace(/<g[^>]*>|<\/g>/g,"")+bubbles(r,24,"#c4ff5a")}),
+  "classes/blood-maiden": r=>({sky:["#12050a","#4d1020"], fx:"petals", acc:"#ff3a5c", art:
+    moon(600,90,52,"#b3203a","#ff3a5c")+
+    `<path d="M440,${SH} L440,170 A160,160 0 0 1 760,170 L760,${SH} L730,${SH} L730,176 A130,130 0 0 0 470,176 L470,${SH} Z" fill="#160509"/>`+
+    `<g stroke="#160509" stroke-width="4">${Array.from({length:9},(_,i)=>`<line x1="${490+i*28}" y1="${SH}" x2="${490+i*28}" y2="${196-Math.sin((i+.5)/9*Math.PI)*60}"/>`).join("")}</g>`+
+    thorns(r,SH,"#1a070c","#c4223f","#6e0f1f")}),
+  prestige: SCENES.stars,
+  titles: SCENES.banners,
+  /* combat */
+  combat: r=>({sky:["#120a06","#4a2410"], fx:"sparks", acc:"#ffd27a", art:
+    glow(600,200,300,"#ffb04a",.45)+colosseum(r,330,"#140a06","#ffb35a").replace(/<ellipse[^>]*>$/,"")+
+    `<g transform="translate(540,312)">${fig("fighter",0,0,2.4,"#080402")}</g><g transform="translate(660,312)">${fig("fighter",0,0,2.4,"#080402",true)}</g>`+
+    `<line x1="562" y1="232" x2="610" y2="196" stroke="#cfc6b8" stroke-width="3"/><line x1="638" y1="232" x2="592" y2="196" stroke="#cfc6b8" stroke-width="3"/>`+glow(600,200,40,"#fff3c4",.9)}),
+  weapons: r=>({sky:["#100c0a","#332418"], fx:"motes", acc:"#ffd9a0", art:
+    `<rect x="0" y="0" width="${SW}" height="${SH}" fill="#1a120c"/>`+Array.from({length:12},(_,i)=>`<rect x="0" y="${i*30}" width="${SW}" height="1" fill="#000" opacity=".3"/>`).join("")+glow(600,160,380,"#ffcf7a",.3)+weaponRack(r,300,"#0a0604")}),
+  "weapons/katana": r=>({sky:["#0a0a18","#2a2a4a"], fx:"petals", acc:"#ffb7c8", art:
+    stars(r,80,"#fff")+moon(600,150,100,"#f4ecd8","#ffd6e0")+`<g transform="translate(600,150) rotate(-12)"><path d="M-260,0 Q0,-14 240,-4 L250,0 L240,4 Q0,-6 -260,6 Z" fill="#0a0a14"/><rect x="-300" y="-5" width="44" height="10" rx="3" fill="#0a0a14"/><ellipse cx="-256" cy="0" rx="4" ry="12" fill="#0a0a14"/><path class="win" d="M-240,-1 Q0,-12 236,-3" stroke="#fff" stroke-width="1" fill="none" opacity=".8"/></g>`+
+    bamboo(r,-20,260,SH,"#06060e")+bamboo(r,940,1220,SH,"#06060e")}),
+  "weapons/longsword": r=>({sky:["#0e1420","#3e5068"], fx:"motes", acc:"#e8f0ff", art:
+    glow(600,-20,300,"#e8f0ff",.5)+`<polygon points="560,-10 640,-10 700,${SH} 500,${SH}" fill="#e8f0ff" opacity=".1" ${BLUR(6)}/>`+hills(r,260,40,"#1a2230",.8)+
+    `<path d="M380,${SH} C460,250 740,250 820,${SH} Z" fill="#101622"/>`+stone(600,270,120,60,"#0c1018")+sword(600,224,150,"#0c1018","#cfe0ff")}),
+  "weapons/sword-and-shield": r=>({sky:["#16120e","#5a4a34"], fx:"motes", acc:"#ffd88a", art:
+    glow(600,200,320,"#ffd88a",.35)+hills(r,260,30,"#3a2e20",.7)+
+    Array.from({length:12},(_,i)=>shieldShape(90+i*92,286,1.3,"#1a140c","#4a3a20")).join("")+shieldShape(600,170,2.6,"#120d08","#ffd88a",`<path d="M0,-18 L10,6 L-10,6 Z" fill="#ffd88a"/>`)+sword(600,330,90,"#120d08",null,0)}),
+  "weapons/daggers": r=>({sky:["#060a10","#1a2430"], fx:"ash", acc:"#c8e6ff", art:
+    rooftops(r,220,"#0a0f16").replace(/fill="#0a0f16"/g,'fill="#0a0f16" opacity=".6"')+`<rect x="0" y="220" width="${SW}" height="${SH}" fill="#05080c"/>`+glow(600,170,200,"#8fbfff",.3)+
+    `<g transform="translate(600,170)"><g transform="rotate(40)">${sword(0,60,90,"#cfd8e6",null)}</g><g transform="rotate(-40)">${sword(0,60,90,"#cfd8e6",null)}</g></g>`+
+    `<g class="win"><path d="M548,128 L558,118 M652,128 L642,118" stroke="#fff" stroke-width="2"/></g>`+fog(200,"#0a1420",.7,"fog drift")}),
+  "weapons/destruction-staff": r=>({sky:["#08081a","#24205a"], fx:"motes", acc:"#a9c8ff", art:
+    smoke(r,"#000",5,.5)+lightning(840,0,150,"#a9c8ff")+lightning(380,0,120,"#c9a8ff")+hills(r,280,40,"#0c0b24",1)+
+    `<g transform="translate(600,320)"><rect x="-4" y="-200" width="8" height="200" fill="#05040e"/><path d="M-20,-200 Q0,-170 20,-200 L14,-186 L-14,-186 Z" fill="#05040e"/>${glow(0,-214,80,"#7fb0ff",.8)}<circle cx="0" cy="-214" r="14" fill="#dfeaff"/></g>`+lightning(600,-60,100,"#dfeaff")}),
+  "weapons/restoration-staff": r=>({sky:["#0e1a12","#5a7a4a"], fx:"leaves", acc:"#e8ffb0", art:
+    glow(600,140,360,"#fff3c4",.5)+hills(r,260,30,"#2a4a2a",.7)+`<g class="spin" style="transform-origin:600px 120px;animation-duration:30s"><circle cx="600" cy="120" r="70" fill="none" stroke="#e8ffb0" stroke-width="1.5" stroke-dasharray="2 10"/></g>`+
+    `<g transform="translate(600,320)"><path d="M-4,0 L-3,-190 Q-30,-210 -14,-236 Q0,-214 0,-200 Q0,-214 14,-236 Q30,-210 3,-190 L4,0 Z" fill="#14240f"/>${glow(0,-210,60,"#e8ffb0",.8)}<circle cx="0" cy="-212" r="8" fill="#fff"/></g>`+hills(r,312,10,"#14240f",1)}),
+  "weapons/scythe": r=>({sky:["#0c0a14","#3a3050"], fx:"ash", acc:"#d6d0ff", art:
+    stars(r,60,"#fff")+moon(840,100,54,"#e8e4f6","#b0a8e6")+hills(r,270,20,"#1c1830",.8)+wheat(r,345,"#2a2238",180)+
+    `<g transform="translate(560,320) rotate(-8)"><rect x="-4" y="-230" width="8" height="230" fill="#08060e"/><path d="M0,-226 C80,-240 150,-200 170,-150 C130,-190 70,-200 0,-206 Z" fill="#08060e"/><path d="M4,-224 C80,-236 146,-198 166,-152" stroke="#e8e4f6" stroke-width="1.3" fill="none" class="win"/></g>`}),
+  "weapons/greatsword": r=>({sky:["#1a1008","#6a4020"], fx:"ash", acc:"#ffcf8a", art:
+    glow(600,240,360,"#ffb060",.45)+smoke(r,"#000",5,.3)+crags(r,250,50,"#2a180c",.8,90)+
+    Array.from({length:14},(_,i)=>{const x=60+i*84+r()*30; return `<line x1="${f1(x)}" y1="330" x2="${f1(x+(r()-.5)*40)}" y2="${f1(220+r()*40)}" stroke="#140c06" stroke-width="3"/>`;}).join("")+
+    `<path d="M440,${SH} C500,280 700,280 760,${SH} Z" fill="#100a05"/>`+sword(600,298,200,"#0c0703","#ffcf8a")}),
+  "weapons/bow": r=>({sky:["#0e1a1a","#4a7a6a"], fx:"motes", acc:"#e8ffd8", art:
+    glow(900,240,300,"#fff3c4",.45)+hills(r,240,30,"#2a4a40",.7)+`<path d="M200,${SH} C320,250 520,236 640,${SH} Z" fill="#0c1814"/>`+
+    `<g transform="translate(420,256)">${fig("archer",0,0,2.2,"#0c1814")}<path d="M24,-76 C54,-56 54,-26 24,-8" stroke="#0c1814" stroke-width="3.5" fill="none"/></g>`+
+    [0,1,2].map(i=>`<g class="arrow" style="animation-delay:${-i*1.1}s"><line x1="500" y1="${168+i*6}" x2="560" y2="${162+i*6}" stroke="#e8ffd8" stroke-width="2"/></g>`).join("")+hills(r,316,10,"#0c1814",1)}),
+  "weapons/halberd": r=>({sky:["#10121a","#4a4a5a"], fx:"ash", acc:"#ffd88a", art:
+    glow(600,230,220,"#ffd88a",.4)+`<path d="M420,${SH} L420,120 A180,140 0 0 1 780,120 L780,${SH} Z" fill="#0c0d12"/><path d="M480,${SH} L480,160 A120,100 0 0 1 720,160 L720,${SH} Z" fill="#ffd88a" opacity=".25"/>`+
+    [[470,24],[730,-24]].map(([x,a])=>`<g transform="translate(${x},330) rotate(${a})"><rect x="-3" y="-260" width="6" height="260" fill="#050608"/><path d="M0,-260 L-8,-236 L8,-236 Z M3,-232 L34,-222 L34,-196 L3,-206 Z M-3,-226 L-18,-214 L-3,-208 Z" fill="#050608"/></g>`).join("")+fig("knight",410,330,1.8,"#050608")+fig("knight",790,330,1.8,"#050608")}),
+  "weapons/twinblade": r=>({sky:["#100808","#4a1a14"], fx:"sparks", acc:"#ffb08a", art:
+    glow(600,170,280,"#ff8a5a",.4)+`<g class="spin" style="transform-origin:600px 170px;animation-duration:2.4s">${[0,1,2,3].map(i=>`<path d="M600,170 m-${120-i*14},0 a${120-i*14},${120-i*14} 0 0 1 ${(120-i*14)*2},0" stroke="#ffd0b0" stroke-width="${3-i*.5}" fill="none" opacity="${.5-i*.1}"/>`).join("")}<rect x="480" y="167" width="240" height="6" rx="3" fill="#1a0806"/><path d="M480,170 L460,164 L470,170 L460,176 Z M720,170 L740,164 L730,170 L740,176 Z" fill="#1a0806"/></g>`+crags(r,300,30,"#140606",1,70)}),
+  "status-effects": SCENES.miasma,
+  /* gear */
+  "item-sets": SCENES.vault,
+  all: r=>({sky:["#0e0c10","#2a2430"], fx:"motes", acc:"#ffe3a0", art:
+    `<rect x="0" y="300" width="${SW}" height="40" fill="#0a080c"/>`+[160,330,500,700,870,1040].map((x,i)=>armorStand(x,300,"#06050a",["#80b0ff","#7fe0a0","#ffc46a","#fff0a0","#c9a8ff","#ff8a6a"][i])).join("")}),
+  "sets/overland": r=>({sky:["#14101e","#6a4a50"], fx:"motes", acc:"#ffd2a0", art:
+    glow(890,190,200,"#ffd2a0",.45)+crags(r,220,70,"#2a2236",.7,90)+hills(r,256,40,"#1e1828",.95)+road(256,"#3a2c2c")+signpost(300,316,"#100c14")+hills(r,316,8,"#100c14",1)}),
+  "sets/dungeon": r=>({sky:["#0a0a0c","#24242a"], fx:"ash", acc:"#ffb05a", art:`<rect x="0" y="0" width="${SW}" height="${SH}" fill="#0c0c10"/>`+Array.from({length:10},(_,i)=>Array.from({length:14},(_,j)=>`<rect x="${j*90+(i%2)*45-20}" y="${i*36}" width="86" height="32" fill="#141418" />`).join("")).join("")+stairs(600,330,"#06060a","#ffb05a")}),
+  "sets/crafted": SCENES.forge.length ? r=>({sky:["#10100c","#3a3420"], fx:"sparks", acc:"#ffd27a", art:
+    glow(600,180,320,"#ffd27a",.4)+`<rect x="380" y="220" width="440" height="20" fill="#0c0a06"/><rect x="400" y="240" width="14" height="90" fill="#0c0a06"/><rect x="786" y="240" width="14" height="90" fill="#0c0a06"/>`+
+    `<g class="bob">${glow(600,140,80,"#ffd27a",.7)}${EMB.star("#000","#ffe9a8").replace("<path",`<path transform="translate(600,140) scale(1.2)"`)}</g>`+
+    [440,500,700,760].map((x,i)=>`<g class="sway slow" style="transform-origin:${x}px 0"><line x1="${x}" y1="0" x2="${x}" y2="${60+i*10}" stroke="#0c0a06" stroke-width="2"/>${["<rect x='-10' y='0' width='20' height='8'/>","<circle r='9'/>","<path d='M-10,0 L10,0 L0,18 Z'/>","<rect x='-3' y='0' width='6' height='24'/>"][i].replace(/<(\w+)/,`<$1 fill="#0c0a06" transform="translate(${x},${60+i*10})"`)}</g>`).join("")}) : null,
+  "sets/monster": r=>({sky:["#0f0606","#3a1210"], fx:"ash", acc:"#ff6a4a", art:smoke(r,"#000",5,.4)+hornedSkull(600,250,1.4,"#0c0505","#ff4a2a")+crags(r,320,30,"#080303",1,60)}),
+  "sets/trial": r=>({sky:["#0c0a1c","#3a2a5a"], fx:"motes", acc:"#c9b8ff", art:stars(r,120,"#fff")+brokenTower(600,330,"#0a0816","#c9b8ff")+hills(r,318,10,"#0a0816",1)}),
+  "sets/arena": r=>({sky:["#1a0e08","#5a2e14"], fx:"sparks", acc:"#ffb35a", art:glow(600,260,320,"#ffb35a",.4)+colosseum(r,326,"#1a0e08","#ffb35a")}),
+  "sets/mythic": r=>({sky:["#05060f","#1d1640"], fx:"motes", acc:"#e6d6ff", art:stars(r,200,"#fff",SH)+crownRelic(600,160,1.6,"#e8c35a","#c9a8ff")}),
+  enchantments: r=>({sky:["#0a0816","#2a1e4a"], fx:"motes", acc:"#c9b8ff", art:glow(600,200,360,"#9a7aff",.35)+glyphStones(600,320,"#0c0a16",["#ff8a5a","#80d0ff","#c9a8ff"])}),
+  crafting: SCENES.forge,
+  search: SCENES.dusk,
+  /* home realm tiles */
+  "realm-oakhaven": SCENES.oakhaven, "realm-dracoria": SCENES.dracoria, "realm-aethelwing": r=>({sky:["#0a0c22","#3a2a6a"], fx:"motes", acc:"#ffd27a", art:
+    stars(r,80,"#fff")+hills(r,250,30,"#1a1a44",.8)+(()=>{let s="";for(let i=0;i<12;i++)s+=spire(140+i*80+r()*30,320,60+r()*120,18+r()*10,"#100f2e","#ffd27a");return s;})()+moths(r,5,"#efe8ff")+hills(r,310,10,"#0a0a22",1)}),
+  "realm-deepspire": SCENES.deepspire, "realm-eloria": r=>({sky:["#0a1a14","#3a6a4a"], fx:"fireflies", acc:"#eaffb0", art:
+    shafts(r,"#eaffb0",6,.1)+hills(r,270,30,"#1e3a28",.8)+`<path d="M560,${SH} C580,280 586,200 580,130 L620,130 C614,200 620,280 640,${SH} Z" fill="#0a160e"/>`+
+    `<g fill="#0e2216">${Array.from({length:30},()=>{const a=r()*Math.PI*2,d=Math.sqrt(r()); return `<circle cx="${f1(600+Math.cos(a)*d*260)}" cy="${f1(110+Math.sin(a)*d*80)}" r="${f1(30+r()*30)}"/>`;}).join("")}</g>`+
+    lanterns(r,7,"#fff0a0","#0a160e").replace(/y1="0"/g,'y1="150"')+spire(300,310,110,20,"#0a160e","#fff0a0")+spire(900,310,140,24,"#0a160e","#fff0a0")+hills(r,316,8,"#0a160e",1)}), "realm-sixth": SCENES.sixth,
+});
+const UNIQUE_SCENE = name => SCENES[name] ? name : "dusk";
+
+/* override particles: adds falling petals and leaves */
+function startFX(canvas, type, acc){
+  stopFX();
+  if(!canvas||!type||matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const ctx=canvas.getContext("2d"), dpr=Math.min(2,window.devicePixelRatio||1);
+  let w=0,h=0,k=1; const size=()=>{ w=canvas.clientWidth; h=canvas.clientHeight; k=Math.max(1,w/1160); canvas.width=w*dpr; canvas.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }; size();
+  const N={embers:80,ash:55,fireflies:34,motes:40,sparks:60,petals:34,leaves:30}[type]||0; if(!N) return;
+  const R=Math.random;
+  const spawn=(init)=>{ const p={x:R()*w,y:init?R()*h:h+8,s:(R()*1.8+.6)*k,v:(R()*.8+.3)*k,ph:R()*6.28,a:R()*.6+.4,rot:R()*6.28};
+    if(type==="ash"||type==="petals"||type==="leaves"){ p.y=init?R()*h:-10; }
+    if(type==="sparks"){ p.x=w*(.2+R()*.6); p.y=h*.9; p.vx=(R()-.5)*4*k; p.vy=-(R()*5+3)*k; p.s=(R()*1.4+.6)*k; p.life=init?R():1; }
+    if(type==="fireflies"){ p.y=R()*h; p.vx=(R()-.5)*.4*k; p.vy=(R()-.5)*.3*k; }
+    return p; };
+  const ps=Array.from({length:N},()=>spawn(true));
+  let vis=true; const io=new IntersectionObserver(e=>{vis=e[0].isIntersecting}); io.observe(canvas);
+  FX={raf:0,io}; let t=0;
+  const tick=()=>{ FX.raf=requestAnimationFrame(tick); if(!vis) return; if(canvas.clientWidth!==w||canvas.clientHeight!==h) size(); t+=.016;
+    ctx.clearRect(0,0,w,h); ctx.globalCompositeOperation=(type==="ash"||type==="petals"||type==="leaves")?"source-over":"lighter";
+    for(let i=0;i<ps.length;i++){ const p=ps[i];
+      if(type==="embers"){ p.y-=p.v*1.3; p.x+=Math.sin(t*2+p.ph)*.5*k; if(p.y<-10) ps[i]=spawn(false); const al=Math.min(1,p.y/h+.15)*p.a;
+        ctx.fillStyle=acc; ctx.globalAlpha=al; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,7); ctx.fill(); ctx.globalAlpha=al*.22; ctx.beginPath(); ctx.arc(p.x,p.y,p.s*3.5,0,7); ctx.fill(); }
+      else if(type==="ash"){ p.y+=p.v*.6; p.x+=Math.sin(t+p.ph)*.4*k; if(p.y>h+10) ps[i]=spawn(false); ctx.fillStyle="#bbb"; ctx.globalAlpha=p.a*.45; ctx.fillRect(p.x,p.y,p.s*1.6,p.s); }
+      else if(type==="petals"||type==="leaves"){ p.y+=p.v*.7; p.x+=Math.sin(t*1.2+p.ph)*.9*k; p.rot+=.02; if(p.y>h+10) ps[i]=spawn(false);
+        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot+Math.sin(t+p.ph)); ctx.fillStyle=acc; ctx.globalAlpha=p.a*.85; ctx.beginPath(); ctx.ellipse(0,0,p.s*2.6,p.s*1.3,0,0,7); ctx.fill(); ctx.restore(); }
+      else if(type==="fireflies"){ p.x+=p.vx+Math.sin(t+p.ph)*.3*k; p.y+=p.vy+Math.cos(t*.8+p.ph)*.3*k; if(p.x<-10)p.x=w+10; if(p.x>w+10)p.x=-10; if(p.y<-10)p.y=h+10; if(p.y>h+10)p.y=-10;
+        const al=(Math.sin(t*2+p.ph)+1)/2*p.a; ctx.fillStyle=acc; ctx.globalAlpha=al; ctx.beginPath(); ctx.arc(p.x,p.y,p.s*.9,0,7); ctx.fill(); ctx.globalAlpha=al*.3; ctx.beginPath(); ctx.arc(p.x,p.y,p.s*5,0,7); ctx.fill(); }
+      else if(type==="motes"){ p.y-=p.v*.35; p.x+=Math.sin(t*.7+p.ph)*.25*k; if(p.y<-10) ps[i]=spawn(false); ctx.fillStyle=acc; ctx.globalAlpha=p.a*.5*Math.min(1,p.y/h+.2); ctx.beginPath(); ctx.arc(p.x,p.y,p.s*.8,0,7); ctx.fill(); }
+      else if(type==="sparks"){ p.x+=p.vx; p.y+=p.vy; p.vy+=.09*k; p.life-=.012; if(p.life<=0||p.y>h+10) ps[i]=spawn(false);
+        ctx.strokeStyle=acc; ctx.globalAlpha=Math.max(0,p.life); ctx.lineWidth=p.s; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p.x-p.vx*2,p.y-p.vy*2); ctx.stroke(); }
+    }
+    ctx.globalAlpha=1; };
+  tick();
+}
+
+/* ---------- refined focal scenes (subject on the open right side) ---------- */
+Object.assign(SCENES, {
+  "classes/dark-knight": r=>({sky:["#07060c","#2a2140"], fx:"ash", acc:"#b9a6ff", art:
+    smoke(r,"#000",6,.45)+stars(r,60,"#d9d0ff")+eclipse(860,118,64,"#c9b6ff")+crags(r,276,46,"#14101f",1,90)+
+    `<g transform="translate(860,318)">${glow(0,-110,170,"#8d78ff",.45)}<path d="${SIL.knight}" transform="scale(2.6)" fill="#030207"/>${sword(0,-12,130,"#030207","#b19dff")}<path class="win" d="M0,-158 L0,-30" stroke="#d6caff" stroke-width="2.2"/></g>`+
+    `<g ${BLUR(3)}><path d="M780,318 C760,280 800,250 780,214 M940,318 C960,276 920,246 948,210" stroke="#7d6bd6" stroke-width="4" fill="none" opacity=".5" class="sway slow"/></g>`+fog(220,"#2a2440",.65,"fog drift")}),
+  "classes/shadowblade": r=>({sky:["#040912","#13253c"], fx:"ash", acc:"#9fd8ff", art:
+    stars(r,120,"#dfefff")+glow(860,120,220,"#9fd8ff",.35)+moon(860,120,78,"#e8f3ff","#9fd8ff")+
+    rooftops(r,300,"#060c14","#ffcf7a")+`<path d="M818,${SH} L818,206 L860,170 L902,206 L902,${SH} Z" fill="#02050a"/>`+
+    `<g transform="translate(846,170)">${fig("crouch",0,0,2.6,"#02050a")}<path class="sway" style="transform-origin:-26px -26px" d="M-26,-26 C-60,-18 -84,2 -104,28" stroke="#02050a" stroke-width="8" fill="none" stroke-linecap="round"/><line class="win" x1="58" y1="-40" x2="90" y2="-10" stroke="#e8f6ff" stroke-width="2.5"/>${glow(74,-25,18,"#bfe6ff",.6)}</g>`+fog(230,"#0a1a2a",.6,"fog drift")}),
+  "classes/holy-knight": r=>({sky:["#3a2810","#f0d090"], fx:"motes", acc:"#fff1c4", art:
+    sun(860,96,38,"#fff3c8")+hills(r,250,30,"#b08c4c",.7)+castle(r,80,520,282,"#8a6a34","#fff1c4")+
+    `<g transform="translate(860,316)">${glow(0,-100,170,"#fff3c8",.55)}<path d="${SIL.knight}" transform="scale(2.5)" fill="#3a2a10"/>${sword(0,-10,140,"#3a2a10","#fff6d8")}<path d="M0,-160 L0,-22" stroke="#fffaf0" stroke-width="2.6"/></g>`+hills(r,312,12,"#5a4420",1)}),
+  "classes/necromancer": r=>({sky:["#050c09","#15321f"], fx:"fireflies", acc:"#7dffa8", art:
+    moon(1060,70,26,"#c8ffd8","#7dffa8")+glow(840,250,320,"#4dff8a",.4)+`<path d="M600,${SH} C660,200 1020,200 1080,${SH} Z" fill="#071410"/><path d="M810,${SH} L810,280 A30,30 0 0 1 870,280 L870,${SH} Z" fill="#9dffbf" opacity=".7"/>`+
+    souls(r,12,"#9dffbf").replace(/translate\(([\d.]+),/g,(m,x)=>`translate(${f1(+x+240)},`)+
+    [700,760,920,980].map((x,i)=>`<g transform="translate(${x},322)">${fig("hood",0,0,1.9+(i%2)*.3,"#020604")}${glow(0,-74,9,"#7dffa8",.9)}</g>`).join("")+graves(r,330,"#040a06")}),
+  "races/drakari": r=>({sky:["#1a0c0a","#7a2a14"], fx:"embers", acc:"#ff9a4a", art:
+    glow(860,100,260,"#ffb04a",.55)+`<circle cx="860" cy="104" r="62" fill="#ffcf7a"/>`+smoke(r,"#000",4,.25)+crags(r,240,110,"#2c120c",.9,80)+
+    `<g class="glide">${fig("dragon",860,124,2.3,"#140604")}</g><g class="glide" style="animation-delay:-6s;animation-duration:16s">${fig("dragon",560,70,.7,"#2a100a")}</g>`+crags(r,310,60,"#120706",1,60)}),
+  "races/ashkin": r=>({sky:["#1a0806","#5a1a0c"], fx:"embers", acc:"#ff7a2e", art:
+    smoke(r,"#000",6,.4)+glow(860,330,380,"#ff5a1f",.55)+crags(r,250,70,"#1e0b0a",1,70)+
+    `<g ${BLUR(1)}>${Array.from({length:50},()=>`<circle cx="${f1(r()*SW)}" cy="${f1(300+r()*40)}" r="${f1(1+r()*3)}" fill="#ff7a2b" opacity="${f1(.4+r()*.6)}"/>`).join("")}</g>`+
+    `<g transform="translate(860,322)">${glow(0,-80,150,"#ff5a1f",.55)}${fig("walker",0,0,3.6,"#0c0403")}<path class="lava" d="M-6,-150 L0,-120 L-8,-96 L2,-70 L-4,-40 M10,-140 L6,-110 L14,-86" stroke="#ff7a2b" stroke-width="2.4" fill="none"/></g>`+
+    `<g class="smoke"><path d="M860,130 C836,100 890,80 866,48 C842,18 896,0 872,-30" stroke="#4a3a36" stroke-width="14" fill="none" opacity=".4" ${BLUR(4)}/></g>`+hills(r,322,8,"#0e0403",1)}),
+  "races/overlander": r=>({sky:["#2a1a14","#d08a4a"], fx:"motes", acc:"#ffe3a0", art:
+    glow(760,250,420,"#ffd08a",.6)+`<circle cx="760" cy="244" r="46" fill="#ffe8b0"/>`+hills(r,250,40,"#6a4a2a",.7)+castle(r,520,940,272,"#3a2818","#ffd27a")+
+    `<g transform="translate(1070,286)"><path d="${SIL.windmill}" fill="#2a1a10"/><g class="spin" style="transform-origin:0px -60px;animation-duration:14s">${[0,90,180,270].map(a=>`<rect x="-4" y="-120" width="8" height="60" fill="#2a1a10" transform="rotate(${a} 0 -60)"/><rect x="2" y="-116" width="18" height="50" fill="#2a1a10" opacity=".85" transform="rotate(${a} 0 -60)"/>`).join("")}</g></g>`+
+    hills(r,292,16,"#4a3018",1)+wheat(r,340,"#c08a3a",170)}),
+  combat: r=>({sky:["#120a06","#4a2410"], fx:"sparks", acc:"#ffd27a", art:
+    glow(860,200,300,"#ffb04a",.5)+colosseum(r,330,"#140a06","#ffb35a").replace(/<ellipse[^>]*>$/,"")+
+    `<g transform="translate(800,316)">${fig("fighter",0,0,2.8,"#060302")}</g><g transform="translate(920,316)">${fig("fighter",0,0,2.8,"#060302",true)}</g>`+
+    `<line x1="826" y1="222" x2="880" y2="180" stroke="#e8ded0" stroke-width="3.5"/><line x1="894" y1="222" x2="840" y2="180" stroke="#e8ded0" stroke-width="3.5"/>`+glow(860,184,50,"#fff3c4",.95)}),
+  "weapons/daggers": r=>({sky:["#050a12","#1a2636"], fx:"ash", acc:"#c8e6ff", art:
+    stars(r,70,"#e8f2ff")+`<path d="M1000,40 A44,44 0 1,0 1000,128 A34,34 0 1,1 1000,40 Z" fill="#e8f2ff"/>`+glow(985,84,120,"#9fd0ff",.3)+
+    rooftops(r,240,"#0b111a","#ffcf7a")+`<rect x="0" y="240" width="${SW}" height="${SH}" fill="#05080d"/>`+lanterns(r,5,"#ffcf7a","#0008").replace(/y1="0"/g,'y1="0"')+
+    `<g transform="translate(860,176)">${glow(0,0,120,"#8fbfff",.45)}<g transform="rotate(40)">${sword(0,76,120,"#dfe8f6",null)}</g><g transform="rotate(-40)">${sword(0,76,120,"#dfe8f6",null)}</g><g class="win"><path d="M-50,-60 L-36,-46 M50,-60 L36,-46" stroke="#fff" stroke-width="2.5"/></g></g>`+fog(220,"#0a1420",.7,"fog drift")}),
+  "weapons/greatsword": r=>({sky:["#1a1008","#6a4020"], fx:"ash", acc:"#ffcf8a", art:
+    glow(860,230,380,"#ffb060",.5)+smoke(r,"#000",5,.3)+crags(r,250,50,"#2a180c",.8,90)+
+    Array.from({length:16},(_,i)=>{const x=40+i*76+r()*30; return `<line x1="${f1(x)}" y1="330" x2="${f1(x+(r()-.5)*40)}" y2="${f1(220+r()*40)}" stroke="#140c06" stroke-width="3"/>`+(r()<.4?`<path d="M${f1(x)},${f1(230)} l18,6 l-18,8 Z" fill="#3a1a0a" class="flag"/>`:"");}).join("")+
+    `<path d="M700,${SH} C760,276 960,276 1020,${SH} Z" fill="#100a05"/>`+`<g transform="translate(860,292) rotate(6)">${sword(0,0,230,"#0a0603","#ffcf8a").replace('<rect x="-16"','<rect x="-26" width="52"').replace('width="32"','')}</g>`}),
+  "weapons/destruction-staff": r=>({sky:["#07071a","#24205e"], fx:"motes", acc:"#a9c8ff", art:
+    smoke(r,"#000",6,.55)+lightning(1040,0,170,"#a9c8ff")+lightning(520,0,140,"#c9a8ff")+hills(r,280,40,"#0c0b24",1)+
+    `<g transform="translate(860,324)"><rect x="-5" y="-220" width="10" height="220" fill="#040310"/><path d="M-26,-220 Q0,-184 26,-220 L18,-202 L-18,-202 Z" fill="#040310"/>${glow(0,-238,120,"#7fb0ff",.85)}<g class="spin" style="transform-origin:0px -238px;animation-duration:8s"><circle cx="0" cy="-238" r="36" fill="none" stroke="#bcd4ff" stroke-width="1.5" stroke-dasharray="3 9"/></g><circle cx="0" cy="-238" r="18" fill="#e8f0ff"/></g>`+lightning(860,-40,86,"#e8f0ff")}),
+});
+Object.assign(SCENES, {
+  "weapons/greatsword": r=>({sky:["#1a1008","#6a4020"], fx:"ash", acc:"#ffcf8a", art:
+    glow(860,200,380,"#ffb060",.55)+smoke(r,"#000",5,.3)+crags(r,250,50,"#2a180c",.8,90)+
+    Array.from({length:16},(_,i)=>{const x=40+i*76+r()*30; return `<line x1="${f1(x)}" y1="330" x2="${f1(x+(r()-.5)*40)}" y2="${f1(220+r()*40)}" stroke="#140c06" stroke-width="3"/>`+(r()<.4?`<path d="M${f1(x)},230 l18,6 l-18,8 Z" fill="#3a1a0a" class="flag"/>`:"");}).join("")+
+    `<path d="M700,${SH} C760,276 960,276 1020,${SH} Z" fill="#100a05"/>`+
+    `<g transform="translate(860,300) rotate(5)">${glow(0,-130,140,"#ffcf8a",.4)}<path d="M-12,0 L-12,-220 L0,-246 L12,-220 L12,0 Z" fill="#0a0603"/><path class="win" d="M0,-240 L0,-6" stroke="#ffe2b0" stroke-width="1.6"/><path d="M-44,-2 L44,-2 L40,10 L-40,10 Z" fill="#0a0603"/><rect x="-6" y="10" width="12" height="40" fill="#0a0603"/><circle cx="0" cy="56" r="8" fill="#0a0603"/></g>`}),
+  combat: r=>({sky:["#120a06","#4a2410"], fx:"sparks", acc:"#ffd27a", art:
+    glow(860,200,320,"#ffb04a",.55)+colosseum(r,330,"#140a06","#ffb35a").replace(/<ellipse[^>]*>$/,"")+
+    `<g transform="translate(860,316)">${glow(0,-80,160,"#ff9a3d",.45)}</g>`+
+    `<g transform="translate(800,316)">${fig("fighter",0,0,2.9,"#030100")}</g><g transform="translate(920,316)">${fig("fighter",0,0,2.9,"#030100",true)}</g>`+
+    `<line x1="826" y1="220" x2="880" y2="178" stroke="#fff3e0" stroke-width="3.5"/><line x1="894" y1="220" x2="840" y2="178" stroke="#fff3e0" stroke-width="3.5"/>`+glow(860,182,60,"#fff3c4",1)}),
+});
 
 
 const CATS = {
@@ -807,9 +1272,8 @@ const THEME = {world:"ashfall",enemies:"gaol",guilds:"arcane",housing:"hearth",r
   "weapons/destruction-staff":"arcane","weapons/restoration-staff":"dawn","weapons/scythe":"barrow","weapons/bow":"eloria","weapons/daggers":"deepspire","weapons/katana":"dusk","weapons/twinblade":"emberhowl",
   "sets/overland":"realms","sets/dungeon":"gaol","sets/crafted":"forge","sets/monster":"dracoria","sets/trial":"sixth","sets/arena":"emberhowl","sets/mythic":"stars"};
 function themeOf(path){
-  if(path.startsWith("set/")){ const s=BY_ID[path.slice(4)]; if(!s) return "dusk";
-    if(s.cat==="overland") return REALM_SCENE[s.source]; if(s.cat==="dungeon"||s.cat==="trial") return DUNGEON_SCENE[s.source]||"gaol"; return THEME["sets/"+s.cat]; }
-  return THEME[path] || "forge";
+  if(path.startsWith("set/")) return "set:"+path.slice(4);
+  return SCENES[path] ? path : "search";
 }
 
 /* ---------- sidebar ---------- */
@@ -871,7 +1335,7 @@ function home(){
   const res = extractTable(P.combat.html,"s-resources");
   const status = extractTable((P["status-effects"].lede||"")+P["status-effects"].html,null);
   const resCol = {Health:"var(--health)",Stamina:"var(--stamina)",Mana:"var(--mana)"};
-  const realms = [["Oakhaven","oakhaven","Kingdom of humans","Overlander, Dreadkin"],["Dracoria","dracoria","Kingdom of dragons","Drakari, Ashkin"],["Aethelwing","aethelwing","Kingdom of moths","Lunari, Vampyri"],["Deepspire","deepspire","Kingdom of the Felyne","Felyne"],["Eloria","eloria","Kingdom of elves","Duskborn, Highborn, Oakborn"],["The Sixth Realm","sixth","Malakor's domain","The endgame: ash wastes and the Throne of Ash"]];
+  const realms = [["Oakhaven","realm-oakhaven","Kingdom of humans","Overlander, Dreadkin"],["Dracoria","realm-dracoria","Kingdom of dragons","Drakari, Ashkin"],["Aethelwing","realm-aethelwing","Kingdom of moths","Lunari, Vampyri"],["Deepspire","realm-deepspire","Kingdom of the Felyne","Felyne"],["Eloria","realm-eloria","Kingdom of elves","Duskborn, Highborn, Oakborn"],["The Sixth Realm","realm-sixth","Malakor's domain","The endgame: ash wastes and the Throne of Ash"]];
   const quick = [["combat","Controls"],["classes","Classes"],["races","Races"],["weapons","Weapons"],["status-effects","Status effects"],["all","All item sets"],["crafting","Crafting"],["prestige","Prestige"]];
   return `<section class="hero" data-fx="embers" data-acc="${sc.acc}">${svg}<canvas></canvas>
     <div class="hc"><h1>Severance</h1>
