@@ -1565,6 +1565,28 @@ SCENES["classes/berserker"] = r=>({sky:["#1c0604","#9a2e10"], fx:"embers", acc:"
   `<g transform="translate(860,318)">${glow(0,-110,170,"#ff7a3a",.45)}</g>`+viking3(860,318,2.5,"#0a0302","#ffd0a0")+
   brazier(610,326,"#0c0302")+hills(r,332,6,"#0c0302",1)});
 
+/* ---------- Shadowblade: ninja, knight silhouette language ---------- */
+SIL.ninja = "M-17,0 L-13,-44 L-17,-56 Q-11,-64 -6,-63 L-6,-68 Q-7,-81 0,-82 Q7,-81 6,-68 L6,-63 Q11,-64 17,-56 L13,-44 L17,0 Z";
+function ninja(x, base, s, color, eye){
+  return `<g transform="translate(${x},${base}) scale(${s})">`+
+    `<g class="sway" style="transform-origin:-5px -73px;animation-duration:1.4s"><path d="M-5,-73 C-16,-72 -24,-78 -36,-72 C-28,-74 -18,-70 -5,-70 Z M-5,-71 C-14,-66 -22,-68 -32,-60 C-24,-64 -16,-64 -5,-68 Z" fill="${color}"/></g>`+
+    `<path d="M-14,-46 L9,-82" stroke="${color}" stroke-width="2.2" stroke-linecap="round"/><path d="M6,-79 L12,-75 L13,-77 L7,-81 Z" fill="${color}"/><path d="M9,-82 L13,-89" stroke="${color}" stroke-width="2.8" stroke-linecap="round"/>`+
+    `<path d="${SIL.ninja}" fill="${color}"/>`+
+    `<path d="M-5,-74 L5,-74 L5,-72.6 L-5,-72.6 Z" fill="${eye}"/>${glow(-2.5,-73.3,4,eye,1)}${glow(2.5,-73.3,4,eye,1)}`+
+    `<path d="M-6,-75.6 L6,-75.6" stroke="${color}" stroke-width="1"/>`+
+  `</g>`;
+}
+function pagodaRoof(cx, y, w, color){
+  return `<path d="M${cx-w/2-30},${y+6} C${cx-w/2},${y+4} ${cx-w/2+20},${y-6} ${cx-w/2+40},${y-14} L${cx+w/2-40},${y-14} C${cx+w/2-20},${y-6} ${cx+w/2},${y+4} ${cx+w/2+30},${y+6} L${cx+w/2+20},${y+12} L${cx-w/2-20},${y+12} Z" fill="${color}"/><rect x="${cx-w/2+10}" y="${y+12}" width="${w-20}" height="${SH}" fill="${color}"/>`;
+}
+SCENES["classes/shadowblade"] = r=>({sky:["#040912","#13253c"], fx:"motes", acc:"#bfe6ff", art:
+  stars(r,140,"#dfefff")+bigMoon(860,128,96,"#eef6ff","#9fd8ff")+
+  `<g ${BLUR(4)}><g class="drift" style="animation-duration:22s"><ellipse cx="760" cy="150" rx="150" ry="10" fill="#0a1626" opacity=".55"/><ellipse cx="980" cy="96" rx="120" ry="8" fill="#0a1626" opacity=".45"/></g></g>`+
+  (()=>{let s="";[[520,250,150],[640,270,120],[1100,256,160],[1200,276,110]].forEach(([x,y,w])=>{s+=pagodaRoof(x,y,w,"#07101c")+`<rect class="win" style="animation-delay:${f1(-r()*4)}s" x="${x-6}" y="${y+28}" width="12" height="14" fill="#ffcf7a" opacity=".8"/>`;});return s;})()+
+  pagodaRoof(860,300,180,"#03070e")+
+  ninja(860,286,2.55,"#03070e","#9fe8ff")+
+  fog(250,"#0a1a2a",.55,"fog drift")});
+
 
 const CATS = {
   crafted:  {label:"Crafted",      title:"Crafted sets",      intro:"Crafted sets are made at their own station, in any armor weight and any slot, once you've researched the listed number of traits. Low-trait sets are levelling gear; the 6+ trait sets are built to last into the endgame."},
