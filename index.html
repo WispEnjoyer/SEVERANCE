@@ -1624,6 +1624,74 @@ SCENES["classes/blood-maiden"] = r=>({sky:["#12050a","#4d1020"], fx:"petals", ac
   `<rect x="0" y="312" width="${SW}" height="40" fill="#0c0306"/>`+
   `<g transform="translate(860,318)">${glow(0,-110,170,"#ff3a5c",.35)}</g>`+maiden(860,318,2.5,"#0a0205","#ff3a5c")});
 
+/* ---------- Blood Maiden v2: feminine silhouette ---------- */
+SIL.lady = "M-36,0 C-25,-13 -13,-28 -6.5,-44 C-5.5,-46 -5,-48 -5.4,-50 C-7.4,-53 -8.6,-57 -9,-60 Q-9.4,-63.4 -2,-64.2 L2,-64.2 Q9.4,-63.4 9,-60 C8.6,-57 7.4,-53 5.4,-50 C5,-48 5.5,-46 6.5,-44 C13,-28 25,-13 36,0 Z";
+function maiden2(x, base, s, color, blood){
+  return `<g transform="translate(${x},${base}) scale(${s})">`+
+    `<g class="sway slow" style="transform-origin:-6px -63px"><path d="M-8,-63 C-16,-52 -26,-34 -44,-4 L-36,-2 C-24,-26 -16,-44 -6,-60 Z" fill="${color}" opacity=".8"/></g>`+
+    `<path d="${SIL.lady}" fill="${color}"/>`+
+    `<rect x="-1.5" y="-68.5" width="3" height="5" fill="${color}"/><ellipse cx="0" cy="-72.5" rx="4.4" ry="5.4" fill="${color}"/>`+
+    `<g class="sway slow" style="transform-origin:-3px -76px;animation-duration:5s"><path d="M-4.6,-76 C-8.6,-76 -9.6,-70 -8.8,-64 C-9.6,-56 -13,-48 -18,-40 C-11,-45 -7.6,-52 -6,-58 C-5,-62 -4,-66 -3.4,-69 Z" fill="${color}"/></g>`+
+    `<path d="M4.4,-75 C7.4,-73 7.6,-68 6.6,-63 C7,-60 8,-58 9,-56 C6.4,-58 5,-61 4.6,-64 Z" fill="${color}"/>`+
+    `<path d="M-4.6,-77.2 L-3.4,-80.4 L-1.8,-78 L0,-82 L1.8,-78 L3.4,-80.4 L4.6,-77.2 Z" fill="${color}"/>${glow(0,-80,4,blood,1)}<circle cx="0" cy="-80.4" r="1" fill="#ff8a9a"/>`+
+    `<path d="M-8,-60 Q-11,-52 -9,-44" stroke="${color}" stroke-width="2.4" stroke-linecap="round" fill="none"/>`+
+    `<path d="M8,-61 Q18,-62 28,-68" stroke="${color}" stroke-width="2.4" stroke-linecap="round" fill="none"/>`+
+    `<g>${glow(32,-73,30,blood,.85)}<circle cx="32" cy="-73" r="4.5" fill="#ff6a80"/><g class="spin" style="transform-origin:32px -73px;animation-duration:3s">${[0,1,2,3,4].map(i=>{const a=i/5*Math.PI*2, cx=32+Math.cos(a)*11, cy=-73+Math.sin(a)*11; return `<path d="M${f1(cx)},${f1(cy-2)} C${f1(cx+1.6)},${f1(cy)} ${f1(cx+1.6)},${f1(cy+2.4)} ${f1(cx)},${f1(cy+2.4)} C${f1(cx-1.6)},${f1(cy+2.4)} ${f1(cx-1.6)},${f1(cy)} ${f1(cx)},${f1(cy-2)} Z" fill="${blood}"/>`;}).join("")}</g></g>`+
+  `</g>`;
+}
+SCENES["classes/blood-maiden"] = r=>({sky:["#12050a","#4d1020"], fx:"petals", acc:"#ff3a5c", art:
+  stars(r,60,"#ffd6de")+bigMoon(860,128,100,"#c4283f","#ff3a5c").replace(/fill="#000"/g,'fill="#5a0a14"')+
+  `<path d="M690,${SH} L690,150 A170,170 0 0 1 1030,150 L1030,${SH} L1000,${SH} L1000,158 A140,140 0 0 0 720,158 L720,${SH} Z" fill="#160509"/>`+
+  thorns(r,SH,"#1a070c","#c4223f","#6e0f1f")+
+  `<rect x="0" y="312" width="${SW}" height="40" fill="#0c0306"/>`+
+  `<g transform="translate(860,318)">${glow(0,-110,170,"#ff3a5c",.35)}</g>`+maiden2(856,318,2.6,"#0a0205","#ff3a5c")});
+
+/* ---------- Blood Maiden v3: proportioned feminine figure ---------- */
+SIL.lady2 = "M-24,0 C-20,-10 -14,-24 -8,-36 C-7,-38 -6.8,-40 -6.6,-41 C-5,-44 -4.2,-46 -4.2,-48 C-4.6,-51 -6.6,-53 -7.4,-56 C-8,-58.5 -8.6,-61 -8.6,-62 Q-6,-64 -1.6,-65 L1.6,-65 Q6,-64 8.6,-62 C8.6,-61 8,-58.5 7.4,-56 C6.6,-53 4.6,-51 4.2,-48 C4.2,-46 5,-44 6.6,-41 C6.8,-40 7,-38 8,-36 C14,-24 20,-10 24,0 Q18,3 12,0 Q6,3 0,0 Q-6,3 -12,0 Q-18,3 -24,0 Z";
+function maiden3(x, base, s, color, blood){
+  return `<g transform="translate(${x},${base}) scale(${s})">`+
+    `<g class="sway slow" style="transform-origin:-4px -70px;animation-duration:5s"><path d="M-3.8,-75 C-7.5,-74 -8.6,-69 -8.4,-64 C-9.2,-58 -12,-52 -17,-47 C-13,-48 -10,-51 -8.4,-55 C-9,-50 -11,-46 -14,-43 C-9,-45 -7,-50 -6.2,-56 L-4.4,-66 Z" fill="${color}"/></g>`+
+    `<path d="${SIL.lady2}" fill="${color}"/>`+
+    `<rect x="-1.4" y="-67.5" width="2.8" height="4" fill="${color}"/><ellipse cx="0" cy="-71" rx="4" ry="5" fill="${color}"/>`+
+    `<path d="M-4.4,-72 C-4.8,-77 -1,-78.6 1.4,-77.6 C4,-76.8 4.8,-74 4.4,-71 C3.6,-73.8 1,-75 -1.4,-74.6 C-3,-74.2 -4,-73.4 -4.4,-72 Z" fill="${color}"/>`+
+    `<path d="M-3.4,-75.8 L-2.6,-78.4 L-1.2,-76.8 L0,-79.6 L1.2,-76.8 L2.6,-78.4 L3.4,-75.8 Z" fill="${color}"/>${glow(0,-78,3.6,blood,1)}<circle cx="0" cy="-78.4" r=".9" fill="#ff8a9a"/>`+
+    `<path d="M-8.2,-60.5 Q-10.4,-54 -9.6,-46 L-8.6,-44" stroke="${color}" stroke-width="2" stroke-linecap="round" fill="none"/>`+
+    `<path d="M8.2,-61 Q17,-63 26,-71" stroke="${color}" stroke-width="1.9" stroke-linecap="round" fill="none"/>`+
+    `<g class="sway" style="transform-origin:13px -62px;animation-duration:3.5s"><path d="M11.5,-62.4 C12.5,-59 13,-56.5 12.4,-54 C14.6,-56.6 16.2,-60 17,-64.2 Z" fill="${color}" opacity=".9"/></g>`+
+    `<g>${glow(30,-75,28,blood,.85)}<circle cx="30" cy="-75" r="4.2" fill="#ff6a80"/><g class="spin" style="transform-origin:30px -75px;animation-duration:3s">${[0,1,2,3,4].map(i=>{const a=i/5*Math.PI*2, cx=30+Math.cos(a)*10.5, cy=-75+Math.sin(a)*10.5; return `<path d="M${f1(cx)},${f1(cy-2)} C${f1(cx+1.6)},${f1(cy)} ${f1(cx+1.6)},${f1(cy+2.4)} ${f1(cx)},${f1(cy+2.4)} C${f1(cx-1.6)},${f1(cy+2.4)} ${f1(cx-1.6)},${f1(cy)} ${f1(cx)},${f1(cy-2)} Z" fill="${blood}"/>`;}).join("")}</g></g>`+
+  `</g>`;
+}
+SCENES["classes/blood-maiden"] = r=>({sky:["#12050a","#4d1020"], fx:"petals", acc:"#ff3a5c", art:
+  stars(r,60,"#ffd6de")+bigMoon(860,128,100,"#c4283f","#ff3a5c").replace(/fill="#000"/g,'fill="#5a0a14"')+
+  `<path d="M690,${SH} L690,150 A170,170 0 0 1 1030,150 L1030,${SH} L1000,${SH} L1000,158 A140,140 0 0 0 720,158 L720,${SH} Z" fill="#160509"/>`+
+  thorns(r,SH,"#1a070c","#c4223f","#6e0f1f")+
+  `<rect x="0" y="312" width="${SW}" height="40" fill="#0c0306"/>`+
+  `<g transform="translate(860,318)">${glow(0,-110,170,"#ff3a5c",.35)}</g>`+maiden3(852,318,2.75,"#0a0205","#ff3a5c")});
+
+/* ---------- Blood Maiden v4: feminine but with the knights' mass ---------- */
+SIL.lady3 = "M-28,0 C-24,-12 -18,-26 -12,-38 C-10.5,-41 -9,-44 -8.4,-47 C-9.4,-51 -11.2,-54 -12,-57 C-13,-59.5 -14.4,-61.5 -14.6,-62.6 Q-9,-65.4 -2,-65.6 L2,-65.6 Q9,-65.4 14.6,-62.6 C14.4,-61.5 13,-59.5 12,-57 C11.2,-54 9.4,-51 8.4,-47 C9,-44 10.5,-41 12,-38 C18,-26 24,-12 28,0 Q21,3 14,0 Q7,3 0,0 Q-7,3 -14,0 Q-21,3 -28,0 Z";
+function maiden4(x, base, s, color, blood){
+  return `<g transform="translate(${x},${base}) scale(${s})">`+
+    `<g class="sway slow" style="transform-origin:0px -62px"><path d="M-15,-62 C-20,-50 -24,-38 -26,-24 L-20,-28 L-16,-22 L-10,-30 L-4,-26 L0,-32 L4,-26 L10,-30 L16,-22 L20,-28 L26,-24 C24,-38 20,-50 15,-62 Z" fill="${color}" opacity=".9"/></g>`+
+    `<g class="sway slow" style="transform-origin:-4px -70px;animation-duration:5s"><path d="M-4,-75 C-8,-74 -9.4,-69 -9.2,-64 C-10.4,-57 -13.6,-51 -19,-45 C-14.4,-46.6 -11,-50 -9.4,-54 C-10,-49 -12.4,-45 -15.6,-41.6 C-10.4,-43.6 -8,-49 -7,-55 L-4.6,-66 Z" fill="${color}"/></g>`+
+    `<path d="${SIL.lady3}" fill="${color}"/>`+
+    `<path d="M-16,-60 Q-15,-66 -9,-65 L9,-65 Q15,-66 16,-60 Q12,-58 8,-60 Q4,-57 0,-59.5 Q-4,-57 -8,-60 Q-12,-58 -16,-60 Z" fill="${color}"/>`+
+    `<rect x="-1.8" y="-68.5" width="3.6" height="4" fill="${color}"/><ellipse cx="0" cy="-72" rx="4.6" ry="5.6" fill="${color}"/>`+
+    `<path d="M-5,-73 C-5.4,-78.6 -1,-80.4 1.6,-79.4 C4.6,-78.4 5.4,-75.2 5,-72 C4,-75 1.2,-76.4 -1.6,-76 C-3.4,-75.6 -4.6,-74.6 -5,-73 Z" fill="${color}"/>`+
+    `<path d="M-3.8,-77.2 L-3,-80.2 L-1.4,-78.4 L0,-81.6 L1.4,-78.4 L3,-80.2 L3.8,-77.2 Z" fill="${color}"/>${glow(0,-79.8,4,blood,1)}<circle cx="0" cy="-80.2" r="1" fill="#ff8a9a"/>`+
+    `${glow(-2,-72.4,3,blood,.9)}${glow(2,-72.4,3,blood,.9)}`+
+    `<path d="M-13.6,-60 Q-16.4,-52 -14.6,-42" stroke="${color}" stroke-width="3.6" stroke-linecap="round" fill="none"/>`+
+    `<path d="M13.4,-60.6 Q22,-63 30,-71" stroke="${color}" stroke-width="3.4" stroke-linecap="round" fill="none"/>`+
+    `<g>${glow(34,-75,30,blood,.85)}<circle cx="34" cy="-75" r="4.6" fill="#ff6a80"/><g class="spin" style="transform-origin:34px -75px;animation-duration:3s">${[0,1,2,3,4].map(i=>{const a=i/5*Math.PI*2, cx=34+Math.cos(a)*11, cy=-75+Math.sin(a)*11; return `<path d="M${f1(cx)},${f1(cy-2)} C${f1(cx+1.6)},${f1(cy)} ${f1(cx+1.6)},${f1(cy+2.4)} ${f1(cx)},${f1(cy+2.4)} C${f1(cx-1.6)},${f1(cy+2.4)} ${f1(cx-1.6)},${f1(cy)} ${f1(cx)},${f1(cy-2)} Z" fill="${blood}"/>`;}).join("")}</g></g>`+
+  `</g>`;
+}
+SCENES["classes/blood-maiden"] = r=>({sky:["#12050a","#4d1020"], fx:"petals", acc:"#ff3a5c", art:
+  stars(r,60,"#ffd6de")+bigMoon(860,128,100,"#c4283f","#ff3a5c").replace(/fill="#000"/g,'fill="#5a0a14"')+
+  `<path d="M690,${SH} L690,150 A170,170 0 0 1 1030,150 L1030,${SH} L1000,${SH} L1000,158 A140,140 0 0 0 720,158 L720,${SH} Z" fill="#160509"/>`+
+  thorns(r,SH,"#1a070c","#c4223f","#6e0f1f")+
+  `<rect x="0" y="312" width="${SW}" height="40" fill="#0c0306"/>`+
+  `<g transform="translate(860,318)">${glow(0,-110,170,"#ff3a5c",.35)}</g>`+maiden4(852,318,2.6,"#0a0205","#ff3a5c")});
+
 
 const CATS = {
   crafted:  {label:"Crafted",      title:"Crafted sets",      intro:"Crafted sets are made at their own station, in any armor weight and any slot, once you've researched the listed number of traits. Low-trait sets are levelling gear; the 6+ trait sets are built to last into the endgame."},
