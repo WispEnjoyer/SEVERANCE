@@ -1180,8 +1180,8 @@ Object.assign(SCENES, {
     `<g ${BLUR(3)}><path d="M780,318 C760,280 800,250 780,214 M940,318 C960,276 920,246 948,210" stroke="#7d6bd6" stroke-width="4" fill="none" opacity=".5" class="sway slow"/></g>`+fog(220,"#2a2440",.65,"fog drift")}),
   "classes/shadowblade": r=>({sky:["#040912","#13253c"], fx:"ash", acc:"#9fd8ff", art:
     stars(r,120,"#dfefff")+glow(860,120,220,"#9fd8ff",.35)+moon(860,120,78,"#e8f3ff","#9fd8ff")+
-    rooftops(r,300,"#060c14","#ffcf7a")+`<path d="M818,${SH} L818,206 L860,170 L902,206 L902,${SH} Z" fill="#02050a"/>`+
-    `<g transform="translate(846,170)">${fig("crouch",0,0,2.6,"#02050a")}<path class="sway" style="transform-origin:-26px -26px" d="M-26,-26 C-60,-18 -84,2 -104,28" stroke="#02050a" stroke-width="8" fill="none" stroke-linecap="round"/><line class="win" x1="58" y1="-40" x2="90" y2="-10" stroke="#e8f6ff" stroke-width="2.5"/>${glow(74,-25,18,"#bfe6ff",.6)}</g>`+fog(230,"#0a1a2a",.6,"fog drift")}),
+    rooftops(r,300,"#060c14","#ffcf7a")+`<path d="M810,${SH} L810,214 L830,198 L890,198 L910,214 L910,${SH} Z" fill="#02050a"/>`+
+    `<g transform="translate(860,200)">${fig("crouch",0,0,2.6,"#02050a")}<path class="sway" style="transform-origin:-10px -84px" d="M-10,-84 C-40,-80 -64,-70 -90,-56" stroke="#02050a" stroke-width="8" fill="none" stroke-linecap="round"/><line class="win" x1="58" y1="-40" x2="90" y2="-10" stroke="#e8f6ff" stroke-width="2.5"/>${glow(74,-25,18,"#bfe6ff",.6)}</g>`+fog(230,"#0a1a2a",.6,"fog drift")}),
   "classes/holy-knight": r=>({sky:["#3a2810","#f0d090"], fx:"motes", acc:"#fff1c4", art:
     sun(860,96,38,"#fff3c8")+hills(r,250,30,"#b08c4c",.7)+castle(r,80,520,282,"#8a6a34","#fff1c4")+
     `<g transform="translate(860,316)">${glow(0,-100,170,"#fff3c8",.55)}<path d="${SIL.knight}" transform="scale(2.5)" fill="#3a2a10"/>${sword(0,-10,140,"#3a2a10","#fff6d8")}<path d="M0,-160 L0,-22" stroke="#fffaf0" stroke-width="2.6"/></g>`+hills(r,312,12,"#5a4420",1)}),
@@ -1290,7 +1290,7 @@ Object.assign(SCENES, {
   "races/dreadkin": r=>({sky:["#070d0a","#1e3627"], fx:"fireflies", acc:"#9df5b0", art:
     stars(r,60,"#d9f2df")+bigMoon(860,120,90,"#dff5e4","#8df0a6")+birds(r,9,"#050a07")+hills(r,236,30,"#132219",.9)+
     deadTree(r,1080,300,230,"#07100b")+deadTree(r,620,300,180,"#07100b")+graves(r,302,"#0a140e")+
-    `<path d="M808,302 Q860,286 912,302 Z" fill="#050a07"/><g transform="translate(860,300)">${glow(0,-60,110,"#8df0a6",.35)}<path d="${SIL.risen}" transform="scale(2.5)" fill="#030604"/>${glow(-6,-140,8,"#9dffb8",1)}${glow(6,-140,8,"#9dffb8",1)}</g>`+
+    `<path d="M808,302 Q860,286 912,302 Z" fill="#050a07"/><g transform="translate(860,300)">${glow(0,-60,110,"#8df0a6",.35)}<path d="${SIL.risen}" transform="scale(2.5)" fill="#030604"/>${glow(-7,-150,8,"#9dffb8",1)}${glow(7,-150,8,"#9dffb8",1)}</g>`+
     fog(170,"#5f8a70",.42,"fog drift")+fence(338,"#030604")}),
   "races/duskborn": r=>({sky:["#0a0a20","#3a2e66"], fx:"fireflies", acc:"#b6c3ff", art:
     stars(r,110,"#e6e8ff")+bigMoon(860,96,70,"#e8ebff","#9aa6ff")+
@@ -1372,7 +1372,7 @@ Object.assign(SCENES, {
     glow(860,240,180,"#ffcf7a",.7)+`<path d="M780,${SH} L780,190 A80,80 0 0 1 940,190 L940,${SH} Z" fill="#ffb85a" opacity=".8"/>`+
     `<g>${Array.from({length:7},(_,i)=>`<rect x="${790+i*22}" y="120" width="5" height="160" fill="#0a0c16"/>`).join("")}<rect x="780" y="150" width="160" height="4" fill="#0a0c16"/><rect x="780" y="200" width="160" height="4" fill="#0a0c16"/></g>`+
     torch(740,200,"#ffb04a")+torch(980,200,"#ffb04a")+
-    [[750,1],[970,-1]].map(([x,d])=>`<g transform="translate(${x},332)"><path d="${SIL.knight}" transform="scale(1.9)" fill="#030408"/><g transform="rotate(${d*-6})"><rect x="${d*30-2}" y="-250" width="5" height="250" fill="#030408"/><path d="M${d*30},-250 l-7,22 l14,0 Z M${d*30+2},-226 l${d*30},10 l0,26 l${-d*30},-10 Z" fill="#030408"/></g></g>`).join("")}),
+    [[750,1],[970,-1]].map(([x,d])=>`<g transform="translate(${x},332)"><path d="${SIL.knight}" transform="scale(1.9)" fill="#030408"/><g transform="rotate(${d*-6})"><rect x="${d*46-2}" y="-250" width="5" height="250" fill="#030408"/><path d="M${d*46},-250 l-7,22 l14,0 Z M${d*46+2},-226 l${d*30},10 l0,26 l${-d*30},-10 Z" fill="#030408"/></g></g>`).join("")}),
   "weapons/twinblade": r=>({sky:["#140606","#5a1a12"], fx:"sparks", acc:"#ffb08a", art:
     bigMoon(860,150,110,"#e84a3a","#ff6a4a").replace(/fill="#000"/g,'fill="#5a0a06"')+
     `<g fill="none" stroke="#ffd0b0" opacity=".25">${Array.from({length:8},(_,i)=>`<path class="drift" style="animation-duration:${4+i}s" d="M${-100+i*30},${240+i*10} Q${300+i*40},${220+i*6} ${700+i*30},${250+i*8}"/>`).join("")}</g>`+
@@ -1421,14 +1421,89 @@ Object.assign(SCENES, {
     stars(r,120,"#e6e8ff")+bigMoon(860,108,74,"#eef0ff","#9aa6ff")+
     `<g ${BLUR(2)} opacity=".6">${(()=>{let t="";for(let i=0;i<10;i++){const x=i*130+r()*50; if(Math.abs(x-860)<150) continue; t+=elfTree(r,x,236,130+r()*50,"#2a2560");}return t;})()}</g>`+
     lake(236,"#110f30",860,150,"#dfe3ff")+
-    `<path d="M770,${SH} L784,280 L840,264 L904,270 L940,${SH} Z" fill="#06051a"/><g transform="translate(860,268)">${fig("elf",0,0,2.9,"#06051a")}<path d="M14,-138 L60,-184" stroke="#dfe4ff" stroke-width="2.4" class="win"/><path class="sway" style="transform-origin:-8px -154px" d="M-8,-154 C-40,-142 -54,-104 -62,-60" stroke="#06051a" stroke-width="8" fill="none"/></g>`+
+    `<path d="M770,${SH} L784,280 L840,264 L904,270 L940,${SH} Z" fill="#06051a"/><g transform="translate(860,268)">${fig("elf",0,0,2.9,"#06051a")}<path d="M88,-80 L132,-150" stroke="#dfe4ff" stroke-width="2.4" class="win"/><path class="sway" style="transform-origin:-8px -154px" d="M-8,-154 C-40,-142 -54,-104 -62,-60" stroke="#06051a" stroke-width="8" fill="none"/></g>`+
     elfTree(r,60,352,380,"#07061a","#b6c3ff")+elfTree(r,1170,352,360,"#07061a","#b6c3ff")}),
   "races/ashkin": r=>({sky:["#170705","#5a1a0c"], fx:"embers", acc:"#ff7a2e", art:
     bigMoon(860,116,84,"#c84a2a","#ff5a1f").replace(/fill="#000"/g,'fill="#4a0a04"')+smoke(r,"#000",7,.45)+
     (()=>{let s="";for(let i=0;i<6;i++){const x=420+i*130+(r()-.5)*40; if(Math.abs(x-860)<60) continue; s+=`<path d="M${f1(x-16)},300 L${f1(x-8)},${f1(150+r()*60)} L${f1(x)},${f1(126+r()*40)} L${f1(x+10)},${f1(166+r()*50)} L${f1(x+18)},300 Z" fill="#1a0806"/>`;}return s;})()+
     `<rect x="0" y="292" width="${SW}" height="60" fill="#120403"/><g ${BLUR(1)}>${Array.from({length:12},()=>{const x=r()*SW; return `<path class="lava" d="M${f1(x)},${f1(300+r()*30)} l${f1(30+r()*40)},${f1((r()-.5)*10)} l${f1(20+r()*30)},${f1((r()-.5)*10)}" stroke="#ff6a2b" stroke-width="2.5" fill="none"/>`;}).join("")}</g>`+
-    `<g transform="translate(860,316)">${glow(0,-90,160,"#ff5a1f",.6)}<path d="${SIL.cloaked}" transform="scale(1.9)" fill="#0a0302"/><path class="lava" d="M-4,-176 L2,-150 L-6,-124 L4,-96 L-2,-64 M12,-160 L8,-130 L16,-104 M-16,-140 L-24,-116" stroke="#ff8a3d" stroke-width="2.4" fill="none"/>${glow(-5,-200,7,"#ffb04a",1)}${glow(5,-200,7,"#ffb04a",1)}</g>`+
+    `<g transform="translate(860,316)">${glow(0,-90,160,"#ff5a1f",.6)}<path d="${SIL.cloaked}" transform="scale(1.9)" fill="#0a0302"/><path class="lava" d="M-4,-176 L2,-150 L-6,-124 L4,-96 L-2,-64 M12,-160 L8,-130 L16,-104 M-16,-140 L-24,-116" stroke="#ff8a3d" stroke-width="2.4" fill="none"/>${glow(-6,-184,7,"#ffb04a",1)}${glow(6,-184,7,"#ffb04a",1)}</g>`+
     `<g class="smoke"><path d="M860,96 C836,66 890,46 866,14 C842,-16 896,-34 872,-64" stroke="#5a4a46" stroke-width="16" fill="none" opacity=".4" ${BLUR(4)}/></g>`}),
+});
+
+/* ================= Blocky avatars (Roblox-style) for every humanoid ================= */
+const RB = (()=>{
+  const P = pts => "M"+pts.map(p=>f1(p[0])+","+f1(p[1])).join(" L")+" Z ";
+  // limb hanging from pivot (px,py): angle th (deg), 0 = straight down, + = toward +x
+  const limb = (px,py,w,len,th) => { const a=th*Math.PI/180, dx=Math.sin(a), dy=Math.cos(a), nx=dy*w/2, ny=-dx*w/2;
+    return P([[px+nx,py+ny],[px-nx,py-ny],[px-nx+dx*len,py-ny+dy*len],[px+nx+dx*len,py+ny+dy*len]]); };
+  const head = (cx,cy,h) => { const c=h*.18, s=h/2; return P([[cx-s+c,cy-s],[cx+s-c,cy-s],[cx+s,cy-s+c],[cx+s,cy+s-c],[cx+s-c,cy+s],[cx-s+c,cy+s],[cx-s,cy+s-c],[cx-s,cy-s+c]]); };
+  function build(o){
+    const u=o.u, hipY=-2*u, shY=-4*u, d=[];
+    const legs=o.legs||[0,0], arms=o.arms||[0,0], lean=o.lean||0;
+    if(o.cape) d.push(P([[-1.1*u,shY+.2*u],[1.1*u,shY+.2*u],[o.cape*u,0],[-o.cape*u,0]]));
+    if(o.gown) d.push(P([[-1*u,hipY-.4*u],[1*u,hipY-.4*u],[1.8*u,0],[-1.8*u,0]]));
+    else { d.push(limb(-.5*u,hipY,u*.98,2*u,legs[0])); d.push(limb(.5*u,hipY,u*.98,2*u,legs[1])); }
+    d.push(P([[-u,shY],[u,shY],[u,hipY],[-u,hipY]]));
+    d.push(limb(-1.5*u,shY+.1*u,u*.92,2*u,arms[0])); d.push(limb(1.5*u,shY+.1*u,u*.92,2*u,arms[1]));
+    const hs=(o.big?1.42:1.22)*u, hc=shY-hs/2-.02*u;
+    d.push(head(0,hc,hs));
+    if(o.helm){ d.push(P([[-.13*u,hc-hs/2-.75*u],[.13*u,hc-hs/2-.75*u],[.2*u,hc-hs/2],[-.2*u,hc-hs/2]])); d.push(P([[-.13*u,hc-hs/2-.75*u],[.6*u,hc-hs/2-.55*u],[.13*u,hc-hs/2-.45*u]])); }
+    if(o.hood) d.push(P([[-.82*u,shY+.3*u],[-.82*u,hc-hs*.35],[0,hc-hs/2-.75*u],[.82*u,hc-hs*.35],[.82*u,shY+.3*u]]));
+    if(o.horns){ d.push(P([[-.7*u,hc-hs*.3],[-1.5*u,hc-hs-.6*u],[-.95*u,hc-hs*.6]])); d.push(P([[.7*u,hc-hs*.3],[1.5*u,hc-hs-.6*u],[.95*u,hc-hs*.6]])); }
+    return d.join("");
+  }
+  function crouch(u){
+    const hip=[0,-1.5*u], a=58*Math.PI/180, tx=Math.sin(a), ty=-Math.cos(a);
+    const top=[hip[0]+tx*2*u, hip[1]+ty*2*u], perp=[-ty,tx];
+    const torso=P([[hip[0]-perp[0]*u,hip[1]-perp[1]*u],[hip[0]+perp[0]*u,hip[1]+perp[1]*u],[top[0]+perp[0]*u,top[1]+perp[1]*u],[top[0]-perp[0]*u,top[1]-perp[1]*u]]);
+    const hc=[hip[0]+tx*2.75*u, hip[1]+ty*2.75*u];
+    return torso + head(hc[0],hc[1],1.22*u) + P([[hc[0]-.8*u,hc[1]+.3*u],[hc[0]-.9*u,hc[1]-.7*u],[hc[0]-.1*u,hc[1]-1.4*u],[hc[0]+.7*u,hc[1]-.6*u]]) +
+      limb(-.4*u,-1.5*u,u*.95,1.6*u,-70) + limb(-1.4*u,-.1*u,u*.95,1.4*u,10) + limb(.4*u,-1.5*u,u*.95,1.5*u,60) + limb(1.6*u,-.4*u,u*.95,.9*u,0) +
+      limb(top[0],top[1],u*.9,2*u,20) + limb(top[0]+.4*u,top[1]+.2*u,u*.9,1.9*u,40);
+  }
+  return {build, crouch};
+})();
+Object.assign(SIL, {
+  knight:  RB.build({u:15, cape:1.75, helm:true, arms:[-6,6], legs:[-3,3]}),
+  hood:    RB.build({u:8.6, gown:true, hood:true, arms:[-8,8]}),
+  crouch:  RB.build({u:8, hood:true, arms:[-24,42], legs:[-9,9]}),
+  archer:  RB.build({u:9, arms:[-80,82], legs:[-14,12]}),
+  fighter: RB.build({u:10, arms:[-30,122], legs:[-28,24]}),
+  walker:  RB.build({u:9.6, arms:[-6,6], legs:[-6,8]}),
+  risen:   RB.build({u:13, arms:[-168,168], legs:[-6,6]}),
+  maiden:  RB.build({u:13, gown:true, hood:true, arms:[-14,14]}),
+  elf:     RB.build({u:12.2, hood:true, cape:1.5, arms:[-6,30], legs:[-4,4]}),
+  warden:  RB.build({u:23, big:true, horns:true, arms:[-30,30], legs:[-6,6]}),
+  cloaked: RB.build({u:21, hood:true, cape:1.9, arms:[-62,62], legs:[-6,6]}),
+  spinner: RB.build({u:10.5, arms:[-88,88], legs:[-14,14]}),
+});
+
+/* scenes whose props must line up with the new avatar hands */
+Object.assign(SCENES, {
+  "races/oakborn": r=>({sky:["#0c1c10","#4a7a3a"], fx:"leaves", acc:"#c8f070", art:
+    bigMoon(860,170,96,"#fff6c8","#e8ffb0").replace(/<circle cx="[\d.]+" cy="[\d.]+" r="[\d.]+" fill="#000"[^>]*>/g,"")+shafts(r,"#f4ffc8",7,.12)+
+    `<g ${BLUR(2)} opacity=".6">${(()=>{let t="";for(let i=0;i<9;i++)t+=elfTree(r,i*150+r()*60,290,170+r()*60,"#3a6a3a");return t;})()}</g>`+fog(170,"#4a7a4a",.5)+
+    `<path d="M1240,${SH} L1240,0 L1140,0 C1150,80 1150,180 1120,${SH} Z" fill="#0a160c"/><path d="M1150,170 C1060,162 980,170 900,190 C880,194 870,200 860,206 L864,214 C900,204 1000,192 1144,196 Z" fill="#0a160c"/>`+
+    `<g transform="translate(880,200)">${fig("archer",0,0,2.4,"#0a160c")}<path d="M74,-112 C104,-90 104,-46 74,-24" stroke="#0a160c" stroke-width="4" fill="none"/><line x1="74" y1="-112" x2="40" y2="-70" stroke="#e8ffb0" stroke-width="1"/><line x1="40" y1="-70" x2="74" y2="-24" stroke="#e8ffb0" stroke-width="1"/><line class="win" x1="40" y1="-70" x2="120" y2="-70" stroke="#e8ffb0" stroke-width="1.6"/></g>`+
+    elfTree(r,60,352,380,"#0a160c","#c8f070")+ferns(r,336,"#0a160c",60)}),
+  "weapons/bow": r=>({sky:["#08101a","#22405a"], fx:"motes", acc:"#e8fff0", art:
+    stars(r,140,"#fff")+bigMoon(860,140,112,"#f0fbff","#bfe8ff")+hills(r,262,30,"#102030",.8)+
+    `<path d="M720,${SH} L760,268 L820,252 L900,256 L960,272 L1000,${SH} Z" fill="#050b12"/>`+
+    `<g transform="translate(830,256)">${fig("archer",0,0,2.8,"#050b12")}<path d="M86,-130 C122,-104 122,-50 86,-24" stroke="#050b12" stroke-width="5" fill="none"/><line x1="86" y1="-130" x2="44" y2="-80" stroke="#dff2ff" stroke-width="1"/><line x1="44" y1="-80" x2="86" y2="-24" stroke="#dff2ff" stroke-width="1"/><line x1="44" y1="-80" x2="140" y2="-80" stroke="#050b12" stroke-width="3"/></g>`+
+    [0,1,2,3].map(i=>`<g class="arrow" style="animation-delay:${-i*.8}s;animation-duration:2.6s"><line x1="980" y1="${120+i*22}" x2="1030" y2="${116+i*22}" stroke="#e8fff0" stroke-width="2"/><path d="M1030,${116+i*22} l-8,-4 l0,8 Z" fill="#e8fff0"/></g>`).join("")+
+    `<g fill="none" stroke="#050b12" stroke-width="2">${Array.from({length:40},()=>{const x=r()*SW; return `<path class="sway" style="transform-origin:${f1(x)}px 340px" d="M${f1(x)},340 q${f1((r()-.5)*10)},-20 ${f1((r()-.5)*16)},-${f1(20+r()*20)}"/>`;}).join("")}</g>`}),
+  combat: r=>({sky:["#1a0a08","#a2421a"], fx:"sparks", acc:"#ffd27a", art:
+    bigMoon(860,186,120,"#ffd27a","#ff8a3a").replace(/fill="#000"[^>]*>/g,'fill="#000" opacity="0"/>')+crags(r,250,60,"#5a2a14",.6,100)+
+    `<path d="M600,${SH} L640,300 L720,292 L860,296 L1000,290 L1080,300 L1120,${SH} Z" fill="#0a0403"/>`+
+    `<g transform="translate(776,298)">${fig("fighter",0,0,2.9,"#0a0403")}</g><g transform="translate(944,298)">${fig("fighter",0,0,2.9,"#0a0403",true)}</g>`+
+    `<line x1="868" y1="160" x2="824" y2="88" stroke="#0a0403" stroke-width="5"/><line x1="852" y1="160" x2="896" y2="88" stroke="#0a0403" stroke-width="5"/>`+
+    `<g class="win">${glow(860,124,46,"#fff6d8",1)}</g>`+bannersHung(r,"#3a0f08","#ffb04a").replace(/<g class="sway slow" style="transform-origin:(430|770|1030)px[\s\S]*?<\/g>/g,"")}),
+  enemies: r=>({sky:["#0a0c0f","#2a2e34"], fx:"ash", acc:"#ffd9a0", art:
+    `<g ${BLUR(6)}><rect class="shim" x="680" y="30" width="360" height="300" fill="#e8e2d0" opacity=".22"/></g>`+glow(860,180,260,"#f2e6c8",.35)+
+    pillars(r,"#050608")+torch(560,170,"#ffb04a")+torch(1160,170,"#ffb04a")+
+    `<g transform="translate(860,324) scale(2.15)"><path d="${SIL.warden}" fill="#020304"/>${glow(-8,-110,7,"#ff3a1a",1)}${glow(8,-110,7,"#ff3a1a",1)}<rect x="-11" y="-112" width="6" height="4" fill="#ffb09a"/><rect x="5" y="-112" width="6" height="4" fill="#ffb09a"/>`+
+    `<g class="sway" style="transform-origin:-58px -48px"><path d="M-58,-48 C-90,-20 -110,0 -150,22" stroke="#2a2e34" stroke-width="3" fill="none" stroke-dasharray="5 2"/></g><g class="sway" style="transform-origin:58px -48px;animation-delay:-2s"><path d="M58,-48 C96,-24 120,0 170,22" stroke="#2a2e34" stroke-width="3" fill="none" stroke-dasharray="5 2"/></g></g>`+fog(250,"#000",.5)}),
 });
 
 
