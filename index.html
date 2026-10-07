@@ -1539,6 +1539,32 @@ SCENES["classes/berserker"] = r=>({sky:["#1c0604","#9a2e10"], fx:"embers", acc:"
   viking2(860,272,1.05,"#0c0302","#ffb070")+
   brazier(610,326,"#0c0302")+hills(r,330,6,"#0c0302",1)});
 
+/* ---------- Berserker v3: same cloaked-silhouette language as the knights ---------- */
+function viking3(x, base, s, color, rimc){
+  const axe = k => `<path d="M${22*k},-46 L${40*k},-100" stroke="${color}" stroke-width="2.6" stroke-linecap="round"/>`+
+    `<path d="M${38*k},-102 C${52*k},-112 ${62*k},-100 ${58*k},-84 C${53*k},-90 ${47*k},-92 ${39*k},-92 Z" fill="${color}"/>`+
+    `<path d="M${56*k},-104 C${62*k},-98 ${62*k},-90 ${58*k},-84" stroke="${rimc}" stroke-width="1.2" fill="none" class="win"/>`+
+    `<path d="M${18*k},-52 L${26*k},-48 L${24*k},-40 L${16*k},-44 Z" fill="${color}"/>`;
+  return `<g transform="translate(${x},${base}) scale(${s})">`+
+    `<path d="${SIL.knight}" fill="${color}"/>`+
+    `<path d="M-30,-58 L-26,-64 L-18,-67 L-9,-69 L0,-70 L9,-69 L18,-67 L26,-64 L30,-58 L26,-54 L21,-58 L16,-52 L10,-56 L4,-51 L0,-55 L-4,-51 L-10,-56 L-16,-52 L-21,-58 L-26,-54 Z" fill="${color}"/>`+
+    `<path d="M-4,-72 C-10,-72 -15,-77 -16,-88 C-12,-83 -9,-80 -3,-79 Z M4,-72 C10,-72 15,-77 16,-88 C12,-83 9,-80 3,-79 Z" fill="${color}"/>`+
+    `<path d="M-6,-70 L-5,-60 L-2,-52 L0,-48 L2,-52 L5,-60 L6,-70 Z" fill="${color}"/>`+
+    axe(1)+axe(-1)+
+    `${glow(-3,-76,3,"#ff5a1f",1)}${glow(3,-76,3,"#ff5a1f",1)}<rect x="-4.4" y="-76.6" width="2.4" height="1.4" fill="#ffb07a"/><rect x="2" y="-76.6" width="2.4" height="1.4" fill="#ffb07a"/>`+
+  `</g>`;
+}
+SCENES["classes/berserker"] = r=>({sky:["#1c0604","#9a2e10"], fx:"embers", acc:"#ff9a3d", art:
+  glow(860,150,400,"#ff6a2b",.6)+`<circle cx="860" cy="140" r="112" fill="#e8502a"/><circle cx="860" cy="140" r="112" fill="#ffb04a" opacity=".22"/>`+smoke(r,"#000",5,.3)+
+  `<path d="M-20,${SH} L-20,150 L60,110 L150,140 L240,100 L330,150 L420,170 L520,220 L560,250 L560,${SH} Z" fill="#2a0c06"/>`+
+  `<path d="M1220,${SH} L1220,120 L1150,90 L1080,130 L1020,160 L980,210 L960,250 L960,${SH} Z" fill="#2a0c06"/>`+
+  `<rect x="0" y="250" width="${SW}" height="90" fill="#3a1208"/>`+
+  `<g>${Array.from({length:8},(_,i)=>`<rect class="shim" style="animation-delay:${-i*.4}s" x="${f1(800-60+i*3)}" y="${256+i*8}" width="${f1(120-i*10)}" height="2" rx="1" fill="#ffb04a" opacity="${f1(.5-i*.05)}"/>`).join("")}</g>`+
+  longship(1060,258,.6,"#120403","#5a140a","#c8402a")+
+  `<path d="M650,${SH} L690,290 L760,276 L840,270 L930,274 L990,288 L1020,${SH} Z" fill="#0c0302"/>`+
+  `<g transform="translate(860,318)">${glow(0,-110,170,"#ff7a3a",.45)}</g>`+viking3(860,318,2.5,"#0a0302","#ffd0a0")+
+  brazier(610,326,"#0c0302")+hills(r,332,6,"#0c0302",1)});
+
 
 const CATS = {
   crafted:  {label:"Crafted",      title:"Crafted sets",      intro:"Crafted sets are made at their own station, in any armor weight and any slot, once you've researched the listed number of traits. Low-trait sets are levelling gear; the 6+ trait sets are built to last into the endgame."},
