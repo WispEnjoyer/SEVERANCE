@@ -3,315 +3,318 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SEVERANCE Wiki</title>
-<meta name="description" content="The SEVERANCE wiki: the world, races, classes, weapons, combat, item sets and crafting for the game by Koala Studios.">
+<title>Severance Wiki</title>
+<meta name="description" content="The Severance wiki: the realms, races, classes, weapons, combat, item sets and crafting of the game by Koala Studios.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@400;500;600;700&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0e0c0b; --bg2:#141110; --surface:#1a1614; --surface2:#221d1a; --line:#2e2723; --line2:#3d342e;
-  --text:#ece4d9; --muted:#a1958a; --faint:#6f655c;
-  --ember:#e2793f; --ember-dim:#e2793f22; --blood:#c2414a;
-  --mana:#6f9dea; --stamina:#7cc47f; --tank:#d4a14a; --healer:#e8d27a; --hybrid:#b48ee6;
-  --serif:"Cormorant Garamond",Georgia,serif; --sans:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
-  --side:272px;
+  --bg:#1f1c24; --bg2:#27232d; --bg3:#2f2a36; --rule:#38323f; --rule2:#4b4455;
+  --ink:#ece7df; --ink2:#b5adba; --ink3:#867d8c;
+  --gold:#e2b84e; --gold-soft:#e2b84e26; --cut:#d2434b;
+  --mana:#80a8f0; --stamina:#88c58b; --health:#e3676e; --tank:#dba65a; --healer:#e9d88a; --hybrid:#bf9cec;
+  --r-oak:#66745d; --r-dra:#a3442f; --r-aet:#5d5898; --r-dee:#357080; --r-elo:#4b7a40; --r-six:#2a2229;
+  --display:"Grenze Gotisch",Georgia,serif; --text:"Alegreya Sans",system-ui,sans-serif;
 }
 @media (prefers-color-scheme: light){
   :root:not([data-theme="dark"]){
-    --bg:#f3eee6; --bg2:#ece5da; --surface:#fbf8f3; --surface2:#f1ebe2; --line:#ddd3c5; --line2:#cbbfae;
-    --text:#1f1915; --muted:#64584d; --faint:#958879;
-    --ember:#b6531d; --ember-dim:#b6531d1a; --blood:#9e2a33;
-    --mana:#2f63b8; --stamina:#2f7d34; --tank:#97690f; --healer:#8a7410; --hybrid:#7442b5;
+    --bg:#e7e4e9; --bg2:#dedae2; --bg3:#d4cfd9; --rule:#c6c0cc; --rule2:#aaa2b2;
+    --ink:#1e1a23; --ink2:#4f4757; --ink3:#766d7e;
+    --gold:#8a620f; --gold-soft:#8a620f1f; --cut:#a52630;
+    --mana:#2f5db0; --stamina:#2e7633; --health:#b0303a; --tank:#8d5f12; --healer:#776710; --hybrid:#6e40ae;
+    --r-six:#3a2e36;
   }
 }
 :root[data-theme="light"]{
-  --bg:#f3eee6; --bg2:#ece5da; --surface:#fbf8f3; --surface2:#f1ebe2; --line:#ddd3c5; --line2:#cbbfae;
-  --text:#1f1915; --muted:#64584d; --faint:#958879;
-  --ember:#b6531d; --ember-dim:#b6531d1a; --blood:#9e2a33;
-  --mana:#2f63b8; --stamina:#2f7d34; --tank:#97690f; --healer:#8a7410; --hybrid:#7442b5;
+  --bg:#e7e4e9; --bg2:#dedae2; --bg3:#d4cfd9; --rule:#c6c0cc; --rule2:#aaa2b2;
+  --ink:#1e1a23; --ink2:#4f4757; --ink3:#766d7e;
+  --gold:#8a620f; --gold-soft:#8a620f1f; --cut:#a52630;
+  --mana:#2f5db0; --stamina:#2e7633; --health:#b0303a; --tank:#8d5f12; --healer:#776710; --hybrid:#6e40ae;
+  --r-six:#3a2e36;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--text);-webkit-font-smoothing:antialiased;font-variant-numeric:lining-nums}
 a{color:inherit;text-decoration:none}
-button{font:inherit;color:inherit}
-::selection{background:var(--ember);color:#fff}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:2px}
+::selection{background:var(--gold);color:var(--bg)}
+.link,.prose a{color:var(--gold);text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--gold) 40%,transparent);text-underline-offset:3px;text-decoration-thickness:1px}
+.link:hover,.prose a:hover{text-decoration-color:var(--gold)}
 
-/* ---------- shell ---------- */
-.side{position:fixed;inset:0 auto 0 0;width:var(--side);background:var(--bg2);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:20}
-.brand{padding:26px 24px 18px;border-bottom:1px solid var(--line)}
-.brand a{display:block}
-.wordmark{font:700 30px/1 var(--serif);letter-spacing:.16em;position:relative;display:inline-block}
-.wordmark .cut{position:relative;display:inline-block}
-.wordmark .cut::after{content:"";position:absolute;left:-3px;right:-3px;top:54%;height:2px;background:var(--blood);transform:rotate(-8deg)}
-.brand small{display:block;margin-top:8px;font:500 11px var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
-.search{margin:16px 18px 6px;position:relative}
-.search input{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 12px 9px 34px;color:var(--text);font:14px var(--sans);outline:none;transition:border-color .15s}
-.search input:focus{border-color:var(--ember)}
-.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--faint)}
-.search kbd{position:absolute;right:9px;top:50%;transform:translateY(-50%);font:11px var(--mono);color:var(--faint);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
-nav.toc{flex:1;overflow:auto;padding:10px 12px 24px}
-.toc h4{margin:18px 12px 6px;font:500 11px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
-.toc a{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;border-radius:6px;color:var(--muted);font-size:14px;transition:background .12s,color .12s}
-.toc a:hover{background:var(--surface);color:var(--text)}
-.toc a.on{background:var(--ember-dim);color:var(--text);box-shadow:inset 2px 0 0 var(--ember)}
-.toc a .n{font:12px var(--mono);color:var(--faint)}
-.toc .sub{padding-left:12px}
-.side-foot{padding:14px 24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--faint)}
-.theme-btn{background:none;border:1px solid var(--line);border-radius:6px;padding:4px 8px;cursor:pointer;color:var(--muted);display:flex;align-items:center}
-.theme-btn:hover{color:var(--text);border-color:var(--line2)}
+/* ---------- the severed wordmark ---------- */
+.mark{position:relative;display:inline-block;font:600 34px/1 var(--display);letter-spacing:.02em;color:var(--ink)}
+.mark span{display:block}
+.mark .b{position:absolute;inset:0;color:var(--ink)}
+.mark .a{clip-path:polygon(0 0,100% 0,100% 38%,0 66%)}
+.mark .b{clip-path:polygon(0 66%,100% 38%,100% 100%,0 100%);transform:translate(3px,2px)}
+.mark::after{content:"";position:absolute;left:-4px;right:-6px;top:50%;height:1px;background:var(--cut);transform:rotate(-6.5deg);transform-origin:center}
 
-.topbar{display:none}
-main{margin-left:var(--side);min-height:100vh}
-.page{max-width:1120px;margin:0 auto;padding:44px 56px 96px;animation:in .28s ease}
-@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* ---------- masthead ---------- */
+.mast{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+.mast-in{max-width:1400px;margin:0 auto;padding:14px 32px;display:flex;align-items:center;gap:36px}
+.mast nav{display:flex;gap:4px}
+.mast nav button{background:none;border:0;padding:8px 14px;cursor:pointer;color:var(--ink2);font-size:17px;border-radius:3px}
+.mast nav button:hover,.mast nav button[aria-expanded="true"]{color:var(--ink);background:var(--bg2)}
+.mast nav button.here{color:var(--ink);box-shadow:inset 0 -2px 0 var(--gold)}
+.find{margin-left:auto;position:relative}
+.find input{width:260px;background:var(--bg2);border:1px solid var(--rule);border-radius:3px;padding:7px 12px 7px 34px;color:var(--ink);outline:none;font-size:16px}
+.find input:focus{border-color:var(--gold)}
+.find svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--ink3)}
+.icon-btn{background:none;border:1px solid var(--rule);border-radius:3px;padding:7px;cursor:pointer;color:var(--ink2);display:flex}
+.icon-btn:hover{color:var(--ink);border-color:var(--rule2)}
+.burger{display:none}
+.drop{position:absolute;left:0;right:0;top:100%;background:var(--bg2);border-bottom:1px solid var(--rule);display:none}
+.drop.open{display:block}
+.drop-in{max-width:1400px;margin:0 auto;padding:26px 32px 30px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px 40px}
+.drop h3{font:500 26px/1.1 var(--display);margin:0 0 4px}
+.drop h3 a:hover{color:var(--gold)}
+.drop p{margin:0 0 8px;color:var(--ink3);font-size:15px;line-height:1.4}
+.drop .kids{display:flex;flex-wrap:wrap;gap:2px 12px;font-size:15px}
+.drop .kids a{color:var(--ink2)} .drop .kids a:hover{color:var(--gold)}
+.drop .grp{display:none}
 
-/* ---------- type ---------- */
-.crumbs{font:12px var(--mono);letter-spacing:.06em;color:var(--faint);margin-bottom:18px;display:flex;flex-wrap:wrap;gap:6px}
-.crumbs a{color:var(--muted)} .crumbs a:hover{color:var(--ember)}
-h1{font:600 52px/1.05 var(--serif);margin:0 0 14px;letter-spacing:.01em}
-h2{font:600 30px/1.15 var(--serif);margin:52px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line)}
-h3{font:600 15px var(--sans);margin:26px 0 8px}
-p{margin:0 0 14px;max-width:72ch}
-.lede{font-size:17px;color:var(--muted);max-width:66ch}
-.meta{font:12px var(--mono);color:var(--faint);margin:-4px 0 22px}
-.mono{font-family:var(--mono)}
-.muted{color:var(--muted)}
-.note{display:flex;gap:12px;align-items:flex-start;background:var(--ember-dim);border:1px solid color-mix(in srgb,var(--ember) 35%,transparent);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:14px;max-width:80ch}
-.note svg{flex:none;margin-top:3px;color:var(--ember)}
-.link{color:var(--ember);border-bottom:1px solid color-mix(in srgb,var(--ember) 40%,transparent)}
-.link:hover{border-bottom-color:var(--ember)}
+/* ---------- page frame ---------- */
+.frame{max-width:1400px;margin:0 auto;padding:0 32px}
+.page{padding:44px 0 96px}
+.page.doc{display:grid;grid-template-columns:210px minmax(0,1fr) 270px;gap:56px;align-items:start}
+.page.doc.no-rail{grid-template-columns:210px minmax(0,1fr)}
+.local{position:sticky;top:96px;font-size:15.5px}
+.local h4{font:500 22px var(--display);margin:0 0 8px;color:var(--ink2)}
+.local a{display:block;padding:3px 0 3px 12px;border-left:1px solid var(--rule);color:var(--ink3)}
+.local a:hover{color:var(--ink)}
+.local a.on{color:var(--ink);border-left:2px solid var(--gold);padding-left:11px}
+.local .sub a{padding-left:24px;font-size:14.5px}
+.local .sub a.on{padding-left:23px}
+.main{min-width:0;max-width:820px}
+.rail{position:sticky;top:96px;display:flex;flex-direction:column;gap:28px}
 
-/* ---------- home ---------- */
-.hero{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;padding:64px 48px 52px;background:
-  radial-gradient(120% 140% at 85% 0%, color-mix(in srgb,var(--ember) 22%,transparent) 0%, transparent 55%),
-  radial-gradient(90% 120% at 0% 100%, color-mix(in srgb,var(--blood) 18%,transparent) 0%, transparent 60%),
-  var(--surface)}
-.hero::after{content:"";position:absolute;right:-60px;top:-40px;width:2px;height:420px;background:linear-gradient(var(--blood),transparent);transform:rotate(28deg);opacity:.6}
-.hero .eyebrow{font:500 12px var(--mono);letter-spacing:.24em;text-transform:uppercase;color:var(--ember)}
-.hero h1{font-size:76px;letter-spacing:.12em;margin:12px 0 16px}
-.hero p{font-size:17px;color:var(--muted);max-width:56ch}
-.stats{display:flex;flex-wrap:wrap;gap:36px;margin-top:30px}
-.stats div b{display:block;font:600 34px/1 var(--serif);color:var(--text)}
-.stats div span{font:12px var(--mono);letter-spacing:.08em;color:var(--faint);text-transform:uppercase}
-
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
-.card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;transition:border-color .15s,transform .15s,background .15s;position:relative}
-.card:hover{border-color:var(--line2);transform:translateY(-2px);background:var(--surface2)}
-.card .k{font:500 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--faint);display:flex;justify-content:space-between}
-.card h3{font:600 22px/1.15 var(--serif);margin:10px 0 6px}
-.card p{font-size:13.5px;color:var(--muted);margin:0}
-.card .bar{position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:0 3px 3px 0}
-
-/* ---------- chips ---------- */
-.chip{display:inline-flex;align-items:center;gap:6px;font:500 12px var(--mono);padding:2px 8px;border-radius:999px;border:1px solid var(--line2);color:var(--muted);white-space:nowrap}
-.chip i{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block}
-.pk-mana{color:var(--mana)} .pk-stamina{color:var(--stamina)} .pk-tank{color:var(--tank)} .pk-healer{color:var(--healer)} .pk-hybrid{color:var(--hybrid)}
-.wt{display:inline-flex;align-items:center;gap:7px;font-size:13px}
-.wt .pips{display:inline-flex;gap:2px;align-items:flex-end}
-.wt .pips span{width:4px;border-radius:1px;background:var(--line2)}
-.wt .pips span:nth-child(1){height:6px}.wt .pips span:nth-child(2){height:9px}.wt .pips span:nth-child(3){height:12px}
-.wt .pips span.f{background:var(--text)}
+.trail{font-size:15px;color:var(--ink3);margin-bottom:10px}
+.trail a{color:var(--ink2)} .trail a:hover{color:var(--gold)}
+.trail .sep{margin:0 8px;color:var(--rule2)}
+h1{font:600 68px/.95 var(--display);margin:0 0 10px;letter-spacing:.005em}
+.kin{font-size:19px;color:var(--ink2);margin:0 0 26px;font-style:italic}
+.lede p{font-size:20px;line-height:1.5;color:var(--ink2);max-width:62ch;margin:0 0 16px}
+.lede strong{color:var(--ink);font-weight:500}
+.prose h2,.sec-h{font:500 38px/1.05 var(--display);margin:56px 0 16px;scroll-margin-top:90px}
+.prose h3{font:500 27px/1.1 var(--display);margin:40px 0 8px;scroll-margin-top:90px}
+.prose h3.line small{display:block;font:italic 400 16px/1.45 var(--text);color:var(--ink3);margin-top:6px}
+.prose p{margin:0 0 16px;max-width:68ch}
+.prose ul{margin:0 0 18px;padding-left:22px;max-width:68ch}
+.prose li{margin:6px 0} .prose li p{margin:0}
+.prose li::marker{content:"◆  ";color:var(--gold);font-size:.6em}
+.prose strong{font-weight:700;color:var(--ink)}
+.prose > p:first-child > em:only-child{display:block;font:500 30px/1.2 var(--display);color:var(--ink);font-style:normal;margin-bottom:6px}
+.muted{color:var(--ink3)}
 
 /* ---------- tables ---------- */
-.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);margin:12px 0 8px}
-table{border-collapse:collapse;width:100%;font-size:14px}
-th{text-align:left;font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface2)}
-td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
-tr:last-child td{border-bottom:0}
-tbody tr.go{cursor:pointer;transition:background .1s}
-tbody tr.go:hover{background:var(--surface2)}
-tbody tr.go:hover td.nm{color:var(--ember)}
-td.nm{font:600 18px/1.2 var(--serif);white-space:nowrap}
-td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
-td.bonus{color:var(--muted);min-width:280px}
-.group-row td{background:var(--bg2);font:500 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ember);padding:9px 14px}
+.tbl-wrap{overflow-x:auto;margin:14px 0 22px}
+table{border-collapse:collapse;width:100%;font-size:15.5px;line-height:1.45}
+th{text-align:left;font-weight:500;color:var(--ink3);padding:8px 14px 8px 0;border-bottom:1px solid var(--rule2);white-space:nowrap}
+td{padding:10px 14px 10px 0;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink2)}
+td:first-child{color:var(--ink);font-weight:700}
+@media (min-width:761px){table.doc td:first-child{white-space:nowrap}}
+table.doc td a{color:var(--ink);text-decoration-color:var(--rule2)}
+table.doc td a:hover{color:var(--gold);text-decoration-color:var(--gold)}
+.tchip{font-size:14px}
+.t-active{color:var(--ink3)} .t-ultimate{color:var(--gold);font-weight:700} .t-passive{color:var(--hybrid);font-style:italic}
+.cost{white-space:nowrap;font-weight:500}
+.cost small{font-size:13px;margin-left:2px}
+.c-mana{color:var(--mana)} .c-stamina{color:var(--stamina)} .c-health{color:var(--health)} .c-ultimate{color:var(--gold)}
+tbody tr.go{cursor:pointer}
+tbody tr.go:hover td{background:var(--bg2)}
+tbody tr.go:hover td.nm{color:var(--gold)}
+tbody tr.go td:first-child{padding-left:8px}
+td.nm{font:500 22px/1.1 var(--display)!important;white-space:nowrap}
+td.num{text-align:right;white-space:nowrap}
+.group-row td{font:500 20px var(--display)!important;color:var(--gold)!important;padding:24px 0 6px!important;border-bottom:1px solid var(--rule2)}
+
+/* ---------- small marks ---------- */
+.pk{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;font-size:15px}
+.pk::before{content:"";width:8px;height:8px;transform:rotate(45deg);background:currentColor}
+.pk-mana{color:var(--mana)} .pk-stamina{color:var(--stamina)} .pk-tank{color:var(--tank)} .pk-healer{color:var(--healer)} .pk-hybrid{color:var(--hybrid)}
+.wt{display:inline-flex;align-items:center;gap:8px;font-size:15px;white-space:nowrap}
+.wt .pips{display:inline-flex;gap:2px;align-items:flex-end}
+.wt .pips span{width:4px;background:var(--rule2)}
+.wt .pips span:nth-child(1){height:6px}.wt .pips span:nth-child(2){height:9px}.wt .pips span:nth-child(3){height:12px}
+.wt .pips span.f{background:var(--ink)}
+.src{font-size:15px;color:var(--ink2);white-space:nowrap}
+.note{border-left:2px solid var(--gold);padding:4px 0 4px 16px;margin:24px 0;color:var(--ink2);font-size:16px;max-width:68ch}
+
+/* ---------- roster (hub children) ---------- */
+.roster{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:8px 0 24px;border-top:1px solid var(--rule)}
+.roster a{display:block;padding:16px 0 14px;border-bottom:1px solid var(--rule);text-decoration:none!important;color:var(--ink)}
+.roster b{font:500 30px/1 var(--display);display:block}
+.roster i{display:block;font-style:italic;color:var(--ink3);font-size:15px;margin-top:4px}
+.roster span{display:block;color:var(--ink2);font-size:15.5px;margin-top:5px}
+.roster a:hover b{color:var(--gold)}
+.roster .tag{display:inline;margin-left:10px;font:400 14px var(--text);color:var(--stamina)}
+
+/* ---------- facts (infobox) ---------- */
+.facts{border-top:3px solid var(--gold);padding-top:14px}
+.facts > b{display:block;font:500 28px/1 var(--display)}
+.facts > i{display:block;color:var(--ink3);font-size:15px;margin-top:4px}
+.facts dl{margin:14px 0 0}
+.facts dl div{padding:9px 0;border-top:1px solid var(--rule)}
+.facts dt{font-size:14px;color:var(--ink3)}
+.facts dd{margin:2px 0 0;font-size:16px}
+.facts dd a{color:var(--gold);text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--gold) 40%,transparent);text-underline-offset:3px}
+.onpage b{display:block;font:500 20px var(--display);color:var(--ink2);margin-bottom:6px}
+.onpage a{display:block;font-size:15px;color:var(--ink3);padding:3px 0;cursor:pointer}
+.onpage a:hover{color:var(--gold)}
+
+details.devnotes{margin:56px 0 0;border:1px dashed var(--rule2);padding:0 20px}
+details.devnotes summary{cursor:pointer;padding:14px 0;color:var(--ink3);font-size:16px}
+details.devnotes summary:hover{color:var(--ink)}
+details.devnotes ul{color:var(--ink2);font-size:15.5px}
 
 /* ---------- filters ---------- */
-.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:22px 0 4px}
-.filters .lbl{font:500 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-right:2px}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
-.seg button{background:none;border:0;padding:6px 11px;font-size:13px;color:var(--muted);cursor:pointer;border-right:1px solid var(--line)}
-.seg button:last-child{border-right:0}
-.seg button:hover{color:var(--text)}
-.seg button.on{background:var(--ember-dim);color:var(--text)}
-.count{font:12px var(--mono);color:var(--faint);margin-left:auto}
-.inline-search{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 12px;color:var(--text);font:14px var(--sans);outline:none;min-width:220px}
-.inline-search:focus{border-color:var(--ember)}
-.empty{padding:40px;text-align:center;color:var(--faint)}
+.filters{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;margin:26px 0 6px}
+.seg{display:inline-flex;gap:2px}
+.seg button{background:none;border:0;border-bottom:2px solid transparent;padding:4px 8px;cursor:pointer;color:var(--ink3);font-size:15.5px}
+.seg button:hover{color:var(--ink)}
+.seg button.on{color:var(--ink);border-bottom-color:var(--gold)}
+.seg-l{color:var(--ink3);font-size:15px;margin-right:2px}
+.count{color:var(--ink3);font-size:15px;margin-left:auto}
+.inline-search{background:var(--bg2);border:1px solid var(--rule);border-radius:3px;padding:8px 12px;color:var(--ink);outline:none;min-width:260px;font-size:16px}
+.inline-search:focus{border-color:var(--gold)}
+.empty{padding:40px 0;color:var(--ink3)}
 
 /* ---------- set page ---------- */
-.set-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 26px}
-.set-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:32px;align-items:start}
-.tiers{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
-.tier{display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--line)}
-.tier:last-child{border-bottom:0}
-.tier .pc{padding:16px;font:500 12px var(--mono);letter-spacing:.06em;color:var(--faint);border-right:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.tiers{margin:10px 0 8px;border-top:1px solid var(--rule2)}
+.tier{display:grid;grid-template-columns:110px 1fr;border-bottom:1px solid var(--rule);padding:14px 0}
+.tier .pc{color:var(--ink3);font-size:15px;display:flex;align-items:center;gap:10px}
 .tier .pc .dots{display:flex;gap:3px}
-.tier .pc .dots span{width:6px;height:6px;border-radius:50%;background:var(--line2)}
-.tier .pc .dots span.f{background:var(--muted)}
-.tier .tx{padding:16px 18px}
-.tier.unique{background:linear-gradient(90deg,var(--ember-dim),transparent 70%)}
-.tier.unique .pc{color:var(--ember)}
-.tier.unique .pc .dots span.f{background:var(--ember)}
-.tier.unique .tx{font-size:16px}
-.tier .tag{display:block;font:500 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ember);margin-bottom:4px}
-.infobox{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden;position:sticky;top:24px}
-.infobox .ib-head{padding:18px;border-bottom:1px solid var(--line);background:var(--surface2)}
-.infobox .ib-head b{font:600 22px/1.15 var(--serif);display:block}
-.infobox dl{margin:0;padding:6px 0}
-.infobox dl div{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:8px 18px;font-size:14px}
-.infobox dt{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding-top:3px}
-.infobox dd{margin:0}
-.related{display:flex;flex-direction:column;gap:6px;margin-top:8px}
-.related a{display:flex;justify-content:space-between;gap:12px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font:600 17px var(--serif)}
-.related a span{font:12px var(--mono);color:var(--faint);align-self:center}
-.related a:hover{border-color:var(--line2);color:var(--ember)}
-.pager{display:flex;justify-content:space-between;gap:12px;margin-top:48px;padding-top:20px;border-top:1px solid var(--line)}
-.pager a{display:flex;flex-direction:column;gap:2px;max-width:48%}
-.pager a small{font:11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
-.pager a b{font:600 20px var(--serif)}
-.pager a:hover b{color:var(--ember)}
+.tier .pc .dots span{width:7px;height:7px;transform:rotate(45deg);background:var(--rule2)}
+.tier .pc .dots span.f{background:var(--ink2)}
+.tier .tx{color:var(--ink2)}
+.tier.unique .pc .dots span.f{background:var(--gold)}
+.tier.unique .tx{color:var(--ink);font-size:19px;line-height:1.45}
+.tier .tag{display:block;font:500 18px var(--display);color:var(--gold);margin-bottom:2px}
+.slots{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 8px}
+.slots span{padding:4px 10px;border:1px solid var(--rule2);font-size:15px;color:var(--ink2)}
+.slots span.j{border-style:dashed}
+.slots span.w{border-color:var(--gold);color:var(--ink)}
+.weights{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin:14px 0}
+.weights b{font:500 26px var(--display);display:block;margin:6px 0 2px}
+.weights p{font-size:15.5px;color:var(--ink2);margin:0}
+.pager{display:flex;justify-content:space-between;gap:16px;margin-top:64px;padding-top:18px;border-top:1px solid var(--rule)}
+.pager a{display:block;max-width:48%;text-decoration:none!important;color:var(--ink)!important}
+.pager a small{display:block;color:var(--ink3);font-size:14px}
+.pager a b{font:500 26px var(--display)}
+.pager a:hover b{color:var(--gold)}
 .pager a.r{text-align:right;margin-left:auto}
 
-.weights{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
-.weights div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
-.weights b{font:600 22px var(--serif);display:block;margin:8px 0 2px}
-.weights p{font-size:13.5px;color:var(--muted);margin:0}
-.slots{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 6px}
-.slots span{font:13px var(--sans);padding:5px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
-.slots span.j{border-style:dashed}
-.slots span.w{border-color:color-mix(in srgb,var(--ember) 40%,transparent)}
+/* ---------- search ---------- */
+.results{margin-top:18px;border-top:1px solid var(--rule)}
+.result{display:block;padding:16px 0;border-bottom:1px solid var(--rule)}
+.result .rt{font:500 26px var(--display)}
+.result .rp{color:var(--ink3);font-size:15px;margin-left:12px}
+.result .rs{font-size:15.5px;color:var(--ink2);margin-top:4px;max-width:80ch}
+.result:hover .rt{color:var(--gold)}
+.result mark{background:var(--gold-soft);color:var(--ink);padding:0 2px}
 
-/* ---------- doc pages ---------- */
-.doc-layout{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:40px;align-items:start}
-.doc-layout.wide{grid-template-columns:minmax(0,1fr) 300px}
-.rail{position:sticky;top:24px;display:flex;flex-direction:column;gap:16px}
-.rail .infobox{position:static}
-.otp{border-left:1px solid var(--line);padding:2px 0 2px 16px}
-.otp b{display:block;font:500 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
-.otp a{display:block;font-size:13.5px;color:var(--muted);padding:3px 0;cursor:pointer}
-.otp a:hover,.otp a.on{color:var(--ember)}
-.prose{min-width:0}
-.prose > :first-child{margin-top:0}
-.prose h2{scroll-margin-top:20px}
-.prose h3{font:600 22px/1.2 var(--serif);margin:34px 0 8px;scroll-margin-top:20px}
-.prose h3.line small{display:block;font:italic 400 14.5px/1.5 var(--sans);color:var(--muted);margin-top:4px}
-.prose ul{padding-left:20px;margin:0 0 16px;max-width:76ch}
-.prose li{margin:4px 0} .prose li p{margin:0}
-.prose li::marker{color:var(--ember)}
-.prose strong{color:var(--text);font-weight:600}
-.prose > p:first-child > em:only-child{font:italic 500 22px/1.4 var(--serif);color:var(--text)}
-.lede p{font-size:17px;color:var(--muted);max-width:68ch}
-.lede strong{color:var(--text)}
-table.doc tr td:first-child{font-weight:500;color:var(--text)}
-@media (min-width:761px){table.doc tr td:first-child{white-space:nowrap}}
-table.doc td{color:var(--muted)}
-table.doc td a.link{color:var(--text);border-bottom-color:var(--line2)}
-table.doc td a.link:hover{color:var(--ember);border-bottom-color:var(--ember)}
-.tchip{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:4px;border:1px solid}
-.t-active{color:var(--muted);border-color:var(--line2)}
-.t-ultimate{color:var(--ember);border-color:color-mix(in srgb,var(--ember) 45%,transparent);background:var(--ember-dim)}
-.t-passive{color:var(--hybrid);border-color:color-mix(in srgb,var(--hybrid) 40%,transparent)}
-.cost{font:500 13px var(--mono);white-space:nowrap}
-.cost small{font-size:11px;opacity:.85}
-.c-mana{color:var(--mana)} .c-stamina{color:var(--stamina)} .c-health{color:var(--blood)} .c-ultimate{color:var(--ember)}
-details.devnotes{margin:48px 0 0;border:1px dashed var(--line2);border-radius:12px;padding:0 18px;background:var(--bg2)}
-details.devnotes summary{cursor:pointer;padding:14px 0;font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);list-style:none}
-details.devnotes summary::before{content:"+ ";color:var(--ember)}
-details.devnotes[open] summary::before{content:"− "}
-details.devnotes ul{color:var(--muted);font-size:14px;padding-bottom:6px}
-.kids{margin:8px 0 8px}
-.card .badge{font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;padding:1px 6px;border-radius:4px;border:1px solid var(--line2);color:var(--muted)}
-.card .badge.ingame{color:var(--stamina);border-color:color-mix(in srgb,var(--stamina) 45%,transparent)}
-.sub-chip{display:inline-block;font:500 12px var(--mono);letter-spacing:.06em;color:var(--muted);margin:-4px 0 22px}
-.toc .kidlist{margin:2px 0 6px 12px;border-left:1px solid var(--line);padding-left:4px}
-.toc .kidlist a{font-size:13px;padding:4px 10px}
-.home-group{margin-top:44px}
-.home-group h2{display:flex;justify-content:space-between;align-items:baseline}
-.home-group h2 small{font:500 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
-.results{display:flex;flex-direction:column;gap:10px;margin-top:16px}
-.result{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
-.result:hover{border-color:var(--line2);background:var(--surface2)}
-.result .rt{font:600 20px var(--serif)}
-.result .rp{font:11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-left:8px}
-.result .rs{font-size:13.5px;color:var(--muted);margin-top:4px}
-.result mark{background:var(--ember-dim);color:var(--text);border-radius:3px;padding:0 2px}
-@media (max-width: 1100px){
-  .doc-layout,.doc-layout.wide{grid-template-columns:1fr}
-  .rail{position:static;order:-1}
-  .otp{display:none}
+/* ---------- home ---------- */
+.home-top{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:64px;align-items:center;padding:40px 0 30px}
+.seal{width:100%;max-width:560px;aspect-ratio:1;justify-self:center}
+.seal svg{width:100%;height:100%;overflow:visible}
+.seal .seg-p{cursor:pointer}
+.seal .seg-p path.f{stroke:var(--bg);stroke-width:2;transition:filter .2s}
+.seal .seg-p:hover path.f,.seal .seg-p:focus-visible path.f{filter:brightness(1.25)}
+.seal .seg-p:focus{outline:none}
+.seal text{font-family:var(--display);fill:#f3eee6;font-size:19px;letter-spacing:.06em;pointer-events:none}
+.seal .six text{fill:var(--cut)}
+.seal .six path.f{stroke:var(--cut);stroke-width:1.5}
+.seal .ctr-t{font-size:34px;fill:var(--ink);letter-spacing:0}
+.seal .ctr-s{font-family:var(--text);font-size:15px;fill:var(--ink2);letter-spacing:0}
+.seal .rim{fill:none;stroke:var(--rule2);stroke-width:1}
+.seal .sixwrap{transform:translate(-22px,-13px) rotate(-5deg);transform-origin:-150px -87px;transform-box:view-box}
+@media (prefers-reduced-motion: no-preference){
+  .seal .sixwrap{animation:sever 1.4s cubic-bezier(.2,.7,.2,1) .35s both}
+  @keyframes sever{from{transform:none}to{transform:translate(-22px,-13px) rotate(-5deg)}}
 }
+.home-copy .mark{font-size:92px;margin-bottom:22px}
+.home-copy .mark::after{height:2px}
+.home-copy p{font-size:20px;line-height:1.55;color:var(--ink2);max-width:46ch;margin:0 0 14px}
+.home-copy .begin{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px 26px;font-size:18px}
+.home-index{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:40px;border-top:1px solid var(--rule);padding-top:34px;margin-top:30px}
+.home-index h2{font:500 34px var(--display);margin:0 0 14px}
+.home-index a.pg{display:block;padding:10px 0;border-top:1px solid var(--rule)}
+.home-index a.pg b{display:block;font-weight:700;font-size:18px}
+.home-index a.pg span{display:block;color:var(--ink3);font-size:15px;line-height:1.4}
+.home-index a.pg:hover b{color:var(--gold)}
 
-footer.foot{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+footer.foot{margin-top:80px;padding-top:18px;border-top:1px solid var(--rule);font-size:14.5px;color:var(--ink3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 
 /* ---------- responsive ---------- */
-@media (max-width: 980px){
-  .set-layout{grid-template-columns:1fr}
-  .infobox{position:static;order:-1}
-  .page{padding:36px 28px 80px}
+@media (max-width:1240px){
+  .page.doc{grid-template-columns:minmax(0,1fr) 260px}
+  .page.doc.no-rail{grid-template-columns:minmax(0,1fr)}
+  .local{display:none}
 }
-@media (max-width: 760px){
-  .side{transform:translateX(-100%);transition:transform .22s ease;width:min(86vw,300px);box-shadow:0 0 40px #0008}
-  body.nav-open .side{transform:none}
-  .scrim{position:fixed;inset:0;background:#0007;z-index:15;opacity:0;pointer-events:none;transition:opacity .2s}
-  body.nav-open .scrim{opacity:1;pointer-events:auto}
-  .topbar{display:flex;position:sticky;top:0;z-index:10;align-items:center;gap:12px;padding:12px 16px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-  .topbar button{background:none;border:1px solid var(--line);border-radius:8px;padding:6px 8px;display:flex;cursor:pointer}
-  .topbar .wordmark{font-size:20px}
-  main{margin-left:0}
-  .page{padding:24px 16px 72px}
-  h1{font-size:38px}
-  .hero{padding:36px 22px 30px}
-  .hero h1{font-size:44px;letter-spacing:.08em}
-  .stats{gap:22px}
-  h2{font-size:25px;margin-top:40px}
-  .weights{grid-template-columns:1fr}
-  .tier{grid-template-columns:72px 1fr}
-  .tier .pc{padding:14px 10px;flex-direction:column;align-items:flex-start;gap:6px}
+@media (max-width:1000px){
+  .page.doc{grid-template-columns:minmax(0,1fr)}
+  .rail{position:static;order:-1}
+  .onpage{display:none}
+  .home-top{grid-template-columns:1fr;gap:20px}
+  .home-index{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mast nav{display:none}
+  .burger{display:flex}
+  .drop-in{grid-template-columns:1fr 1fr}
+  .drop .grp{display:block;font:500 15px var(--text);color:var(--ink3);margin:0 0 6px;grid-column:1/-1;border-bottom:1px solid var(--rule);padding-bottom:4px}
+}
+@media (max-width:760px){
+  body{font-size:16.5px}
+  .frame,.mast-in,.drop-in{padding-left:16px;padding-right:16px}
+  .mast-in{gap:12px}
+  .mark{font-size:28px}
+  .find{flex:1;min-width:0}
+  .find input{width:100%}
+  .drop{max-height:calc(100vh - 64px);overflow:auto}
+  .drop-in{grid-template-columns:1fr}
+  .page{padding:26px 0 72px}
+  h1{font-size:48px}
+  .lede p{font-size:18px}
+  .prose h2,.sec-h{font-size:31px;margin-top:44px}
+  .roster{grid-template-columns:1fr}
+  .home-copy .mark{font-size:64px}
+  .home-index{grid-template-columns:1fr;gap:28px}
+  .weights{grid-template-columns:1fr;gap:16px}
+  .tier{grid-template-columns:80px 1fr}
   .inline-search{min-width:0;width:100%}
   .count{margin-left:0;width:100%}
   td.nm{white-space:normal}
   table.sets thead{display:none}
-  table.sets, table.sets tbody{display:block}
-  table.sets tr.go{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:14px;border-bottom:1px solid var(--line)}
-  table.sets tr.go:last-child{border-bottom:0}
-  table.sets tr.go td{padding:0;border:0}
-  table.sets tr.go td.nm{width:100%;font-size:20px}
-  table.sets tr.go td.bonus{width:100%;min-width:0;font-size:14px}
-  table.sets tr.go td.num::before{content:"Traits ";color:var(--faint)}
+  table.sets,table.sets tbody{display:block}
+  table.sets tr.go{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:14px 0;border-bottom:1px solid var(--rule)}
+  table.sets tr.go td{padding:0!important;border:0;background:none!important}
+  table.sets tr.go td.nm{width:100%}
+  table.sets tr.go td.bonus{width:100%;font-size:15.5px}
+  table.sets tr.go td.num::before{content:"Traits ";color:var(--ink3);font-weight:400}
   table.sets tr.group-row{display:block}
   table.sets tr.group-row td{display:block}
 }
 </style>
 </head>
 <body>
-<div class="scrim" onclick="document.body.classList.remove('nav-open')"></div>
-<aside class="side" id="side">
-  <div class="brand">
-    <a href="#/"><span class="wordmark">SEVER<span class="cut">A</span>NCE</span><small>The Official Wiki</small></a>
-  </div>
-  <label class="search">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    <input id="q" type="search" placeholder="Search the wiki" autocomplete="off" aria-label="Search the wiki">
-    <kbd>/</kbd>
-  </label>
-  <nav class="toc" id="toc"></nav>
-  <div class="side-foot">
-    <span>Koala Studios</span>
-    <button class="theme-btn" id="themeBtn" aria-label="Toggle light or dark theme" title="Toggle theme">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+<header class="mast">
+  <div class="mast-in">
+    <a href="#/" class="mark" aria-label="Severance wiki home"><span class="a">Severance</span><span class="b" aria-hidden="true">Severance</span></a>
+    <nav id="topnav" aria-label="Sections"></nav>
+    <label class="find">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search" autocomplete="off" aria-label="Search the wiki">
+    </label>
+    <button class="icon-btn" id="themeBtn" aria-label="Switch light or dark theme" title="Switch theme">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+    <button class="icon-btn burger" id="burger" aria-label="Open the page list" aria-expanded="false">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
   </div>
-</aside>
-<main>
-  <div class="topbar">
-    <button aria-label="Open menu" onclick="document.body.classList.add('nav-open')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-    <a href="#/" class="wordmark">SEVER<span class="cut">A</span>NCE</a>
-  </div>
-  <div id="app"></div>
-</main>
+  <div class="drop" id="drop"><div class="drop-in" id="dropIn"></div></div>
+</header>
+<main class="frame"><div id="app"></div></main>
 
 <script>
 const SETS=[{"name": "Pilgrim's Lesson", "cat": "crafted", "source": "Crafting station", "traits": 2, "weight": "Any", "package": "Hybrid", "pieces": 5, "bonus": "+15% experience from defeating foes", "id": "pilgrims-lesson"}, {"name": "Ironbound Oath", "cat": "crafted", "source": "Crafting station", "traits": 2, "weight": "Any", "package": "Tank", "pieces": 5, "bonus": "Blocking a blow restores 6 Stamina (once per second)", "id": "ironbound-oath"}, {"name": "Ember-Kiss", "cat": "crafted", "source": "Crafting station", "traits": 3, "weight": "Any", "package": "Mana damage", "pieces": 5, "bonus": "Your Fire damage has a 25% chance to Burn the target for 4 s", "id": "ember-kiss"}, {"name": "Quickstep", "cat": "crafted", "source": "Crafting station", "traits": 3, "weight": "Any", "package": "Stamina damage", "pieces": 5, "bonus": "Dodging costs 25% less; rolling through an attack gives +10% Physical Damage for 4 s", "id": "quickstep"}, {"name": "Lantern of Mercy", "cat": "crafted", "source": "Crafting station", "traits": 4, "weight": "Any", "package": "Healer", "pieces": 5, "bonus": "Heals on allies below 35% Health are 25% stronger", "id": "lantern-of-mercy"}, {"name": "Sanguine Thread", "cat": "crafted", "source": "Crafting station", "traits": 4, "weight": "Any", "package": "Hybrid", "pieces": 5, "bonus": "Health spent on skills is restored over 4 s (30% of it)", "id": "sanguine-thread"}, {"name": "Riposter's Creed", "cat": "crafted", "source": "Crafting station", "traits": 5, "weight": "Any", "package": "Stamina damage", "pieces": 5, "bonus": "Ripostes and backstabs deal 20% more damage", "id": "riposters-creed"}, {"name": "Unbroken Wall", "cat": "crafted", "source": "Crafting station", "traits": 5, "weight": "Any", "package": "Tank", "pieces": 5, "bonus": "Take 8% less damage while your guard is up; a parry restores 10 Stamina", "id": "unbroken-wall"}, {"name": "Arcanist's Lattice", "cat": "crafted", "source": "Crafting station", "traits": 6, "weight": "Any", "package": "Mana damage", "pieces": 5, "bonus": "Casting 3 different skills within 6 s gives +8% Spell Damage for 8 s", "id": "arcanists-lattice"}, {"name": "Bladesworn", "cat": "crafted", "source": "Crafting station", "traits": 6, "weight": "Any", "package": "Stamina damage", "pieces": 5, "bonus": "Light attacks that weave after a skill deal 15% more damage", "id": "bladesworn"}, {"name": "Twice-Armed", "cat": "crafted", "source": "Crafting station", "traits": 7, "weight": "Any", "package": "Hybrid", "pieces": 5, "bonus": "For 6 s after swapping bars, your first skill costs 30% less and deals 10% more damage", "id": "twice-armed"}, {"name": "Master's Due", "cat": "crafted", "source": "Crafting station", "traits": 9, "weight": "Any", "package": "Hybrid", "pieces": 5, "bonus": "+15% Ultimate gain; casting an ultimate restores 15 Mana and 15 Stamina", "id": "masters-due"}, {"name": "Gaoler's Lantern", "cat": "overland", "source": "Oakhaven", "weight": "Light", "package": "Healer", "pieces": 5, "bonus": "Healing an ally also gives them 8% damage reduction for 4 s", "id": "gaolers-lantern"}, {"name": "Wandering Knight's Stride", "cat": "overland", "source": "Oakhaven", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "Heavy attacks deal 25% more poise damage", "id": "wandering-knights-stride"}, {"name": "Oakwarden's Bark", "cat": "overland", "source": "Oakhaven", "weight": "Heavy", "package": "Tank", "pieces": 5, "bonus": "When hit, 15% chance to gain a 120-point shield for 4 s (8 s cooldown)", "id": "oakwardens-bark"}, {"name": "The Last Wall", "cat": "overland", "source": "Oakhaven", "weight": "Heavy", "package": "Tank", "pieces": 5, "bonus": "Restore 4 Stamina whenever an ally within 10 studs is hit", "id": "the-last-wall"}, {"name": "Wyrmspeaker's Robes", "cat": "overland", "source": "Dracoria", "weight": "Light", "package": "Mana damage", "pieces": 5, "bonus": "Skills cost 5% less; Fire skills cost 15% less", "id": "wyrmspeakers-robes"}, {"name": "Cinderborn Vestments", "cat": "overland", "source": "Dracoria", "weight": "Light", "package": "Mana damage", "pieces": 5, "bonus": "Fire skills deal 12% more damage to Burning foes", "id": "cinderborn-vestments"}, {"name": "Scaleshard Hide", "cat": "overland", "source": "Dracoria", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "+6% Physical Damage while above 70% Stamina", "id": "scaleshard-hide"}, {"name": "Dragonscale Aegis", "cat": "overland", "source": "Dracoria", "weight": "Heavy", "package": "Tank", "pieces": 5, "bonus": "Block Cost -15%; blocking Fire attacks costs no Stamina", "id": "dragonscale-aegis"}, {"name": "Moonlit Vigil", "cat": "overland", "source": "Aethelwing", "weight": "Light", "package": "Healer", "pieces": 5, "bonus": "Your heals also restore 5 Mana to the target", "id": "moonlit-vigil"}, {"name": "Lamplight Mantle", "cat": "overland", "source": "Aethelwing", "weight": "Light", "package": "Healer", "pieces": 5, "bonus": "Holy damage you deal heals the most wounded nearby ally for 30% of it", "id": "lamplight-mantle"}, {"name": "Comet Hunter", "cat": "overland", "source": "Aethelwing", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "Every 5th light attack calls down a falling star for 25 Arcane damage", "id": "comet-hunter"}, {"name": "Lunar Bulwark", "cat": "overland", "source": "Aethelwing", "weight": "Heavy", "package": "Tank", "pieces": 5, "bonus": "Each parry grants 10 Ultimate", "id": "lunar-bulwark"}, {"name": "Spire-Witch's Shroud", "cat": "overland", "source": "Deepspire", "weight": "Light", "package": "Mana damage", "pieces": 5, "bonus": "Poison you apply spreads to one more foe within 8 studs", "id": "spire-witchs-shroud"}, {"name": "Prowler's Wraps", "cat": "overland", "source": "Deepspire", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "Hits on Staggered foes deal 15% more damage", "id": "prowlers-wraps"}, {"name": "Duskprowler's Coat", "cat": "overland", "source": "Deepspire", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "Your Bleeds deal 20% more damage; hitting a Bleeding foe restores 2 Stamina", "id": "duskprowlers-coat"}, {"name": "Spirewalker's Plate", "cat": "overland", "source": "Deepspire", "weight": "Heavy", "package": "Tank", "pieces": 5, "bonus": "Foes who strike you are Slowed by 20% for 3 s", "id": "spirewalkers-plate"}, {"name": "Thornweaver's Robes", "cat": "overland", "source": "Eloria", "weight": "Light", "package": "Healer", "pieces": 5, "bonus": "Your healing fields last 25% longer", "id": "thornweavers-robes"}, {"name": "Starsong Ranger", "cat": "overland", "source": "Eloria", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "Hits on Poisoned foes deal 10% more damage", "id": "starsong-ranger"}, {"name": "Wildheart", "cat": "overland", "source": "Eloria", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "Hits on foes at full Health deal 15% more damage", "id": "wildheart"}, {"name": "Rootbound Guard", "cat": "overland", "source": "Eloria", "weight": "Heavy", "package": "Tank", "pieces": 5, "bonus": "While standing still: +15 Poise and 10% less damage taken", "id": "rootbound-guard"}, {"name": "Vesper's Velvet", "cat": "overland", "source": "The Sixth Realm", "weight": "Light", "package": "Hybrid", "pieces": 5, "bonus": "Your Blood damage heals you for 6% of the damage dealt", "id": "vespers-velvet"}, {"name": "Ash Raider's Leathers", "cat": "overland", "source": "The Sixth Realm", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "Jump attacks leave burning ground for 6 s (6 Fire damage per second)", "id": "ash-raiders-leathers"}, {"name": "Sovereign's Brand", "cat": "overland", "source": "The Sixth Realm", "weight": "Heavy", "package": "Tank", "pieces": 5, "bonus": "Blocking a melee blow Burns the attacker for 4 s", "id": "sovereigns-brand"}, {"name": "Blood-Oath Mail", "cat": "overland", "source": "The Sixth Realm", "weight": "Heavy", "package": "Tank", "pieces": 5, "bonus": "Falling below 35% Health heals you for 20% of max Health (45 s cooldown)", "id": "blood-oath-mail"}, {"name": "Cellblock Ritualist", "cat": "dungeon", "source": "Oakhaven Gaol", "weight": "Light", "package": "Mana damage", "pieces": 5, "bonus": "Staggering or stunning a foe gives +10% Spell Damage for 6 s", "id": "cellblock-ritualist"}, {"name": "Shackle-Breaker", "cat": "dungeon", "source": "Oakhaven Gaol", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "Breaking a foe's poise restores 15 Stamina and gives +10% damage for 5 s", "id": "shackle-breaker"}, {"name": "Gaoler's Keys", "cat": "dungeon", "source": "Oakhaven Gaol", "weight": "Heavy", "package": "Tank", "pieces": 5, "bonus": "Bashing through a foe's guard Weakens it (15% less damage) for 6 s", "id": "gaolers-keys"}, {"name": "Firedamp", "cat": "dungeon", "source": "Cinderdeep Mines", "weight": "Light", "package": "Mana damage", "pieces": 5, "bonus": "Your Fire damage can explode for 60 Fire damage around the target (10% chance, 6 s cooldown)", "id": "firedamp"}, {"name": "Pickaxe Brigade", "cat": "dungeon", "source": "Cinderdeep Mines", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "Heavy attacks deal 15% more damage and 20 more poise damage", "id": "pickaxe-brigade"}, {"name": "Deep Delver's Lamp", "cat": "dungeon", "source": "Cinderdeep Mines", "weight": "Heavy", "package": "Tank", "pieces": 5, "bonus": "Allies within 10 studs take 5% less damage", "id": "deep-delvers-lamp"}, {"name": "Tidebound", "cat": "dungeon", "source": "The Drowned Abbey", "weight": "Light", "package": "Healer", "pieces": 5, "bonus": "Healing a Slowed ally also removes the Slow", "id": "tidebound"}, {"name": "Drowned Knight", "cat": "dungeon", "source": "The Drowned Abbey", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "Slowed foes take 12% more Physical Damage from you", "id": "drowned-knight"}, {"name": "Abbey's Bell", "cat": "dungeon", "source": "The Drowned Abbey", "weight": "Heavy", "package": "Tank", "pieces": 5, "bonus": "Parrying tolls a bell: nearby foes are Slowed by 30% for 3 s", "id": "abbeys-bell"}, {"name": "Crownmage's Circlet", "cat": "dungeon", "source": "Vaults of the Ashen Crown", "weight": "Light", "package": "Mana damage", "pieces": 5, "bonus": "Shock skills chain to one more foe", "id": "crownmages-circlet"}, {"name": "Vaultbreaker", "cat": "dungeon", "source": "Vaults of the Ashen Crown", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "Your ultimate deals 15% more damage", "id": "vaultbreaker"}, {"name": "Ashen Throneguard", "cat": "dungeon", "source": "Vaults of the Ashen Crown", "weight": "Heavy", "package": "Tank", "pieces": 5, "bonus": "Blocking builds 30% more Ultimate", "id": "ashen-throneguard"}, {"name": "Grave-Whisperer's Wraps", "cat": "dungeon", "source": "Hollowroot Barrow", "weight": "Light", "package": "Mana damage", "pieces": 5, "bonus": "Your summons deal 20% more damage and last 25% longer", "id": "grave-whisperers-wraps"}, {"name": "Barrow Stalker", "cat": "dungeon", "source": "Hollowroot Barrow", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "Defeating a foe restores 10% of your Health", "id": "barrow-stalker"}, {"name": "Rootbound Dead", "cat": "dungeon", "source": "Hollowroot Barrow", "weight": "Heavy", "package": "Tank", "pieces": 5, "bonus": "When you would fall, rise instead with 30% Health (once every 2 minutes)", "id": "rootbound-dead"}, {"name": "Saint's Last Rite", "cat": "dungeon", "source": "Thornveil Cathedral", "weight": "Light", "package": "Healer", "pieces": 5, "bonus": "Your heals cleanse one harmful status (Bleed, Burn, Poison, Slow, Weaken or Vulnerable)", "id": "saints-last-rite"}, {"name": "Thornveil Penitent", "cat": "dungeon", "source": "Thornveil Cathedral", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "Bleeds you apply last 2 s longer", "id": "thornveil-penitent"}, {"name": "Cathedral Warden", "cat": "dungeon", "source": "Thornveil Cathedral", "weight": "Heavy", "package": "Tank", "pieces": 5, "bonus": "Melee attackers take 10% of their damage back as Blood damage", "id": "cathedral-warden"}, {"name": "Chained Warden", "cat": "monster", "source": "Oakhaven Gaol", "weight": null, "package": null, "pieces": 2, "one": "+60 Max Health", "bonus": "Every 10 s, your next heavy attack lashes a burning chain: the foe is dragged to you and Burns for 4 s", "id": "chained-warden"}, {"name": "Molten Foreman", "cat": "monster", "source": "Cinderdeep Mines", "weight": null, "package": null, "pieces": 2, "one": "+3% Physical Damage", "bonus": "Every 8 s, your next heavy attack erupts magma: 80 Fire damage within 6 studs", "id": "molten-foreman"}, {"name": "Drowned Abbess", "cat": "monster", "source": "The Drowned Abbey", "weight": null, "package": null, "pieces": 2, "one": "+50 Max Mana", "bonus": "Falling below 50% Health raises a 150-point shield of water (20 s cooldown)", "id": "drowned-abbess"}, {"name": "Malakor's Cultist", "cat": "monster", "source": "Throne of Ash (trial final boss)", "weight": null, "package": null, "pieces": 2, "one": "+3% Spell Damage", "bonus": "Casting your ultimate calls lightning on up to 3 foes: 60 Shock damage each", "id": "malakors-cultist"}, {"name": "Root-Mother", "cat": "monster", "source": "Hollowroot Barrow", "weight": null, "package": null, "pieces": 2, "one": "+50 Max Stamina", "bonus": "Foes you defeat rise as skeletal allies for 10 s (up to 2)", "id": "root-mother"}, {"name": "Thorned Saint", "cat": "monster", "source": "Thornveil Cathedral", "weight": null, "package": null, "pieces": 2, "one": "+4% Healing Done", "bonus": "Healing an ally plants a rose that heals them for 40 more over 4 s", "id": "thorned-saint"}, {"name": "Old Ashjaw", "cat": "monster", "source": "World boss, Dracoria", "weight": null, "package": null, "pieces": 2, "one": "+12 Poise", "bonus": "Every 12 s, your next attack breathes a cone of fire: 70 Fire damage", "id": "old-ashjaw"}, {"name": "The Moth Matriarch", "cat": "monster", "source": "World boss, Aethelwing", "weight": null, "package": null, "pieces": 2, "one": "+3 Stamina Recovery/s", "bonus": "Dodging leaves a swarm of moths that bites for 30 Arcane damage and Slows", "id": "the-moth-matriarch"}, {"name": "Spire-Touched", "cat": "trial", "source": "The Sundered Spire", "weight": "Light", "package": "Mana damage", "pieces": 5, "bonus": "Dealing damage of 3 different elements within 8 s gives +12% Spell Damage for 10 s", "id": "spire-touched"}, {"name": "Splinterblade", "cat": "trial", "source": "The Sundered Spire", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "Ripostes, backstabs and guard counters give you and 3 nearby allies +10% Physical Damage for 10 s (20 s cooldown)", "id": "splinterblade"}, {"name": "Keeper of the Spire", "cat": "trial", "source": "The Sundered Spire", "weight": "Light", "package": "Healer", "pieces": 5, "bonus": "Healing an ally gives them +8% damage for 6 s (one ally at a time)", "id": "keeper-of-the-spire"}, {"name": "Pyre-Bearer", "cat": "trial", "source": "Throne of Ash", "weight": "Light", "package": "Mana damage", "pieces": 5, "bonus": "Your Burns tick 30% faster", "id": "pyre-bearer"}, {"name": "Crownbreaker", "cat": "trial", "source": "Throne of Ash", "weight": "Medium", "package": "Stamina damage", "pieces": 5, "bonus": "+15% damage to foes above 75% Health", "id": "crownbreaker"}, {"name": "Throneguard Eternal", "cat": "trial", "source": "Throne of Ash", "weight": "Heavy", "package": "Tank", "pieces": 5, "bonus": "Breaking a boss's poise makes it Vulnerable (+10% damage taken from your group) for 8 s", "id": "throneguard-eternal"}, {"name": "Crowd's Favour", "cat": "arena", "source": "The Ashpit", "weapon": "Katana", "weight": null, "package": null, "pieces": 2, "bonus": "Parrying makes your next skill cost nothing", "id": "crowds-favour"}, {"name": "Pitmaster's Edge", "cat": "arena", "source": "The Ashpit", "weapon": "Longsword", "weight": null, "package": null, "pieces": 2, "bonus": "Guard counters deal 30% more damage and restore 15 Stamina", "id": "pitmasters-edge"}, {"name": "Emberwake Staff", "cat": "arena", "source": "The Ashpit", "weapon": "Destruction Staff", "weight": null, "package": null, "pieces": 2, "bonus": "Your staff's bolts split into 3 on hitting a foe, each carrying the staff's element", "id": "emberwake-staff"}, {"name": "Pit-Warden's Bulwark", "cat": "arena", "source": "The Ashpit", "weapon": "Sword and Shield", "weight": null, "package": null, "pieces": 2, "bonus": "Bashing a foe costs no Stamina and Weakens it for 6 s", "id": "pit-wardens-bulwark"}, {"name": "Gutterfang", "cat": "arena", "source": "The Ashpit", "weapon": "Daggers", "weight": null, "package": null, "pieces": 2, "bonus": "Backstabs reset Ghoststep's cooldown", "id": "gutterfang"}, {"name": "Mender's Laurel", "cat": "arena", "source": "The Ashpit", "weapon": "Restoration Staff", "weight": null, "package": null, "pieces": 2, "bonus": "Overhealing an ally becomes a shield worth 50% of the excess", "id": "menders-laurel"}, {"name": "Harrowed Crescent", "cat": "arena", "source": "The Ashpit", "weapon": "Scythe", "weight": null, "package": null, "pieces": 2, "bonus": "Each foe hit by a heavy attack grants 3 Ultimate", "id": "harrowed-crescent"}, {"name": "Crowd-Breaker", "cat": "arena", "source": "The Ashpit", "weapon": "Greatsword", "weight": null, "package": null, "pieces": 2, "bonus": "Fully charged heavy attacks can't be blocked", "id": "crowd-breaker"}, {"name": "Sandglass Bow", "cat": "arena", "source": "The Ashpit", "weapon": "Bow", "weight": null, "package": null, "pieces": 2, "bonus": "Charged shots that hit from over 25 studs refund half their Stamina", "id": "sandglass-bow"}, {"name": "Gatekeeper's Reach", "cat": "arena", "source": "The Ashpit", "weapon": "Halberd", "weight": null, "package": null, "pieces": 2, "bonus": "Foes hit at the tip of your reach are Slowed by 30% for 3 s", "id": "gatekeepers-reach"}, {"name": "Dervish Edge", "cat": "arena", "source": "The Ashpit", "weapon": "Twinblade", "weight": null, "package": null, "pieces": 2, "bonus": "Dodging through a foe leaves a cutting ring behind you", "id": "dervish-edge"}, {"name": "Chain of the First Warden", "cat": "mythic", "source": "Relic hunts", "slot": "Neck", "weight": null, "package": null, "pieces": 1, "bonus": "Your flask heals 50% more, but you carry one fewer charge", "id": "chain-of-the-first-warden"}, {"name": "Ring of the Severed Name", "cat": "mythic", "source": "Relic hunts", "slot": "Ring", "weight": null, "package": null, "pieces": 1, "bonus": "+20% damage dealt, but other players' heals can't reach you", "id": "ring-of-the-severed-name"}, {"name": "The Hollow Crown", "cat": "mythic", "source": "Relic hunts", "slot": "Head", "weight": null, "package": null, "pieces": 1, "bonus": "Your Ultimate charges 30% faster, but casting an ultimate costs 10% of your max Health", "id": "the-hollow-crown"}];
@@ -322,434 +325,392 @@ const DOC={"order": ["world", "enemies", "guilds", "housing", "races", "races/dr
 
 
 const CATS = {
-  crafted:  {label:"Crafted",       title:"Crafted sets",       color:"var(--ember)",
-    intro:"Crafted sets are made at their own station, in any armor weight and any slot, once you've researched the listed number of traits. Low-trait sets are levelling gear; the 6+ trait sets are built to last into the endgame."},
-  overland: {label:"Overland",      title:"Overland sets",      color:"var(--stamina)", group:"Realm",
-    intro:"The overland zones are the five realms from the intro, plus the sealed Sixth Realm Malakor rose from. Each drops four sets from its chests, world bosses and delves. The sets lean toward their realm's people: fire and scale in Dracoria, light and night in Aethelwing, the hunt in Deepspire, the old forests in Eloria, walls and knights in Oakhaven, and ash and blood in the Sixth Realm."},
-  dungeon:  {label:"Dungeon",       title:"Dungeon sets",       color:"var(--mana)", group:"Dungeon",
-    intro:"Each of the 6 launch dungeons drops three sets, one per weight, from its bosses. Oakhaven Gaol is the prison players escape at the start; the other five dungeon names are working titles."},
-  monster:  {label:"Monster",       title:"Monster sets",       color:"var(--blood)",
-    intro:"Monster sets are a helm and shoulders cut from a great foe: the head drops from the boss, the shoulders from the weekly reward chest. One piece gives a stat line; both give the boss's own power. Five come from dungeon final bosses and two from world bosses. Malakor's own is the one exception: it drops only from him, at the end of the Throne of Ash trial."},
-  trial:    {label:"Trial",         title:"Trial sets",         color:"var(--hybrid)", group:"Trial",
-    intro:"Trial sets are the endgame chase: each of the two launch trials drops a Mana, a Stamina and a support set, and their bonuses reward group play. Trial names are working titles."},
-  arena:    {label:"Arena weapon",  title:"Arena weapon sets",  color:"var(--tank)",
-    intro:"The Ashpit, a solo arena, rewards one weapon for every weapon type, and each one changes how that weapon plays. Two of the same one-hander, one two-hander, a pair of daggers, or a sword with its shield completes the set."},
-  mythic:   {label:"Mythic",        title:"Mythic items",       color:"var(--healer)",
-    intro:"Mythics are single pieces with a strong upside and a real cost. You can wear only one at a time. They come from relic hunts, a system still to be designed."}
+  crafted:  {label:"Crafted",      title:"Crafted sets",      intro:"Crafted sets are made at their own station, in any armor weight and any slot, once you've researched the listed number of traits. Low-trait sets are levelling gear; the 6+ trait sets are built to last into the endgame."},
+  overland: {label:"Overland",     title:"Overland sets",     group:"Realm", intro:"The overland zones are the five realms from the intro, plus the sealed Sixth Realm Malakor rose from. Each drops four sets from its chests, world bosses and delves. The sets lean toward their realm's people: fire and scale in Dracoria, light and night in Aethelwing, the hunt in Deepspire, the old forests in Eloria, walls and knights in Oakhaven, and ash and blood in the Sixth Realm."},
+  dungeon:  {label:"Dungeon",      title:"Dungeon sets",      group:"Dungeon", intro:"Each of the 6 launch dungeons drops three sets, one per weight, from its bosses. Oakhaven Gaol is the prison players escape at the start; the other five dungeon names are working titles."},
+  monster:  {label:"Monster",      title:"Monster sets",      intro:"Monster sets are a helm and shoulders cut from a great foe: the head drops from the boss, the shoulders from the weekly reward chest. One piece gives a stat line; both give the boss's own power. Five come from dungeon final bosses and two from world bosses. Malakor's own is the one exception: it drops only from him, at the end of the Throne of Ash trial."},
+  trial:    {label:"Trial",        title:"Trial sets",        group:"Trial", intro:"Trial sets are the endgame chase: each of the two launch trials drops a Mana, a Stamina and a support set, and their bonuses reward group play. Trial names are working titles."},
+  arena:    {label:"Arena weapon", title:"Arena weapon sets", intro:"The Ashpit, a solo arena, rewards one weapon for every weapon type, and each one changes how that weapon plays. Two of the same one-hander, one two-hander, a pair of daggers, or a sword with its shield completes the set."},
+  mythic:   {label:"Mythic",       title:"Mythic items",      intro:"Mythics are single pieces with a strong upside and a real cost. You can wear only one at a time. They come from relic hunts, a system still to be designed."}
 };
 const CAT_ORDER = ["overland","dungeon","crafted","monster","trial","arena","mythic"];
 const SRC_TO_CAT = {"Overland":"overland","Dungeon":"dungeon","Crafted":"crafted","Monster":"monster","Trial":"trial","Arena weapon":"arena","Mythic":"mythic"};
 const PK_CLASS = {"Mana damage":"pk-mana","Stamina damage":"pk-stamina","Tank":"pk-tank","Healer":"pk-healer","Hybrid":"pk-hybrid"};
 const BY_ID = Object.fromEntries(SETS.map(s=>[s.id,s]));
+const P = DOC.pages;
 
 const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const pkChip = p => p ? `<span class="chip ${PK_CLASS[p]}"><i></i>${esc(p)}</span>` : "";
-const catChip = c => `<span class="chip" style="color:${CATS[c].color}"><i></i>${CATS[c].label}</span>`;
+const slugify = s => s.toLowerCase().replace(/'/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const pkMark = p => p ? `<span class="pk ${PK_CLASS[p]}">${esc(p)}</span>` : "";
 function wt(w){
-  if(!w) return `<span class="muted">—</span>`;
+  if(!w) return `<span class="muted">none</span>`;
   const n = {Light:1,Medium:2,Heavy:3,Any:3}[w];
-  const pips = [1,2,3].map(i=>`<span class="${w==="Any"||i<=n?"f":""}"></span>`).join("");
-  return `<span class="wt"><span class="pips">${pips}</span>${w}</span>`;
+  return `<span class="wt"><span class="pips">${[1,2,3].map(i=>`<span class="${w==="Any"||i<=n?"f":""}"></span>`).join("")}</span>${w==="Any"?"Any weight":w}</span>`;
 }
-const setCount = c => SETS.filter(s=>s.cat===c).length;
-const footer = (generic) => generic
-  ? `<footer class="foot"><span>SEVERANCE Wiki · Koala Studios</span><span>Pre-launch design: names and numbers may change in testing.</span></footer>`
-  : `<footer class="foot"><span>SEVERANCE Wiki · Koala Studios</span><span>Numbers are first-pass and will be balanced in testing.</span></footer>`;
-const WARN = `<div class="note"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span>All values are first-pass launch numbers and will be balanced in testing.</span></div>`;
+const footer = () => `<footer class="foot"><span>Severance Wiki, by Koala Studios</span><span>Pre-launch: names and numbers may change in testing.</span></footer>`;
+const NOTE = `<p class="note">These are first-pass launch numbers. They will be balanced in testing.</p>`;
 
-/* ---------- wiki structure ---------- */
-const P = DOC.pages;
+/* ---------- structure ---------- */
 const GROUPS = [
-  {id:"world",      label:"The World",  items:["world","enemies","guilds","housing"],
-   blurb:{world:"The five realms, the Sixth Realm, dungeons, trials and the orders.",enemies:"How foes fight, and the bosses that guard the way.",guilds:"The Arcane Conclave and the Ironbound Company.",housing:"Your own home: decorate, store gear and craft."}},
+  {id:"world", label:"World", items:["world","enemies","guilds","housing"],
+   blurb:{world:"Five kingdoms, a sealed sixth, and where to fight in each.",enemies:"How foes telegraph, and the bosses that guard the way.",guilds:"The Arcane Conclave and the Ironbound Company.",housing:"A home of your own to decorate, store gear and craft in."}},
   {id:"characters", label:"Characters", items:["races","classes","prestige","titles"],
-   blurb:{races:"10 playable races and their racial passives.",classes:"8 classes, each with three skill lines.",prestige:"Growth past level 50: Paths, Marks and Oaths.",titles:"Achievements and the titles they award."}},
-  {id:"combat",     label:"Combat",     items:["combat","weapons","status-effects"],
-   blurb:{combat:"Resources, attacks, defence, poise and controls.",weapons:"11 weapon types, each with its own skill line.","status-effects":"Bleed, Burn, Poison and the rest."}},
-  {id:"gear",       label:"Gear",       items:["item-sets","enchantments","crafting"],
-   blurb:{"item-sets":"82 launch item sets from seven sources.",enchantments:"Glyphs for weapons, armour and jewellery.",crafting:"Seven crafts, traits, research and quality."}},
+   blurb:{races:"Ten peoples, each with four racial passives.",classes:"Eight classes, each with three skill lines.",prestige:"Growth past level 50: Paths, Marks and Oaths.",titles:"Achievements and the titles they award."}},
+  {id:"combat", label:"Combat", items:["combat","weapons","status-effects"],
+   blurb:{combat:"Resources, attacks, blocking, poise and controls.",weapons:"Eleven weapon types, each with its own skill line.","status-effects":"Bleed, Burn, Poison and the rest."}},
+  {id:"gear", label:"Gear", items:["item-sets","enchantments","crafting"],
+   blurb:{"item-sets":"82 launch sets: where they drop and what they do.",enchantments:"Glyphs for weapons, armour and jewellery.",crafting:"Seven crafts, trait research and quality."}},
 ];
 const GROUP_OF = {}; GROUPS.forEach(g=>g.items.forEach(i=>GROUP_OF[i]=g));
-const titleOf = id => id==="item-sets" ? "Item sets" : P[id]?.title;
-function currentPath(){ return (location.hash.replace(/^#\/?/,"").split("?")[0]) || ""; }
+const titleOf = id => id==="item-sets" ? "Item sets" : id==="all" ? "All sets" : id.startsWith("sets/") ? CATS[id.slice(5)].title : P[id]?.title;
+const kidsOf = id => id==="item-sets" ? ["all",...CAT_ORDER.map(c=>"sets/"+c)] : (P[id]?.children||[]);
+function currentPath(){ return location.hash.replace(/^#\/?/,"").split("?")[0].replace(/\/+$/,""); }
 function rootOf(path){
   if(!path) return "";
   if(path==="item-sets"||path==="all"||path.startsWith("sets/")||path.startsWith("set/")) return "item-sets";
   return path.split("/")[0];
 }
 
-/* ---------- sidebar ---------- */
-function renderToc(){
-  const path = currentPath(), root = rootOf(path);
-  const link = (id,label,n) => `<a href="#/${id}" class="${path===id?"on":""}">${esc(label)}${n!=null?`<span class="n">${n}</span>`:""}</a>`;
-  let h = `<h4>Wiki</h4>` + link("","Home");
-  for(const g of GROUPS){
-    h += `<h4>${g.label}</h4>`;
-    for(const id of g.items){
-      if(id==="item-sets"){
-        h += link("item-sets","Item sets",SETS.length);
-        if(root==="item-sets") h += `<div class="kidlist">${link("all","All sets",SETS.length)}${CAT_ORDER.map(c=>link(`sets/${c}`,CATS[c].title,setCount(c))).join("")}</div>`;
-        continue;
-      }
-      const p = P[id];
-      h += link(id,p.title,p.children.length||null);
-      if(p.children.length && root===id) h += `<div class="kidlist">${p.children.map(c=>link(c,P[c].title)).join("")}</div>`;
-    }
-  }
-  document.getElementById("toc").innerHTML = h;
+/* ---------- masthead ---------- */
+function renderNav(){
+  const g = GROUP_OF[rootOf(currentPath())];
+  document.getElementById("topnav").innerHTML = GROUPS.map(x=>`<button data-g="${x.id}" aria-expanded="false" class="${g===x?"here":""}">${x.label}</button>`).join("");
+}
+function openDrop(gid){
+  const drop = document.getElementById("drop"), list = gid ? GROUPS.filter(g=>g.id===gid) : GROUPS;
+  document.getElementById("dropIn").innerHTML = list.map(g=>
+    (gid?"":`<div class="grp">${g.label}</div>`) + g.items.map(id=>{
+      const kids = kidsOf(id);
+      return `<div><h3><a href="#/${id}">${esc(titleOf(id))}</a></h3><p>${esc(g.blurb[id])}</p>${kids.length?`<div class="kids">${kids.map(k=>`<a href="#/${k}">${esc(titleOf(k))}</a>`).join("")}</div>`:""}</div>`;
+    }).join("")).join("");
+  drop.classList.add("open"); drop.dataset.g = gid||"all";
+  document.querySelectorAll("#topnav button").forEach(b=>b.setAttribute("aria-expanded", String(b.dataset.g===gid)));
+  document.getElementById("burger").setAttribute("aria-expanded", String(!gid));
+}
+function closeDrop(){
+  const d = document.getElementById("drop"); d.classList.remove("open"); d.dataset.g="";
+  document.querySelectorAll("#topnav button,#burger").forEach(b=>b.setAttribute("aria-expanded","false"));
 }
 
-/* ---------- pages ---------- */
+/* ---------- local nav + rail ---------- */
+function localNav(path){
+  const root = rootOf(path), g = GROUP_OF[root]; if(!g) return "";
+  const isOn = x => path===x || (x.startsWith("sets/") && path.startsWith("set/") && BY_ID[path.slice(4)]?.cat===x.slice(5));
+  let h = `<nav class="local" aria-label="${g.label} pages"><h4>${g.label}</h4>`;
+  for(const id of g.items){
+    h += `<a href="#/${id}" class="${path===id?"on":""}">${esc(titleOf(id))}</a>`;
+    if(id===root){ const k = kidsOf(id); if(k.length) h += `<div class="sub">${k.map(x=>`<a href="#/${x}" class="${isOn(x)?"on":""}">${esc(titleOf(x))}</a>`).join("")}</div>`; }
+  }
+  return h + `</nav>`;
+}
+function facts(title, sub, rows){
+  return `<aside class="facts"><b>${esc(title)}</b>${sub?`<i>${esc(sub)}</i>`:""}<dl>${rows.filter(r=>r[1]!==""&&r[1]!=null).map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl></aside>`;
+}
+function frame(path, mainHTML, railHTML){
+  return `<div class="page doc ${railHTML===null?"no-rail":""}">${localNav(path)}<div class="main">${mainHTML}</div>${railHTML===null?"":`<div class="rail">${railHTML}<nav class="onpage" id="onpage" aria-label="On this page"></nav></div>`}</div>`;
+}
+const trail = parts => `<div class="trail">${parts.map(([h,l])=>h!==null?`<a href="#/${h}">${esc(l)}</a>`:`<span>${esc(l)}</span>`).join('<span class="sep">/</span>')}</div>`;
+function pager(prev, next){
+  const a = (x,cls,lab) => `<a class="${cls}" href="#/${x.id}"><small>${lab}</small><b>${esc(x.title)}</b></a>`;
+  return `<div class="pager">${prev?a(prev,"","Previous"):"<span></span>"}${next?a(next,"r","Next"):""}</div>`;
+}
+function buildOnPage(){
+  const el = document.getElementById("onpage"); if(!el) return;
+  const hs = [...document.querySelectorAll(".main .prose h2, .main .prose h3.line, .main .sec-h, .main details.devnotes")];
+  if(hs.length<3){ el.remove(); return; }
+  el.innerHTML = `<b>On this page</b>` + hs.map(h=>`<a data-t="${h.id}" tabindex="0">${esc(h.tagName==="DETAILS"?"Design notes":h.childNodes[0].textContent)}</a>`).join("");
+  const go = e=>{ const a=e.target.closest("a[data-t]"); if(!a) return; const t=document.getElementById(a.dataset.t); if(t.tagName==="DETAILS") t.open=true; t.scrollIntoView({behavior:"smooth",block:"start"}); };
+  el.onclick = go; el.onkeydown = e=>{ if(e.key==="Enter") go(e); };
+}
+
+/* ---------- home ---------- */
+const REALMS = [
+  {n:"Oakhaven", k:"Kingdom of humans", h:"Overlander, Dreadkin", c:"var(--r-oak)"},
+  {n:"Dracoria", k:"Kingdom of dragons", h:"Drakari, Ashkin", c:"var(--r-dra)"},
+  {n:"Aethelwing", k:"Kingdom of moths", h:"Lunari, Vampyri", c:"var(--r-aet)"},
+  {n:"Deepspire", k:"Kingdom of the Felyne", h:"Felyne", c:"var(--r-dee)"},
+  {n:"Eloria", k:"Kingdom of elves", h:"Duskborn, Highborn, Oakborn", c:"var(--r-elo)"},
+  {n:"The Sixth Realm", k:"Malakor's domain", h:"Ash wastes and the endgame", c:"var(--r-six)", six:true},
+];
+function sealSVG(){
+  const R1=118, R2=200, RM=159, gap=1.6;
+  const pt=(r,a)=>[r*Math.cos(a*Math.PI/180), r*Math.sin(a*Math.PI/180)].map(v=>v.toFixed(2));
+  let segs="", defs="";
+  REALMS.forEach((r,i)=>{
+    const a0=-90+i*60+gap, a1=-90+(i+1)*60-gap, mid=(a0+a1)/2;
+    const [x0,y0]=pt(R2,a0),[x1,y1]=pt(R2,a1),[x2,y2]=pt(R1,a1),[x3,y3]=pt(R1,a0);
+    const d=`M${x0},${y0} A${R2},${R2} 0 0 1 ${x1},${y1} L${x2},${y2} A${R1},${R1} 0 0 0 ${x3},${y3} Z`;
+    const bottom = mid>0 && mid<180;
+    const [lx0,ly0]=pt(RM, bottom?a1-2:a0+2),[lx1,ly1]=pt(RM, bottom?a0+2:a1-2);
+    defs += `<path id="lp${i}" d="M${lx0},${ly0} A${RM},${RM} 0 0 ${bottom?0:1} ${lx1},${ly1}"/>`;
+    const g = `<g class="seg-p${r.six?" six":""}" data-i="${i}" tabindex="0" role="link" aria-label="${esc(r.n)}, ${esc(r.k)}"><path class="f" d="${d}" fill="${r.c}"/><text dy="${bottom?14:6}"><textPath href="#lp${i}" startOffset="50%" text-anchor="middle">${r.six?"Sixth Realm":r.n}</textPath></text></g>`;
+    segs += r.six ? `<g class="sixwrap">${g}</g>` : g;
+  });
+  return `<svg viewBox="-235 -235 470 470" role="group" aria-label="The seal of the six realms, with the Sixth Realm broken away"><defs>${defs}</defs>
+    <circle class="rim" r="214"/><circle class="rim" r="106"/>${segs}
+    <text class="ctr-t" id="ctrT" text-anchor="middle" y="-6">Six realms</text>
+    <text class="ctr-s" id="ctrS1" text-anchor="middle" y="22">One broken seal</text>
+    <text class="ctr-s" id="ctrS2" text-anchor="middle" y="42"></text></svg>`;
+}
 function home(){
-  return `<div class="page">
-  <section class="hero">
-    <div class="eyebrow">Koala Studios · Wiki</div>
-    <h1>SEVERANCE</h1>
-    <p>Malakor, the Ash Sovereign, has burned his way through the five realms, and tonight his fire reached Oakhaven. Your story starts in the dungeons beneath the burning city. This is the player's guide to the world, its races, classes, weapons and gear.</p>
-    <div class="stats">
-      <div><b>10</b><span>Races</span></div>
-      <div><b>8</b><span>Classes</span></div>
-      <div><b>11</b><span>Weapons</span></div>
-      <div><b>${SETS.length}</b><span>Item sets</span></div>
-      <div><b>6</b><span>Realms</span></div>
+  const begin = [["combat","Learn to fight"],["races","Choose a race"],["classes","Pick a class"],["item-sets","Find your gear"]];
+  return `<div class="page home">
+  <section class="home-top">
+    <div class="home-copy">
+      <div class="mark" aria-hidden="true"><span class="a">Severance</span><span class="b">Severance</span></div>
+      <p>Five kingdoms once shared the realms. A sixth was sealed away, until Malakor broke the seal and rose from its ashes as the Ash Sovereign.</p>
+      <p>His fire has spread through the realms. Tonight it reached Oakhaven, the last kingdom standing, and your story starts in the dungeons beneath the burning city.</p>
+      <div class="begin">${begin.map(([h,l])=>`<a class="link" href="#/${h}">${l}</a>`).join("")}</div>
     </div>
+    <div class="seal" id="seal">${sealSVG()}</div>
   </section>
-  ${GROUPS.map(g=>`<section class="home-group"><h2>${g.label}<small>${g.items.length} pages</small></h2>
-    <div class="grid">${g.items.map(id=>{
-      const n = id==="item-sets" ? SETS.length : P[id].children.length;
-      return `<a class="card" href="#/${id}"><div class="k"><span>${g.label}</span><span>${n?n+(id==="item-sets"?" sets":" pages"):""}</span></div>
-      <h3>${esc(titleOf(id))}</h3><p>${esc(g.blurb[id])}</p></a>`}).join("")}</div></section>`).join("")}
+  <section class="home-index">
+    ${GROUPS.map(g=>`<div><h2>${g.label}</h2>${g.items.map(id=>`<a class="pg" href="#/${id}"><b>${esc(titleOf(id))}</b><span>${esc(g.blurb[id])}</span></a>`).join("")}</div>`).join("")}
+  </section>
   ${footer()}</div>`;
 }
+function wireSeal(){
+  const seal = document.getElementById("seal"); if(!seal) return;
+  const T=document.getElementById("ctrT"), S1=document.getElementById("ctrS1"), S2=document.getElementById("ctrS2");
+  const show = i => { if(i==null){ T.textContent="Six realms"; S1.textContent="One broken seal"; S2.textContent=""; return; }
+    const r=REALMS[i]; T.textContent = r.six?"Sixth Realm":r.n; S1.textContent=r.k; S2.textContent=r.h; };
+  seal.querySelectorAll(".seg-p").forEach(g=>{
+    const i=+g.dataset.i;
+    g.addEventListener("mouseenter",()=>show(i)); g.addEventListener("focus",()=>show(i));
+    g.addEventListener("mouseleave",()=>show(null)); g.addEventListener("blur",()=>show(null));
+    const go=()=>{ location.hash="#/world"; setTimeout(()=>document.getElementById("s-the-realms")?.scrollIntoView({block:"start"}),30); };
+    g.addEventListener("click",go); g.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); }});
+  });
+}
 
+/* ---------- generated pages ---------- */
 function docPage(id){
-  const p = P[id], g = GROUP_OF[p.parent||id];
-  const parent = p.parent ? P[p.parent] : null;
+  const p = P[id], g = GROUP_OF[p.parent||id], parent = p.parent ? P[p.parent] : null;
   let body = p.html || "";
-  if(p.children && p.children.length){
-    const cards = `<h2 id="s-${p.id}-list">${esc(p.title)}</h2><div class="grid kids">${p.children.map(c=>{const k=P[c];
-      return `<a class="card" href="#/${c}"><div class="k"><span>${esc(k.sub)}</span>${k.badge?`<span class="badge ${k.badge==="In game"?"ingame":""}">${esc(k.badge)}</span>`:""}</div><h3>${esc(k.title)}</h3><p>${esc(k.card)}</p></a>`}).join("")}</div>`;
-    body = body.includes("<!--CHILDREN-->") ? body.replace("<!--CHILDREN-->",cards) : body+cards;
+  if((p.children||[]).length){
+    const list = `<h2 class="sec-h" id="s-${p.id}-list">All ${esc(p.title.toLowerCase())}</h2><div class="roster">${p.children.map(c=>{const k=P[c];
+      return `<a href="#/${c}"><b>${esc(k.title)}${k.badge==="In game"?`<span class="tag">in game now</span>`:""}</b>${p.id==="races"?`<i>${esc(k.sub)}</i>`:""}<span>${esc(p.id==="races"?k.card:k.sub)}</span></a>`}).join("")}</div>`;
+    body = body.includes("<!--CHILDREN-->") ? body.replace("<!--CHILDREN-->",list) : body+list;
   }
-  const lede = p.lede ? `<div class="lede">${p.lede}</div>` : "";
-  const info = p.info ? `<aside class="infobox"><div class="ib-head"><b>${esc(p.title)}</b><span class="muted" style="font-size:13px">${esc(p.sub)}</span></div><dl>${p.info.filter(r=>r[1]).map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl></aside>` : "";
-  const sibs = parent ? parent.children : g.items;
-  const i = sibs.indexOf(id), prev = sibs[i-1], next = sibs[i+1];
-  const pl = (x,cls,lab) => x ? `<a class="${cls}" href="#/${x}"><small>${lab}</small><b>${esc(titleOf(x))}</b></a>` : "<span></span>";
-  return `<div class="page" data-doc="${id}">
-  <div class="crumbs"><a href="#/">Home</a>/<span>${g.label}</span>${parent?`/<a href="#/${parent.id}">${esc(parent.title)}</a>`:""}/<span>${esc(p.title)}</span></div>
-  <h1>${esc(p.title)}</h1>
-  ${p.sub?`<div class="sub-chip">${esc(p.sub)}${p.badge?` · ${esc(p.badge)}`:""}</div>`:""}
-  ${lede}
-  <div class="doc-layout ${info?"wide":""}">
-    <div class="prose">${body}</div>
-    <div class="rail">${info}<nav class="otp" id="otp"></nav></div>
-  </div>
-  <div class="pager">${pl(prev,"","← Previous")}${next?pl(next,"r","Next →"):""}</div>
-  ${footer(true)}</div>`;
-}
-function buildOtp(){
-  const otp = document.getElementById("otp"); if(!otp) return;
-  const hs = [...document.querySelectorAll(".prose h2, .prose h3.line, .prose details.devnotes")];
-  if(hs.length<3){ otp.remove(); return; }
-  otp.innerHTML = `<b>On this page</b>` + hs.map(h=>`<a data-t="${h.id}">${esc(h.tagName==="DETAILS"?"Design notes":h.childNodes[0].textContent)}</a>`).join("");
-  otp.onclick = e=>{ const a=e.target.closest("a[data-t]"); if(!a) return; const t=document.getElementById(a.dataset.t); if(t.tagName==="DETAILS") t.open=true; t.scrollIntoView({behavior:"smooth",block:"start"}); };
+  const sibs = (parent ? parent.children : g.items).map(x=>({id:x,title:titleOf(x)}));
+  const i = sibs.findIndex(x=>x.id===id);
+  const main = `${trail([["","Home"],[null,g.label],...(parent?[[parent.id,parent.title]]:[])])}
+    <h1>${esc(p.title)}</h1>${p.sub?`<p class="kin">${esc(p.sub)}${p.badge==="In game"?", in game now":""}</p>`:""}
+    ${p.lede?`<div class="lede">${p.lede}</div>`:""}
+    <div class="prose">${body}</div>${pager(sibs[i-1],sibs[i+1])}${footer()}`;
+  return frame(id, main, p.info ? facts(p.title, p.sub, p.info) : "");
 }
 
-/* ---------- search ---------- */
-let INDEX = null;
-function buildIndex(){
-  const div = document.createElement("div");
-  INDEX = DOC.order.map(id=>{ const p=P[id]; div.innerHTML=(p.lede||"")+(p.html||"")+(p.info||[]).map(r=>r.join(" ")).join(" ");
-    return {id, title:p.title, where:(p.parent?P[p.parent].title:GROUP_OF[id].label), text:div.textContent.replace(/\s+/g," ")}; });
-}
-function searchPage(q){
-  if(!INDEX) buildIndex();
-  const ql = q.trim().toLowerCase();
-  const hl = s => esc(s).replace(new RegExp("("+ql.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig"),"<mark>$1</mark>");
-  let pages=[], sets=[];
-  if(ql){
-    pages = INDEX.map(r=>{ const inT=r.title.toLowerCase().includes(ql); const at=r.text.toLowerCase().indexOf(ql);
-      if(!inT && at<0) return null;
-      const n = (r.text.toLowerCase().match(new RegExp(ql.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"g"))||[]).length;
-      const s = at<0 ? r.text.slice(0,140) : (at>60?"… ":"")+r.text.slice(Math.max(0,at-60),at+100)+" …";
-      return {...r, score:(inT?100:0)+n, snip:s}; }).filter(Boolean).sort((a,b)=>b.score-a.score);
-    sets = SETS.filter(s=>[s.name,s.bonus,s.source,s.weapon||"",s.slot||""].join(" ").toLowerCase().includes(ql));
-  }
-  return `<div class="page">
-  <div class="crumbs"><a href="#/">Home</a>/<span>Search</span></div>
-  <h1>Search</h1>
-  <input class="inline-search" id="sq" type="search" placeholder="Search the whole wiki…" value="${esc(q)}" style="width:100%;max-width:560px;font-size:16px;padding:11px 14px">
-  ${!ql?`<p class="muted" style="margin-top:16px">Type to search every page, skill and item set.</p>`:
-  `<p class="meta" style="margin-top:14px">${pages.length} pages · ${sets.length} item sets</p>
-  ${pages.length?`<div class="results">${pages.slice(0,40).map(r=>`<a class="result" href="#/${r.id}"><span class="rt">${hl(r.title)}</span><span class="rp">${esc(r.where)}</span><div class="rs">${hl(r.snip)}</div></a>`).join("")}</div>`:""}
-  ${sets.length?`<h2>Item sets</h2>${tableHTML("all",sets)}`:""}
-  ${!pages.length&&!sets.length?`<div class="empty">Nothing matches “${esc(q)}”.</div>`:""}`}
-  ${footer(true)}</div>`;
-}
-
+/* ---------- item sets ---------- */
 function howSets(){
-  const pkRows = Object.entries(PACKAGES).map(([k,v])=>`<tr><td>${pkChip(k)}</td>${v.map(x=>`<td class="mono">${esc(x)}</td>`).join("")}</tr>`).join("");
-  const srcRows = SOURCES.map(s=>`<tr class="go" data-href="#/sets/${SRC_TO_CAT[s.source]}"><td class="nm">${esc(s.source)}</td><td class="num">${s.sets}</td><td class="num">${s.pieces}</td><td class="bonus">${esc(s.how)}</td></tr>`).join("");
-  return `<div class="page">
-  <div class="crumbs"><a href="#/">Home</a>/<span>Gear</span>/<span>Item sets</span></div>
-  <h1>How item sets work</h1>
-  <p class="lede">Severance launches with 82 item sets from seven sources. Most are 5-piece sets: wear several pieces of the same set and its bonuses switch on, the strongest at 5 pieces. Builds come from pairing sets with your <a class="link" href="#/classes">class</a>, <a class="link" href="#/weapons">weapons</a> and skills.</p>
-
-  <h2>Gear slots</h2>
-  <p>There are 12 gear slots. Armor and jewelry always count toward sets. Weapons count only while their bar is in hand, so swapping bars (<span class="mono">Z</span>) can swap set bonuses.</p>
-  <div class="slots">
-    ${["Head","Shoulders","Chest","Hands","Waist","Legs","Feet"].map(s=>`<span>${s}</span>`).join("")}
-    ${["Neck","Ring","Ring"].map(s=>`<span class="j">${s}</span>`).join("")}
-    <span class="w">Front bar weapons</span><span class="w">Back bar weapons</span>
-  </div>
-  <p class="muted" style="font-size:13px">Solid: armor · Dashed: jewelry · Ember: weapons</p>
-
-  <h2>Armor weights</h2>
+  const pkRows = Object.entries(PACKAGES).map(([k,v])=>`<tr><td>${pkMark(k)}</td>${v.map(x=>`<td>${esc(x)}</td>`).join("")}</tr>`).join("");
+  const srcRows = SOURCES.map(s=>`<tr class="go" data-href="#/sets/${SRC_TO_CAT[s.source]}"><td class="nm">${esc(s.source)}</td><td class="num">${s.sets}</td><td class="num">${s.pieces}</td><td>${esc(s.how)}</td></tr>`).join("");
+  const main = `${trail([["","Home"],[null,"Gear"]])}<h1>Item sets</h1>
+  <div class="lede"><p>Severance launches with 82 item sets from seven sources. Most are 5-piece sets: wear several pieces of the same set and its bonuses switch on, the strongest at 5 pieces. Builds come from pairing sets with your <a class="link" href="#/classes">class</a>, <a class="link" href="#/weapons">weapons</a> and skills.</p></div>
+  <div class="prose">
+  <h2 id="s-slots">Gear slots</h2>
+  <p>There are 12 gear slots. Armor and jewelry always count toward sets. Weapons count only while their bar is in hand, so swapping bars (Z) can swap set bonuses.</p>
+  <div class="slots">${["Head","Shoulders","Chest","Hands","Waist","Legs","Feet"].map(s=>`<span>${s}</span>`).join("")}${["Neck","Ring","Ring"].map(s=>`<span class="j">${s}</span>`).join("")}<span class="w">Front bar weapons</span><span class="w">Back bar weapons</span></div>
+  <p class="muted" style="font-size:15px">Solid outline: armor. Dashed: jewelry. Gold: weapons.</p>
+  <h2 id="s-weights">Armor weights</h2>
   <p>Every set drops in one weight, or any weight if crafted.</p>
-  <div class="weights">
-    <div>${wt("Light")}<b>Light</b><p>Mana builds. Spellcasters and healers.</p></div>
-    <div>${wt("Medium")}<b>Medium</b><p>Stamina builds. Fast weapon fighters.</p></div>
-    <div>${wt("Heavy")}<b>Heavy</b><p>Health builds. Tanks who block, parry and hold poise.</p></div>
-  </div>
-
-  <h2>Bonus tiers</h2>
-  <p>5-piece sets give a stat line at 2, 3 and 4 pieces, and the set's unique effect at 5. <a class="link" href="#/sets/monster">Monster sets</a> have 2 pieces (head and shoulders). <a class="link" href="#/sets/arena">Arena weapons</a> have 2 pieces (a two-hander counts as both). <a class="link" href="#/sets/mythic">Mythics</a> are a single piece, and you can wear only one.</p>
-
+  <div class="weights"><div>${wt("Light")}<b>Light</b><p>Mana builds. Spellcasters and healers.</p></div><div>${wt("Medium")}<b>Medium</b><p>Stamina builds. Fast weapon fighters.</p></div><div>${wt("Heavy")}<b>Heavy</b><p>Health builds. Tanks who block, parry and hold poise.</p></div></div>
+  <h2 id="s-tiers">Bonus tiers</h2>
+  <p>5-piece sets give a stat line at 2, 3 and 4 pieces, and the set's unique effect at 5. <a href="#/sets/monster">Monster sets</a> have 2 pieces (head and shoulders). <a href="#/sets/arena">Arena weapons</a> have 2 pieces (a two-hander counts as both). <a href="#/sets/mythic">Mythics</a> are a single piece, and you can wear only one.</p>
   <h3>Stat packages</h3>
   <p>At launch every 5-piece set uses one of five standard stat packages for its 2–4 piece lines, so the unique 5-piece effect is what sets them apart.</p>
   <div class="tbl-wrap"><table><thead><tr><th>Package</th><th>2 pieces</th><th>3 pieces</th><th>4 pieces</th></tr></thead><tbody>${pkRows}</tbody></table></div>
-  ${WARN}
-
-  <h2>Where the 82 sets come from</h2>
+  ${NOTE}
+  <h2 id="s-sources">Where the 82 sets come from</h2>
   <div class="tbl-wrap"><table><thead><tr><th>Source</th><th style="text-align:right">Sets</th><th style="text-align:right">Pieces</th><th>How you get them</th></tr></thead><tbody>${srcRows}</tbody></table></div>
-  <div class="pager"><a href="#/"><small>← Previous</small><b>Home</b></a><a class="r" href="#/sets/overland"><small>Next →</small><b>Overland sets</b></a></div>
-  ${footer()}</div>`;
+  </div>${pager(null,{id:"all",title:"All sets"})}${footer()}`;
+  return frame("item-sets", main, "");
 }
-
-/* columns per category */
 function cols(cat){
   const name = {h:"Set",c:s=>`<td class="nm">${esc(s.name)}</td>`};
   const weight = {h:"Weight",c:s=>`<td>${wt(s.weight)}</td>`};
-  const pk = {h:"Package",c:s=>`<td>${pkChip(s.package)}</td>`};
-  const bonus = (h)=>({h,c:s=>`<td class="bonus">${esc(s.bonus)}</td>`});
+  const pk = {h:"Package",c:s=>`<td>${pkMark(s.package)}</td>`};
+  const bonus = h=>({h,c:s=>`<td class="bonus">${esc(s.bonus)}</td>`});
   switch(cat){
     case "crafted": return [name,{h:"Traits",c:s=>`<td class="num">${s.traits}</td>`},pk,bonus("5-piece bonus")];
-    case "monster": return [name,{h:"Dropped by",c:s=>`<td>${esc(s.source)}</td>`},{h:"1 piece",c:s=>`<td class="mono" style="white-space:nowrap">${esc(s.one)}</td>`},bonus("2-piece bonus")];
-    case "arena":   return [name,{h:"Weapon",c:s=>`<td>${esc(s.weapon)}</td>`},bonus("2-piece bonus")];
-    case "mythic":  return [name,{h:"Slot",c:s=>`<td>${esc(s.slot)}</td>`},bonus("Effect")];
-    case "all":     return [name,{h:"Source",c:s=>`<td>${catChip(s.cat)}</td>`},weight,pk,{h:"Bonus",c:s=>`<td class="bonus">${esc(s.bonus)}</td>`}];
+    case "monster": return [name,{h:"Dropped by",c:s=>`<td class="src">${esc(s.source)}</td>`},{h:"1 piece",c:s=>`<td style="white-space:nowrap">${esc(s.one)}</td>`},bonus("2-piece bonus")];
+    case "arena":   return [name,{h:"Weapon",c:s=>`<td class="src">${esc(s.weapon)}</td>`},bonus("2-piece bonus")];
+    case "mythic":  return [name,{h:"Slot",c:s=>`<td class="src">${esc(s.slot)}</td>`},bonus("Effect")];
+    case "all":     return [name,{h:"Source",c:s=>`<td class="src">${CATS[s.cat].label}</td>`},weight,pk,bonus("Bonus")];
     default:        return [name,weight,pk,bonus("5-piece bonus")];
   }
 }
-
 const state = {w:"All",p:"All",q:""};
 function filterBar(cat, list){
-  const hasW = list.some(s=>s.weight && s.weight!=="Any");
-  const hasP = list.some(s=>s.package);
-  const weights = ["All","Light","Medium","Heavy"];
-  const pks = ["All",...Object.keys(PACKAGES)];
+  const hasW = list.some(s=>s.weight && s.weight!=="Any"), hasP = list.some(s=>s.package);
   let h = `<div class="filters">`;
-  if(cat==="all") h += `<input class="inline-search" id="fq" type="search" placeholder="Filter by name or effect…" value="${esc(state.q)}">`;
-  if(hasW) h += `<span class="lbl">Weight</span><span class="seg" data-f="w">${weights.map(w=>`<button class="${state.w===w?"on":""}" data-v="${w}">${w}</button>`).join("")}</span>`;
-  if(hasP) h += `<span class="lbl">Package</span><span class="seg" data-f="p">${pks.map(p=>`<button class="${state.p===p?"on":""}" data-v="${p}">${p.replace(" damage","")}</button>`).join("")}</span>`;
+  if(cat==="all") h += `<input class="inline-search" id="fq" type="search" placeholder="Filter by name or effect" value="${esc(state.q)}" aria-label="Filter sets">`;
+  if(hasW) h += `<span><span class="seg-l">Weight</span><span class="seg" data-f="w">${["All","Light","Medium","Heavy"].map(w=>`<button class="${state.w===w?"on":""}" data-v="${w}">${w}</button>`).join("")}</span></span>`;
+  if(hasP) h += `<span><span class="seg-l">Package</span><span class="seg" data-f="p">${["All",...Object.keys(PACKAGES)].map(p=>`<button class="${state.p===p?"on":""}" data-v="${p}">${p.replace(" damage","")}</button>`).join("")}</span></span>`;
   return h + `<span class="count" id="cnt"></span></div>`;
 }
 function applyFilter(list){
   const q = state.q.trim().toLowerCase();
-  return list.filter(s =>
-    (state.w==="All" || s.weight===state.w || s.weight==="Any") &&
-    (state.p==="All" || s.package===state.p) &&
+  return list.filter(s => (state.w==="All"||s.weight===state.w||s.weight==="Any") && (state.p==="All"||s.package===state.p) &&
     (!q || [s.name,s.bonus,s.source,s.weapon,s.slot,s.one,s.package,CATS[s.cat].label].join(" ").toLowerCase().includes(q)));
 }
 function tableHTML(cat, list){
-  const c = cols(cat);
-  const groupKey = CATS[cat]?.group;
-  let body = "", last = null;
+  if(!list.length) return `<div class="empty">No sets match these filters. Clear a filter to see more.</div>`;
+  const c = cols(cat), gk = CATS[cat]?.group;
+  let body="", last=null;
   for(const s of list){
-    if(groupKey && s.source!==last){ body += `<tr class="group-row"><td colspan="${c.length}">${esc(s.source)}</td></tr>`; last = s.source; }
+    if(gk && s.source!==last){ body += `<tr class="group-row"><td colspan="${c.length}">${esc(s.source)}</td></tr>`; last=s.source; }
     body += `<tr class="go" data-href="#/set/${s.id}">${c.map(x=>x.c(s)).join("")}</tr>`;
   }
-  if(!list.length) return `<div class="tbl-wrap"><div class="empty">No sets match these filters.</div></div>`;
   return `<div class="tbl-wrap"><table class="sets"><thead><tr>${c.map(x=>`<th>${x.h}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table></div>`;
 }
 function category(cat){
-  const meta = CATS[cat], list = SETS.filter(s=>s.cat===cat);
-  const i = CAT_ORDER.indexOf(cat);
-  const prev = i>0 ? `<a href="#/sets/${CAT_ORDER[i-1]}"><small>← Previous</small><b>${CATS[CAT_ORDER[i-1]].title}</b></a>` : `<a href="#/item-sets"><small>← Previous</small><b>How item sets work</b></a>`;
-  const next = i<CAT_ORDER.length-1 ? `<a class="r" href="#/sets/${CAT_ORDER[i+1]}"><small>Next →</small><b>${CATS[CAT_ORDER[i+1]].title}</b></a>` : `<a class="r" href="#/all"><small>Next →</small><b>All sets</b></a>`;
+  const m = CATS[cat], list = SETS.filter(s=>s.cat===cat), i = CAT_ORDER.indexOf(cat);
   const src = SOURCES.find(s=>SRC_TO_CAT[s.source]===cat);
-  return `<div class="page" data-cat="${cat}">
-  <div class="crumbs"><a href="#/">Home</a>/<a href="#/item-sets">Item sets</a>/<span>${meta.title}</span></div>
-  <h1>${meta.title}</h1>
-  <div class="meta">${list.length} ${cat==="mythic"?"items":"sets"} · ${src.pieces} ${src.pieces===1?"piece":"pieces"} each</div>
-  <p class="lede">${esc(meta.intro)}</p>
-  ${filterBar(cat,list)}
-  <div id="tbl"></div>
-  <div class="pager">${prev}${next}</div>
-  ${footer()}</div>`;
+  const prev = i>0 ? {id:"sets/"+CAT_ORDER[i-1],title:CATS[CAT_ORDER[i-1]].title} : {id:"all",title:"All sets"};
+  const next = i<CAT_ORDER.length-1 ? {id:"sets/"+CAT_ORDER[i+1],title:CATS[CAT_ORDER[i+1]].title} : null;
+  const main = `${trail([["","Home"],[null,"Gear"],["item-sets","Item sets"]])}<h1>${m.title}</h1>
+  <p class="kin">${list.length} ${cat==="mythic"?"items":"sets"}, ${src.pieces} ${src.pieces===1?"piece":"pieces"} each</p>
+  <div class="lede"><p>${esc(m.intro)}</p></div>
+  <div data-cat="${cat}">${filterBar(cat,list)}<div id="tbl"></div></div>${pager(prev,next)}${footer()}`;
+  return frame("sets/"+cat, main, null);
 }
 function allSets(){
-  return `<div class="page" data-cat="all">
-  <div class="crumbs"><a href="#/">Home</a>/<a href="#/item-sets">Item sets</a>/<span>All sets</span></div>
-  <h1>All sets</h1>
-  <div class="meta">${SETS.length} sets from 7 sources</div>
-  <p class="lede">Every launch set in one list. Filter by weight or package, or search names and effects — try “Burn”, “parry” or “Ultimate”.</p>
-  ${filterBar("all",SETS)}
-  <div id="tbl"></div>
-  ${footer()}</div>`;
+  const main = `${trail([["","Home"],[null,"Gear"],["item-sets","Item sets"]])}<h1>All sets</h1>
+  <p class="kin">${SETS.length} sets from 7 sources</p>
+  <div class="lede"><p>Every launch set in one list. Filter by weight or package, or search names and effects, such as Burn, parry or Ultimate.</p></div>
+  <div data-cat="all">${filterBar("all",SETS)}<div id="tbl"></div></div>${pager({id:"item-sets",title:"Item sets"},{id:"sets/overland",title:"Overland sets"})}${footer()}`;
+  return frame("all", main, null);
 }
-
 function tiersFor(s){
-  const dots = (n,max)=>`<span class="dots">${Array.from({length:max},(_,i)=>`<span class="${i<n?"f":""}"></span>`).join("")}</span>`;
-  if(s.pieces===5){
-    const p = PACKAGES[s.package];
-    return [2,3,4].map((n,i)=>`<div class="tier"><div class="pc">${dots(n,5)}${n} pc</div><div class="tx mono">${esc(p[i])}</div></div>`).join("")
-      + `<div class="tier unique"><div class="pc">${dots(5,5)}5 pc</div><div class="tx"><span class="tag">Unique effect</span>${esc(s.bonus)}</div></div>`;
-  }
-  if(s.cat==="monster")
-    return `<div class="tier"><div class="pc">${dots(1,2)}1 pc</div><div class="tx mono">${esc(s.one)}</div></div>`
-      + `<div class="tier unique"><div class="pc">${dots(2,2)}2 pc</div><div class="tx"><span class="tag">Boss power</span>${esc(s.bonus)}</div></div>`;
-  if(s.cat==="arena")
-    return `<div class="tier unique"><div class="pc">${dots(2,2)}2 pc</div><div class="tx"><span class="tag">Weapon effect</span>${esc(s.bonus)}</div></div>`;
-  return `<div class="tier unique"><div class="pc">${dots(1,1)}1 pc</div><div class="tx"><span class="tag">Mythic effect</span>${esc(s.bonus)}</div></div>`;
+  const dots=(n,max)=>`<span class="dots">${Array.from({length:max},(_,i)=>`<span class="${i<n?"f":""}"></span>`).join("")}</span>`;
+  const row=(n,max,txt,uniq,tag)=>`<div class="tier${uniq?" unique":""}"><div class="pc">${dots(n,max)}${n} pc</div><div class="tx">${tag?`<span class="tag">${tag}</span>`:""}${esc(txt)}</div></div>`;
+  if(s.pieces===5){ const p=PACKAGES[s.package]; return [2,3,4].map((n,i)=>row(n,5,p[i])).join("")+row(5,5,s.bonus,true,"Unique effect"); }
+  if(s.cat==="monster") return row(1,2,s.one)+row(2,2,s.bonus,true,"The boss's power");
+  if(s.cat==="arena") return row(2,2,s.bonus,true,"Weapon effect");
+  return row(1,1,s.bonus,true,"Mythic effect");
 }
 function obtain(s){
   switch(s.cat){
-    case "crafted": return `Craft it at the set's own crafting station after researching <b>${s.traits}</b> traits. Can be made in any armor weight and any slot. See <a class="link" href="#/crafting">Crafting</a> for how trait research works.`;
-    case "overland": return `Drops from zone chests, world bosses and delves in <b>${esc(s.source)}</b>.`;
-    case "dungeon": return `Drops from the bosses of <b>${esc(s.source)}</b>.`;
-    case "trial": return `Drops in the <b>${esc(s.source)}</b> trial.`;
-    case "monster": return s.source.startsWith("Throne of Ash")
-      ? `Both pieces drop only from Malakor, at the end of the <b>Throne of Ash</b> trial.`
-      : s.source.startsWith("World boss")
-        ? `Head drops from a world boss in <b>${esc(s.source.replace("World boss, ",""))}</b>; shoulders from that content's weekly reward chest.`
-        : `Head drops from the final boss of <b>${esc(s.source)}</b>; shoulders from that content's weekly reward chest.`;
-    case "arena": return `Rewarded by <b>The Ashpit</b> solo arena. Two of the same one-hander, one two-hander, a pair of daggers, or a sword with its shield completes the set.`;
+    case "crafted": return `Craft it at the set's own crafting station after researching ${s.traits} traits. It can be made in any armor weight and any slot. <a href="#/crafting">Crafting</a> explains trait research.`;
+    case "overland": return `Drops from zone chests, world bosses and delves in ${esc(s.source)}.`;
+    case "dungeon": return `Drops from the bosses of ${esc(s.source)}.`;
+    case "trial": return `Drops in the ${esc(s.source)} trial.`;
+    case "monster": return s.source.startsWith("Throne of Ash") ? `Both pieces drop only from Malakor, at the end of the Throne of Ash trial.`
+      : s.source.startsWith("World boss") ? `The head drops from a world boss in ${esc(s.source.replace("World boss, ",""))}; the shoulders from that content's weekly reward chest.`
+      : `The head drops from the final boss of ${esc(s.source)}; the shoulders from that content's weekly reward chest.`;
+    case "arena": return `Rewarded by the Ashpit solo arena. Two of the same one-hander, one two-hander, a pair of daggers, or a sword with its shield completes the set.`;
     case "mythic": return `Found through relic hunts (system to be designed). You can wear only one mythic at a time.`;
   }
 }
 function setPage(id){
-  const s = BY_ID[id];
-  if(!s) return notFound();
-  const meta = CATS[s.cat];
-  const rows = [["Source",catChip(s.cat)]];
-  if(s.cat==="crafted") rows.push(["Traits",`<span class="mono">${s.traits}</span>`]);
-  if(meta.group) rows.push([meta.group,esc(s.source)]);
-  if(s.cat==="monster") rows.push(["Dropped by",esc(s.source)]);
-  if(s.weapon) rows.push(["Weapon",P["weapons/"+s.weapon.toLowerCase().replace(/[^a-z0-9]+/g,"-")]?`<a class="link" href="#/weapons/${s.weapon.toLowerCase().replace(/[^a-z0-9]+/g,"-")}">${esc(s.weapon)}</a>`:esc(s.weapon)]);
-  if(s.slot) rows.push(["Slot",esc(s.slot)]);
-  if(s.weight) rows.push(["Weight",wt(s.weight)]);
-  if(s.package) rows.push(["Package",pkChip(s.package)]);
-  rows.push(["Pieces",`<span class="mono">${s.pieces}</span>`]);
-  const sib = SETS.filter(x=>x.cat===s.cat && x.id!==s.id && (meta.group ? x.source===s.source : true)).slice(0, meta.group?4:5);
-  const sibTitle = meta.group ? `More from ${esc(s.source)}` : `More ${meta.title.toLowerCase()}`;
-  const catList = SETS.filter(x=>x.cat===s.cat), idx = catList.indexOf(s);
-  const prev = catList[idx-1], next = catList[idx+1];
-  return `<div class="page">
-  <div class="crumbs"><a href="#/">Home</a>/<a href="#/item-sets">Item sets</a>/<a href="#/sets/${s.cat}">${meta.title}</a>/<span>${esc(s.name)}</span></div>
-  <h1>${esc(s.name)}</h1>
-  <div class="set-head">${catChip(s.cat)}${s.weight?`<span class="chip">${s.weight}</span>`:""}${pkChip(s.package)}<span class="chip">${s.pieces} pc</span></div>
-  <div class="set-layout">
-    <div>
-      <h3 style="margin-top:0">Bonuses</h3>
-      <div class="tiers">${tiersFor(s)}</div>
-      ${s.pieces===5?`<p class="muted" style="font-size:13px;margin-top:10px">The 2–4 piece lines come from the standard <b>${esc(s.package)}</b> package. <a class="link" href="#/item-sets">About packages</a></p>`:""}
-      <h3>How to get it</h3>
-      <p>${obtain(s)}</p>
-      ${WARN}
-      ${sib.length?`<h3>${sibTitle}</h3><div class="related">${sib.map(x=>`<a href="#/set/${x.id}">${esc(x.name)}<span>${x.weight||x.weapon||x.slot||esc(x.source)}</span></a>`).join("")}</div>`:""}
-    </div>
-    <aside class="infobox">
-      <div class="ib-head"><b>${esc(s.name)}</b><span class="muted" style="font-size:13px">${meta.label}${s.cat==="mythic"?" item":" set"}</span></div>
-      <dl>${rows.map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
-    </aside>
-  </div>
-  <div class="pager">${prev?`<a href="#/set/${prev.id}"><small>← Previous</small><b>${esc(prev.name)}</b></a>`:`<span></span>`}${next?`<a class="r" href="#/set/${next.id}"><small>Next →</small><b>${esc(next.name)}</b></a>`:""}</div>
-  ${footer()}</div>`;
+  const s = BY_ID[id]; if(!s) return notFound();
+  const m = CATS[s.cat];
+  const wlink = s.weapon && P["weapons/"+slugify(s.weapon)] ? `<a href="#/weapons/${slugify(s.weapon)}">${esc(s.weapon)}</a>` : esc(s.weapon||"");
+  const rows = [["Source",m.label],["Traits needed",s.traits],[m.group,m.group?esc(s.source):""],["Dropped by",s.cat==="monster"?esc(s.source):""],["Weapon",wlink],["Slot",esc(s.slot||"")],["Weight",s.weight?wt(s.weight):""],["Package",pkMark(s.package)],["Pieces",s.pieces]];
+  const sib = SETS.filter(x=>x.cat===s.cat && x.id!==s.id && (m.group ? x.source===s.source : true)).slice(0, m.group?4:5);
+  const list = SETS.filter(x=>x.cat===s.cat), i = list.indexOf(s);
+  const main = `${trail([["","Home"],[null,"Gear"],["item-sets","Item sets"],["sets/"+s.cat,m.title]])}
+  <h1>${esc(s.name)}</h1><p class="kin">${m.label} ${s.cat==="mythic"?"item":"set"}${s.weight?", "+(s.weight==="Any"?"any weight":s.weight.toLowerCase()):""}${s.package?", "+s.package.toLowerCase():""}</p>
+  <div class="prose">
+    <h2 id="s-bonuses" style="margin-top:20px">Bonuses</h2><div class="tiers">${tiersFor(s)}</div>
+    ${s.pieces===5?`<p class="muted" style="font-size:15.5px">The 2–4 piece lines come from the standard ${esc(s.package)} package. <a href="#/item-sets">How packages work</a></p>`:""}
+    <h2 id="s-get">How to get it</h2><p>${obtain(s)}</p>${NOTE}
+    ${sib.length?`<h2 id="s-more">${m.group?`More from ${esc(s.source)}`:`More ${m.title.toLowerCase()}`}</h2><div class="roster">${sib.map(x=>`<a href="#/set/${x.id}"><b>${esc(x.name)}</b><span>${esc(x.bonus)}</span></a>`).join("")}</div>`:""}
+  </div>${pager(list[i-1]&&{id:"set/"+list[i-1].id,title:list[i-1].name}, list[i+1]&&{id:"set/"+list[i+1].id,title:list[i+1].name})}${footer()}`;
+  return frame("set/"+id, main, facts(s.name, `${m.label} ${s.cat==="mythic"?"item":"set"}`, rows));
 }
 function notFound(){
-  return `<div class="page"><h1>Page not found</h1><p class="muted">That page doesn't exist yet. <a class="link" href="#/">Back to home</a></p></div>`;
+  return `<div class="page"><h1>No page here</h1><p class="muted">This page doesn't exist. Check the address, or <a class="link" href="#/">go back to the home page</a>.</p></div>`;
+}
+
+/* ---------- search ---------- */
+let INDEX=null;
+function buildIndex(){
+  const div=document.createElement("div");
+  INDEX = DOC.order.map(id=>{ const p=P[id]; div.innerHTML=(p.lede||"")+(p.html||"")+(p.info||[]).map(r=>r.join(" ")).join(" ");
+    return {id,title:p.title,where:p.parent?P[p.parent].title:GROUP_OF[id].label,text:div.textContent.replace(/\s+/g," ")}; });
+}
+function searchPage(q){
+  if(!INDEX) buildIndex();
+  const ql=q.trim().toLowerCase(), rx=ql.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+  const hl=s=>esc(s).replace(new RegExp("("+rx+")","ig"),"<mark>$1</mark>");
+  let pages=[], sets=[];
+  if(ql){
+    pages = INDEX.map(r=>{ const inT=r.title.toLowerCase().includes(ql), at=r.text.toLowerCase().indexOf(ql); if(!inT&&at<0) return null;
+      const n=(r.text.match(new RegExp(rx,"ig"))||[]).length, s=at<0?r.text.slice(0,150):(at>70?"…":"")+r.text.slice(Math.max(0,at-70),at+110)+"…";
+      return {...r,score:(inT?100:0)+n,snip:s}; }).filter(Boolean).sort((a,b)=>b.score-a.score);
+    sets = SETS.filter(s=>[s.name,s.bonus,s.source,s.weapon||"",s.slot||""].join(" ").toLowerCase().includes(ql));
+  }
+  return `<div class="page"><div class="main" style="max-width:900px">
+  <h1>Search</h1>
+  <input class="inline-search" id="sq" type="search" placeholder="Search every page, skill and item set" value="${esc(q)}" style="width:100%;max-width:620px;font-size:18px;padding:11px 14px" aria-label="Search the wiki">
+  ${!ql?`<p class="muted" style="margin-top:16px">Type a name or an effect, such as Bleed, parry or Malakor.</p>`:
+  `<p class="kin" style="margin-top:16px">${pages.length} ${pages.length===1?"page":"pages"} and ${sets.length} item ${sets.length===1?"set":"sets"}</p>
+  ${pages.length?`<div class="results">${pages.slice(0,40).map(r=>`<a class="result" href="#/${r.id}"><span class="rt">${hl(r.title)}</span><span class="rp">${esc(r.where)}</span><div class="rs">${hl(r.snip)}</div></a>`).join("")}</div>`:""}
+  ${sets.length?`<h2 class="sec-h">Item sets</h2>${tableHTML("all",sets)}`:""}
+  ${!pages.length&&!sets.length?`<p class="empty">Nothing matches “${esc(q)}”. Try a shorter word.</p>`:""}`}
+  ${footer()}</div></div>`;
 }
 
 /* ---------- router ---------- */
 function drawTable(){
-  const page = document.querySelector(".page[data-cat]");
-  if(!page) return;
-  const cat = page.dataset.cat;
-  const base = cat==="all" ? SETS : SETS.filter(s=>s.cat===cat);
-  const list = applyFilter(base);
-  document.getElementById("tbl").innerHTML = tableHTML(cat, list);
-  document.getElementById("cnt").textContent = `${list.length} of ${base.length}`;
+  const box=document.querySelector("[data-cat]"); if(!box) return;
+  const cat=box.dataset.cat, base=cat==="all"?SETS:SETS.filter(s=>s.cat===cat), list=applyFilter(base);
+  document.getElementById("tbl").innerHTML=tableHTML(cat,list);
+  document.getElementById("cnt").textContent=`Showing ${list.length} of ${base.length}`;
 }
 function route(){
-  const h = location.hash.replace(/^#/,"") || "/";
-  const [rawPath, qs] = h.split("?");
-  const path = rawPath.replace(/^\/+|\/+$/g,"");
-  const parts = path.split("/").filter(Boolean);
-  const focused = document.activeElement && document.activeElement.id;
-  let html, title = null;
-  if(!parts.length) html = home();
-  else if(parts[0]==="item-sets"){ html = howSets(); title="How item sets work"; }
-  else if(parts[0]==="all"){ html = allSets(); title="All sets"; }
-  else if(parts[0]==="search"){ const q=new URLSearchParams(qs||"").get("q")||""; html = searchPage(q); title="Search"; }
-  else if(parts[0]==="sets" && CATS[parts[1]]){ html = category(parts[1]); title=CATS[parts[1]].title; }
-  else if(parts[0]==="set"){ html = setPage(parts[1]); title=BY_ID[parts[1]]?.name; }
-  else if(P[path]){ html = docPage(path); title=P[path].title; }
-  else html = notFound();
-  if(parts[0]!=="all") state.q="";
-  if(parts[0]!=="search" && document.getElementById("q")) document.getElementById("q").value="";
-  if(!(parts[0]==="sets"||parts[0]==="all")) { state.w="All"; state.p="All"; }
-  document.getElementById("app").innerHTML = html;
-  drawTable();
-  buildOtp();
-  renderToc();
-  document.body.classList.remove("nav-open");
-  document.title = title ? `${title} · SEVERANCE Wiki` : "SEVERANCE Wiki";
-  if(parts[0]==="search" && (focused==="sq"||focused==="q")){
-    const el=document.getElementById(focused); el.focus(); const n=el.value.length; try{el.setSelectionRange(n,n)}catch(e){}
-  }
+  const h=location.hash.replace(/^#/,"")||"/", [raw,qs]=h.split("?"), path=raw.replace(/^\/+|\/+$/g,""), parts=path.split("/").filter(Boolean);
+  const focused=document.activeElement&&document.activeElement.id;
+  let html, title=null;
+  if(!parts.length) html=home();
+  else if(path==="item-sets"){ html=howSets(); title="Item sets"; }
+  else if(path==="all"){ html=allSets(); title="All sets"; }
+  else if(parts[0]==="search"){ html=searchPage(new URLSearchParams(qs||"").get("q")||""); title="Search"; }
+  else if(parts[0]==="sets"&&CATS[parts[1]]){ html=category(parts[1]); title=CATS[parts[1]].title; }
+  else if(parts[0]==="set"){ html=setPage(parts[1]); title=BY_ID[parts[1]]?.name; }
+  else if(P[path]){ html=docPage(path); title=P[path].title; }
+  else html=notFound();
+  if(path!=="all") state.q="";
+  if(parts[0]!=="search") document.getElementById("q").value="";
+  if(!(parts[0]==="sets"||path==="all")){ state.w="All"; state.p="All"; }
+  document.getElementById("app").innerHTML=html;
+  drawTable(); buildOnPage(); wireSeal(); renderNav(); closeDrop();
+  document.title = title ? `${title} | Severance Wiki` : "Severance Wiki";
+  if(parts[0]==="search"&&(focused==="sq"||focused==="q")){ const el=document.getElementById(focused); el.focus(); const n=el.value.length; try{el.setSelectionRange(n,n)}catch(e){} }
 }
-let lastPath = null;
-window.addEventListener("hashchange", ()=>{
-  const p = location.hash.split("?")[0];
-  route();
-  if(p!==lastPath) window.scrollTo(0,0);
-  lastPath = p;
+let lastPath=null;
+window.addEventListener("hashchange",()=>{ const p=location.hash.split("?")[0]; route(); if(p!==lastPath) window.scrollTo(0,0); lastPath=p; });
+document.addEventListener("click",e=>{
+  const nb=e.target.closest("#topnav button");
+  if(nb){ const d=document.getElementById("drop"); d.classList.contains("open")&&d.dataset.g===nb.dataset.g ? closeDrop() : openDrop(nb.dataset.g); return; }
+  if(e.target.closest("#burger")){ const d=document.getElementById("drop"); d.classList.contains("open")&&d.dataset.g==="all" ? closeDrop() : openDrop(null); return; }
+  if(!e.target.closest("#drop")) closeDrop();
+  const row=e.target.closest("tr.go"); if(row){ location.hash=row.dataset.href; return; }
+  const b=e.target.closest(".seg button");
+  if(b){ state[b.parentElement.dataset.f]=b.dataset.v; b.parentElement.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b)); drawTable(); }
 });
-
-document.addEventListener("click", e=>{
-  const row = e.target.closest("tr.go");
-  if(row){ location.hash = row.dataset.href; return; }
-  const b = e.target.closest(".seg button");
-  if(b){ state[b.parentElement.dataset.f] = b.dataset.v; b.parentElement.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b)); drawTable(); }
-});
-document.addEventListener("input", e=>{
-  if(e.target.id==="fq"){ state.q = e.target.value; drawTable(); }
+document.addEventListener("input",e=>{
+  if(e.target.id==="fq"){ state.q=e.target.value; drawTable(); }
   if(e.target.id==="q"||e.target.id==="sq"){
-    const v = e.target.value;
-    const target = "#/search" + (v ? "?q="+encodeURIComponent(v) : "");
-    if(location.hash.startsWith("#/search")) history.replaceState(null,"",target), route();
-    else location.hash = target;
+    const v=e.target.value, target="#/search"+(v?"?q="+encodeURIComponent(v):"");
+    if(location.hash.startsWith("#/search")){ history.replaceState(null,"",target); route(); } else location.hash=target;
   }
 });
-document.addEventListener("keydown", e=>{
-  if(e.key==="/" && !/input|textarea/i.test(document.activeElement.tagName)){ e.preventDefault(); document.getElementById("q").focus(); }
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape") closeDrop();
+  if(e.key==="/"&&!/input|textarea/i.test(document.activeElement.tagName)){ e.preventDefault(); document.getElementById("q").focus(); }
 });
-
-/* theme */
 (function(){
   let saved=null; try{saved=localStorage.getItem("sev-theme")}catch(e){}
-  if(saved) document.documentElement.dataset.theme = saved;
-  document.getElementById("themeBtn").onclick = ()=>{
-    const cur = document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");
-    const nx = cur==="light"?"dark":"light";
-    document.documentElement.dataset.theme = nx;
-    try{localStorage.setItem("sev-theme",nx)}catch(e){}
+  if(saved) document.documentElement.dataset.theme=saved;
+  document.getElementById("themeBtn").onclick=()=>{
+    const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"), nx=cur==="light"?"dark":"light";
+    document.documentElement.dataset.theme=nx; try{localStorage.setItem("sev-theme",nx)}catch(e){}
   };
 })();
-
-lastPath = location.hash.split("?")[0];
+lastPath=location.hash.split("?")[0];
 route();
 </script>
 </body>
