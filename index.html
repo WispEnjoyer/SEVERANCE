@@ -127,6 +127,13 @@ main{margin-left:var(--side);min-height:100vh}
 @keyframes zap{0%,86%{opacity:0}88%{opacity:1}91%{opacity:.15}93%,96%{opacity:1}97%,100%{opacity:0}}
 .arrow{animation:arrow 3.3s linear infinite}
 @keyframes arrow{from{transform:translateX(0);opacity:1}to{transform:translateX(600px);opacity:0}}
+.flapw{animation:flapw .9s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes flapw{to{transform:scaleY(.3)}}
+.pageL{animation:pg .7s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:100% 60%}
+.pageR{animation:pg .7s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:0% 60%}
+@keyframes pg{to{transform:scaleX(.2) skewY(8deg)}}
+.shim{animation:shim 3s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+@keyframes shim{to{transform:scaleX(1.18);opacity:.25}}
 @media (prefers-reduced-motion: reduce){ .scene *{animation:none!important} }
 
 /* ---------- page body ---------- */
@@ -1221,6 +1228,207 @@ Object.assign(SCENES, {
     `<g transform="translate(860,316)">${glow(0,-80,160,"#ff9a3d",.45)}</g>`+
     `<g transform="translate(800,316)">${fig("fighter",0,0,2.9,"#030100")}</g><g transform="translate(920,316)">${fig("fighter",0,0,2.9,"#030100",true)}</g>`+
     `<line x1="826" y1="220" x2="880" y2="178" stroke="#fff3e0" stroke-width="3.5"/><line x1="894" y1="220" x2="840" y2="178" stroke="#fff3e0" stroke-width="3.5"/>`+glow(860,182,60,"#fff3c4",1)}),
+});
+
+/* ================= V3: scenes rebuilt to the approved standard ================= */
+Object.assign(SIL, {
+  dragonBody:"M-70,14 C-40,10 -20,4 0,0 C14,-4 30,-6 46,-6 C56,-8 64,-10 72,-8 L82,-4 L72,0 C56,4 40,6 20,8 C0,10 -30,18 -70,14 Z M-70,14 L-84,6 L-76,16 Z",
+  wingFar:"M0,-2 C10,-20 -10,-50 -36,-74 C-28,-56 -30,-46 -20,-40 C-26,-34 -22,-26 -14,-22 C-16,-16 -10,-10 -2,-6 Z",
+  wingNear:"M12,-4 C22,-22 32,-46 46,-78 C44,-54 46,-46 52,-40 C48,-34 50,-28 56,-24 C52,-18 52,-12 46,-6 Z",
+  risen:"M-9,0 L-7,-30 L-15,-52 L-22,-72 L-17,-74 L-9,-57 L-7,-49 C-9,-57 -5,-63 0,-63 C5,-63 9,-57 7,-49 L9,-57 L17,-74 L22,-72 L15,-52 L7,-30 L9,0 L3,0 L0,-20 L-3,0 Z",
+  maiden:"M-20,0 C-15,-20 -11,-40 -9,-56 C-11,-67 -6,-75 0,-75 C6,-75 11,-67 9,-56 C11,-40 15,-20 20,0 Z",
+  elf:"M-9,0 L-6,-28 L-12,-42 L-8,-54 C-8,-62 -4,-66 0,-66 C4,-66 9,-62 8,-54 L12,-42 L6,-28 L9,0 L3,0 L0,-18 L-3,0 Z",
+  warden:"M-34,0 L-28,-60 L-46,-74 L-40,-100 L-22,-108 L-12,-106 L-12,-118 C-12,-130 12,-130 12,-118 L12,-106 L22,-108 L40,-100 L46,-74 L28,-60 L34,0 L12,0 L8,-40 L-8,-40 L-12,0 Z",
+  bigcat:"M0,0 C-4,-14 -3,-30 4,-40 C2,-46 2,-52 4,-58 L10,-50 L18,-50 L24,-58 C26,-52 26,-46 24,-40 C31,-30 32,-14 28,0 Z",
+  spinner:"M-7,0 L-4,-26 L-12,-38 L-26,-42 L-26,-46 L-10,-44 C-8,-52 -4,-56 0,-56 C5,-56 9,-51 8,-44 L26,-48 L26,-44 L10,-38 L4,-26 L10,0 L4,0 L0,-16 L-4,0 Z",
+});
+function bigMoon(cx, cy, rad, color, halo){ return glow(cx,cy,rad*5,halo,.42)+moon(cx,cy,rad,color,halo); }
+function torch(x, y, flame){ return glow(x,y-14,70,flame,.6)+`<path d="M${x-6},${y} L${x+6},${y} L${x+3},${y+26} L${x-3},${y+26} Z" fill="#0a0604"/><path class="fl" style="transform-origin:${x}px ${y}px;animation-duration:.8s" d="M${x-9},${y} Q${x-10},${y-18} ${x},${y-30} Q${x+10},${y-18} ${x+9},${y} Z" fill="${flame}"/><path class="fl" style="transform-origin:${x}px ${y}px;animation-duration:.6s;animation-delay:-.3s" d="M${x-4},${y} Q${x-5},${y-10} ${x},${y-18} Q${x+5},${y-10} ${x+4},${y} Z" fill="#fff1c0"/>`; }
+function flyingDragon(x, y, s, color){
+  return `<g class="glide"><g transform="translate(${x},${y}) scale(${s})"><path class="flapw" d="${SIL.wingFar}" fill="${color}" opacity=".85"/><path d="${SIL.dragonBody}" fill="${color}"/><path class="flapw" style="animation-delay:-.1s" d="${SIL.wingNear}" fill="${color}"/></g></g>`;
+}
+function birds(r, n, color){ let s=""; for(let i=0;i<n;i++){ const x=r()*SW, y=30+r()*120, sc=.6+r()*.8; s+=`<g class="bat" style="animation-delay:${f1(-r()*14)}s;animation-duration:${f1(16+r()*10)}s"><path class="flap" transform="translate(${f1(x)},${f1(y)}) scale(${f1(sc)})" d="M-14,-2 Q-7,-8 0,0 Q7,-8 14,-2 Q7,-4 0,3 Q-7,-4 -14,-2 Z" fill="${color}"/></g>`; } return s; }
+function fence(base, color, x0=-10, x1=SW+10){ let s=`<rect x="${x0}" y="${base-44}" width="${x1-x0}" height="4" fill="${color}"/><rect x="${x0}" y="${base-14}" width="${x1-x0}" height="4" fill="${color}"/>`; for(let x=x0;x<x1;x+=18) s+=`<path d="M${x-2},${base} L${x-2},${base-56} L${x},${base-64} L${x+2},${base-56} L${x+2},${base} Z" fill="${color}"/>`; return s; }
+function lake(y, color, moonX, moonR, moonC){
+  let s=`<rect x="0" y="${y}" width="${SW}" height="${SH-y}" fill="${color}"/>`;
+  for(let i=0;i<9;i++){ const yy=y+10+i*9, w=moonR*(1.6-i*.12); s+=`<rect class="shim" style="animation-delay:${-i*.4}s" x="${f1(moonX-w/2)}" y="${yy}" width="${f1(w)}" height="2.2" rx="1" fill="${moonC}" opacity="${f1(.55-i*.05)}"/>`; }
+  return s;
+}
+function flapBook(x, y, s, cover, page, delay){
+  return `<g class="bob" style="animation-delay:${delay}s"><g transform="translate(${x},${y}) scale(${s})">${glow(0,0,46,"#ffe7a3",.3)}<path class="pageL" style="animation-delay:${delay}s" d="M0,0 Q-12,-10 -26,-6 L-26,8 Q-12,4 0,12 Z" fill="${page}"/><path class="pageR" style="animation-delay:${delay}s" d="M0,0 Q12,-10 26,-6 L26,8 Q12,4 0,12 Z" fill="${page}"/><path d="M-28,8 Q-12,4 0,14 Q12,4 28,8 L28,11 Q12,7 0,17 Q-12,7 -28,11 Z" fill="${cover}"/></g></g>`;
+}
+function cottage(x, base, w, color, win, roof){
+  const h=w*.55;
+  return glow(x+w/2, base-h*.5, w*1.1, win, .35)+`<rect x="${x+w*.68}" y="${base-h-w*.5}" width="${w*.1}" height="${w*.34}" fill="${color}"/>`+
+    `<g>${[0,1,2,3,4].map(i=>`<circle class="rise" style="animation-delay:${-i*1.4}s;animation-duration:7s" cx="${x+w*.73}" cy="${base-h-w*.52}" r="${8+i*2}" fill="#9aa0b4" opacity=".25" ${BLUR(3)}/>`).join("")}</g>`+
+    `<path d="M${x},${base} L${x},${base-h} L${x+w/2},${base-h-w*.42} L${x+w},${base-h} L${x+w},${base} Z" fill="${color}"/><path d="M${x-14},${base-h+4} L${x+w/2},${base-h-w*.46} L${x+w+14},${base-h+4}" stroke="${roof}" stroke-width="6" fill="none"/>`+
+    `<rect class="win" x="${x+w*.14}" y="${base-h*.7}" width="${w*.18}" height="${w*.17}" rx="2" fill="${win}"/><rect class="win" style="animation-delay:-2s" x="${x+w*.66}" y="${base-h*.7}" width="${w*.18}" height="${w*.17}" rx="2" fill="${win}"/><path d="M${x+w*.41},${base} L${x+w*.41},${base-h*.42} A${w*.09},${w*.09} 0 0 1 ${x+w*.59},${base-h*.42} L${x+w*.59},${base} Z" fill="${win}" opacity=".85"/><rect x="${x+w*.42}" y="${base-h*.5-w*.02}" width="${w*.16}" height="${w*.02}" fill="${color}"/>`;
+}
+function pathLights(r, x0, x1, base, color){ let s=""; for(let i=0;i<5;i++){ const x=x0+(x1-x0)*i/4, y=base-i*3; s+=glow(x,y-24,30,color,.6)+`<rect x="${x-1.5}" y="${y-26}" width="3" height="26" fill="#0a0c12"/><circle cx="${x}" cy="${y-28}" r="4" fill="${color}" class="win" style="animation-delay:${-i*.7}s"/>`; } return s; }
+function heraldShield(x, y, s, field, trim, charge){
+  return `<g transform="translate(${x},${y}) scale(${s})"><path d="M0,-40 L34,-30 C34,8 22,30 0,40 C-22,30 -34,8 -34,-30 Z" fill="${field}"/><path d="M0,-34 L28,-26 C28,6 18,25 0,34 C-18,25 -28,6 -28,-26 Z" fill="none" stroke="${trim}" stroke-width="2.2"/><path d="M0,-34 L0,34 M-28,-4 L28,-4" stroke="${trim}" stroke-width="1.2" opacity=".5"/>${charge}</g>`;
+}
+function swamp(r, y, water, glowc){
+  let s=`<rect x="0" y="${y}" width="${SW}" height="${SH-y}" fill="${water}"/>`;
+  for(let i=0;i<7;i++){ const x=r()*SW, w=80+r()*160; s+=`<g ${BLUR(3)}><ellipse class="shim" style="animation-delay:${f1(-r()*3)}s" cx="${f1(x)}" cy="${f1(y+10+r()*30)}" rx="${f1(w)}" ry="4" fill="${glowc}" opacity=".35"/></g>`; }
+  for(let i=0;i<14;i++){ const x=r()*SW; s+=`<path d="M${f1(x)},${f1(y+4)} q-4,-30 -2,-60 M${f1(x)},${f1(y+4)} q6,-24 8,-46" stroke="#0a1206" stroke-width="2.4" fill="none"/>`; }
+  return s;
+}
+
+Object.assign(SCENES, {
+  /* ---------- races ---------- */
+  "races/felyne": r=>({sky:["#061019","#163a54"], fx:"fireflies", acc:"#7fe0ff", art:
+    stars(r,150,"#dff6ff")+bigMoon(860,138,104,"#eef8ff","#9fe3ff")+
+    (()=>{let s="";for(let i=0;i<7;i++){const x=440+i*70+(r()-.5)*20; if(Math.abs(x-860)<70) continue; s+=spire(x,340,90+r()*110,18+r()*10,"#071520","#7fe0ff");}return s;})()+
+    `<path d="M820,${SH} L820,236 L860,214 L900,236 L900,${SH} Z" fill="#030a10"/>`+
+    `<g transform="translate(860,216)"><path d="${SIL.bigcat}" transform="translate(-14,0) scale(2.6)" fill="#030a10"/>${glow(-7,-118,10,"#8fffe0",1)}${glow(15,-118,10,"#8fffe0",1)}<ellipse class="win" cx="-6" cy="-118" rx="3.2" ry="2" fill="#d8fff4"/><ellipse class="win" cx="16" cy="-118" rx="3.2" ry="2" fill="#d8fff4"/><path class="sway" style="transform-origin:58px -6px" d="M58,-6 Q96,-10 92,-58 Q90,-76 78,-80" stroke="#030a10" stroke-width="9" fill="none" stroke-linecap="round"/></g>`+
+    rooftops(r,334,"#05121b","#ffcf7a")+fog(240,"#0f3442",.5)}),
+  "races/drakari": r=>({sky:["#1c0a08","#8a3412"], fx:"embers", acc:"#ff9a4a", art:
+    bigMoon(860,150,118,"#ffcf7a","#ff8a3a")+smoke(r,"#000",5,.25)+crags(r,232,120,"#3a160c",.85,90)+
+    `<g ${BLUR(1)}><path class="lava" d="M300,${SH} C340,300 380,290 420,270 S500,250 540,232" stroke="#ff6a2b" stroke-width="5" fill="none"/><path class="lava" style="animation-delay:-1s" d="M1000,${SH} C980,300 1010,282 1060,262" stroke="#ff6a2b" stroke-width="4" fill="none"/></g>`+
+    flyingDragon(860,170,2.6,"#140604")+`<g opacity=".7">${flyingDragon(470,70,.8,"#2a0f08")}</g>`+crags(r,312,56,"#140806",1,64)}),
+  "races/dreadkin": r=>({sky:["#070d0a","#1e3627"], fx:"fireflies", acc:"#9df5b0", art:
+    stars(r,60,"#d9f2df")+bigMoon(860,120,90,"#dff5e4","#8df0a6")+birds(r,9,"#050a07")+hills(r,236,30,"#132219",.9)+
+    deadTree(r,1080,300,230,"#07100b")+deadTree(r,620,300,180,"#07100b")+graves(r,302,"#0a140e")+
+    `<path d="M808,302 Q860,286 912,302 Z" fill="#050a07"/><g transform="translate(860,300)">${glow(0,-60,110,"#8df0a6",.35)}<path d="${SIL.risen}" transform="scale(2.5)" fill="#030604"/>${glow(-6,-140,8,"#9dffb8",1)}${glow(6,-140,8,"#9dffb8",1)}</g>`+
+    fog(170,"#5f8a70",.42,"fog drift")+fence(338,"#030604")}),
+  "races/duskborn": r=>({sky:["#0a0a20","#3a2e66"], fx:"fireflies", acc:"#b6c3ff", art:
+    stars(r,110,"#e6e8ff")+bigMoon(860,96,70,"#e8ebff","#9aa6ff")+
+    `<g ${BLUR(2)} opacity=".6">${(()=>{let t="";for(let i=0;i<10;i++)t+=elfTree(r,i*130+r()*50,236,150+r()*60,"#2a2560");return t;})()}</g>`+
+    lake(236,"#110f30",860,140,"#dfe3ff")+
+    `<path d="M780,${SH} L790,282 L840,268 L900,274 L930,${SH} Z" fill="#06051a"/><g transform="translate(860,272)">${fig("elf",0,0,2.2,"#06051a")}<path d="M10,-104 L44,-140" stroke="#cfd6ff" stroke-width="2" class="win"/><path class="sway" style="transform-origin:-6px -118px" d="M-6,-118 C-30,-110 -40,-80 -46,-50" stroke="#06051a" stroke-width="6" fill="none"/></g>`+
+    elfTree(r,60,352,380,"#07061a","#b6c3ff")+elfTree(r,1170,352,360,"#07061a","#b6c3ff")}),
+  "races/oakborn": r=>({sky:["#0c1c10","#4a7a3a"], fx:"leaves", acc:"#c8f070", art:
+    bigMoon(860,170,96,"#fff6c8","#e8ffb0").replace(/<circle cx="[\d.]+" cy="[\d.]+" r="[\d.]+" fill="#000"[^>]*>/g,"")+shafts(r,"#f4ffc8",7,.12)+
+    `<g ${BLUR(2)} opacity=".6">${(()=>{let t="";for(let i=0;i<9;i++)t+=elfTree(r,i*150+r()*60,290,170+r()*60,"#3a6a3a");return t;})()}</g>`+fog(170,"#4a7a4a",.5)+
+    `<path d="M1240,${SH} L1240,0 L1140,0 C1150,80 1150,180 1120,${SH} Z" fill="#0a160c"/><path d="M1150,170 C1060,162 980,170 900,190 C880,194 870,200 860,206 L864,214 C900,204 1000,192 1144,196 Z" fill="#0a160c"/>`+
+    `<g transform="translate(900,200)">${fig("archer",0,0,2.4,"#0a160c")}<path d="M28,-90 C64,-66 64,-30 28,-10" stroke="#0a160c" stroke-width="4" fill="none"/><line x1="28" y1="-90" x2="28" y2="-10" stroke="#e8ffb0" stroke-width="1" opacity=".7"/><line x1="-6" y1="-50" x2="60" y2="-50" stroke="#e8ffb0" stroke-width="1.5" class="win"/></g>`+
+    elfTree(r,60,352,380,"#0a160c","#c8f070")+ferns(r,336,"#0a160c",60)}),
+  "races/ashkin": r=>({sky:["#170705","#5a1a0c"], fx:"embers", acc:"#ff7a2e", art:
+    bigMoon(860,120,86,"#c84a2a","#ff5a1f").replace(/fill="#000"/g,'fill="#4a0a04"')+smoke(r,"#000",7,.45)+
+    (()=>{let s="";for(let i=0;i<6;i++){const x=420+i*130+(r()-.5)*40; s+=`<path d="M${f1(x-16)},300 L${f1(x-8)},${f1(140+r()*60)} L${f1(x)},${f1(120+r()*40)} L${f1(x+10)},${f1(160+r()*50)} L${f1(x+18)},300 Z" fill="#1a0806"/>`;}return s;})()+
+    `<rect x="0" y="292" width="${SW}" height="60" fill="#120403"/><g ${BLUR(1)}>${Array.from({length:12},()=>{const x=r()*SW; return `<path class="lava" d="M${f1(x)},${f1(300+r()*30)} l${f1(30+r()*40)},${f1((r()-.5)*10)} l${f1(20+r()*30)},${f1((r()-.5)*10)}" stroke="#ff6a2b" stroke-width="2.5" fill="none"/>`;}).join("")}</g>`+
+    `<g transform="translate(860,318)">${glow(0,-90,160,"#ff5a1f",.6)}${fig("walker",0,0,3.8,"#0a0302")}<path class="lava" d="M-6,-160 L0,-130 L-8,-104 L2,-76 L-4,-44 M10,-150 L6,-118 L14,-92 M-14,-120 L-20,-96" stroke="#ff8a3d" stroke-width="2.6" fill="none"/></g>`+
+    `<g class="smoke"><path d="M860,128 C836,98 890,78 866,46 C842,16 896,-2 872,-32" stroke="#5a4a46" stroke-width="16" fill="none" opacity=".4" ${BLUR(4)}/></g>`}),
+  /* ---------- world ---------- */
+  enemies: r=>({sky:["#0a0c0f","#2a2e34"], fx:"ash", acc:"#ffd9a0", art:
+    `<g ${BLUR(6)}><rect class="shim" x="680" y="30" width="360" height="300" fill="#e8e2d0" opacity=".22"/></g>`+glow(860,180,260,"#f2e6c8",.35)+
+    pillars(r,"#050608")+torch(560,170,"#ffb04a")+torch(1160,170,"#ffb04a")+
+    `<g transform="translate(860,320)">${`<path d="${SIL.warden}" transform="scale(2.3)" fill="#020304"/>`}${glow(-10,-262,12,"#ff3a1a",1)}${glow(10,-262,12,"#ff3a1a",1)}<circle cx="-9" cy="-262" r="3" fill="#ffb09a"/><circle cx="9" cy="-262" r="3" fill="#ffb09a"/>`+
+    `<g class="sway" style="transform-origin:-100px -150px"><path d="M-100,-150 C-140,-90 -150,-40 -200,0" stroke="#2a2e34" stroke-width="7" fill="none" stroke-dasharray="10 5"/></g><g class="sway" style="transform-origin:100px -150px;animation-delay:-2s"><path d="M100,-150 C150,-100 170,-40 220,0" stroke="#2a2e34" stroke-width="7" fill="none" stroke-dasharray="10 5"/></g></g>`+fog(250,"#000",.5)}),
+  housing: r=>({sky:["#0d1222","#3a3a5e"], fx:"fireflies", acc:"#ffd88a", art:
+    stars(r,110,"#fff")+bigMoon(1060,90,46,"#f6f0dc","#c9c8ff")+hills(r,250,40,"#1c2034",.9)+
+    elfTree(r,640,300,200,"#0c0f1a","#8a8fc0")+cottage(780,302,190,"#0c0f1a","#ffcf7a","#1a1e30")+
+    pathLights(r,560,760,334,"#ffd88a")+`<path d="M560,${SH} C620,320 700,312 760,304 L800,304 C740,318 680,326 640,${SH} Z" fill="#2a2c40"/>`+fence(330,"#0c0f1a",960,1220)+hills(r,322,8,"#0a0c14",1)}),
+  guilds: r=>({sky:["#120c08","#3a2814"], fx:"motes", acc:"#ffe7a3", art:
+    bookshelves(r,"#160f0a",["#5a2a1a","#2a3a5a","#3a5a2a","#6a5a2a","#4a2a4a"])+`<rect x="0" y="0" width="${SW}" height="${SH}" fill="#000" opacity=".45"/>`+
+    glow(860,220,300,"#ffd27a",.6)+`<g transform="translate(860,250)"><path d="M-90,0 Q-45,-26 0,-8 Q45,-26 90,0 L90,24 Q45,6 0,26 Q-45,6 -90,24 Z" fill="#f3e6c8"/><path d="M-96,24 Q-48,8 0,30 Q48,8 96,24 L96,32 Q48,16 0,38 Q-48,16 -96,32 Z" fill="#3a1e10"/>${[0,1,2,3,4,5].map(i=>`<text class="rise" style="animation-delay:${-i*1.1}s;animation-duration:6.6s" x="${-40+i*16}" y="-10" font-family="serif" font-size="16" fill="#ffe7a3">${"ᚠᚱᚢᛟᚨᛉ"[i]}</text>`).join("")}</g>`+
+    flapBook(660,120,1.6,"#4a1a10","#f3e6c8",-0.2)+flapBook(760,70,1.2,"#1a2a4a","#e8e0cc",-1.1)+flapBook(990,100,1.7,"#2a4a1a","#f0e4c8",-.6)+flapBook(1100,170,1.1,"#5a3a10","#f3e6c8",-1.6)+flapBook(560,200,1,"#3a1a3a","#ede2cc",-2.1)+
+    torch(470,140,"#ffb04a")+torch(1180,140,"#ffb04a")+`<rect x="0" y="300" width="${SW}" height="40" fill="#0a0705"/>`}),
+  /* ---------- combat ---------- */
+  combat: r=>({sky:["#1a0a08","#a2421a"], fx:"sparks", acc:"#ffd27a", art:
+    bigMoon(860,190,120,"#ffd27a","#ff8a3a").replace(/fill="#000"[^>]*>/g,'fill="#000" opacity="0"/>')+crags(r,250,60,"#5a2a14",.6,100)+
+    `<path d="M600,${SH} L640,300 L720,292 L860,296 L1000,290 L1080,300 L1120,${SH} Z" fill="#0a0403"/>`+
+    `<g transform="translate(796,298)">${fig("fighter",0,0,3.1,"#0a0403")}</g><g transform="translate(924,298)">${fig("fighter",0,0,3.1,"#0a0403",true)}</g>`+
+    `<line x1="824" y1="194" x2="882" y2="148" stroke="#0a0403" stroke-width="4.5"/><line x1="896" y1="194" x2="838" y2="148" stroke="#0a0403" stroke-width="4.5"/>`+
+    `<g class="win">${glow(860,152,44,"#fff6d8",1)}</g>`+bannersHung(r,"#3a0f08","#ffb04a").replace(/<g class="sway slow" style="transform-origin:(430|770|1030)px[\s\S]*?<\/g>/g,"")}),
+  weapons: r=>({sky:["#120c08","#3a2616"], fx:"motes", acc:"#ffd9a0", art:
+    `<rect x="0" y="0" width="${SW}" height="${SH}" fill="#1e140c"/>`+Array.from({length:12},(_,i)=>Array.from({length:14},(_,j)=>`<rect x="${j*92+(i%2)*46-20}" y="${i*30}" width="88" height="27" fill="#24180e"/>`).join("")).join("")+
+    glow(860,160,300,"#ffcf7a",.45)+
+    `<g transform="translate(860,160) rotate(32)"><rect x="-6" y="-170" width="12" height="320" fill="#0a0604"/><path d="M0,-200 L-14,-170 L14,-170 Z" fill="#0a0604"/></g><g transform="translate(860,160) rotate(-32)"><rect x="-4" y="-160" width="8" height="320" fill="#0a0604"/><path d="M4,-150 L44,-140 L44,-110 L4,-120 Z M-4,-176 L4,-176 L4,-150 L-4,-150 Z" fill="#0a0604"/></g>`+
+    heraldShield(860,166,2.8,"#5a140c","#ffcf7a",`<path d="M0,-18 L12,10 L-12,10 Z" fill="#ffcf7a"/>`)+torch(640,130,"#ffb04a")+torch(1080,130,"#ffb04a")+
+    `<rect x="0" y="306" width="${SW}" height="40" fill="#0a0604"/>`+[120,190,260,330].map(x=>sword(x,300,110+((x/10)%3)*20,"#0a0604")).join("")}),
+  "status-effects": r=>({sky:["#08100a","#2a4414"], fx:"motes", acc:"#c6ff5a", art:
+    bigMoon(860,110,80,"#d8ff8a","#9be03a").replace(/fill="#000"/g,'fill="#2a4a0a"')+smoke(r,"#9be03a",6,.2)+
+    deadTree(r,700,280,220,"#060c04")+deadTree(r,1080,280,200,"#060c04")+hills(r,262,24,"#0e1a08",1)+swamp(r,280,"#0a1406","#b6f05a")+bubbles(r,26,"#c6ff5a")+fog(150,"#6fa830",.35,"fog drift")}),
+  /* ---------- weapons ---------- */
+  "weapons/longsword": r=>({sky:["#0a1020","#2e4262"], fx:"motes", acc:"#e8f0ff", art:
+    stars(r,120,"#fff")+bigMoon(860,140,110,"#eef4ff","#bcd2ff")+`<polygon points="830,-10 890,-10 940,${SH} 780,${SH}" fill="#e8f0ff" opacity=".08" ${BLUR(6)}/>`+
+    hills(r,262,40,"#141c30",.8)+[620,700,1020,1100].map((x,i)=>`<path d="M${x-14},${SH} L${x-14},${200+i*14} L${x-8},${190+i*14} L${x+6},${196+i*14} L${x+14},${186+i*14} L${x+14},${SH} Z" fill="#0c1220"/>`).join("")+
+    `<path d="M700,${SH} C760,262 960,262 1020,${SH} Z" fill="#0a0f1a"/>`+stone(860,276,140,62,"#070b14")+`<g transform="translate(860,232)"><path d="M-6,0 L-6,-150 L0,-166 L6,-150 L6,0 Z" fill="#070b14"/><path d="M-34,0 L34,0 L30,9 L-30,9 Z" fill="#070b14"/><rect x="-5" y="9" width="10" height="30" fill="#070b14"/><circle cy="44" r="6" fill="#070b14"/><path class="win" d="M0,-160 L0,-6" stroke="#dfe9ff" stroke-width="1.4"/></g>`}),
+  "weapons/sword-and-shield": r=>({sky:["#2a1a0c","#d89a4a"], fx:"motes", acc:"#fff0c0", art:
+    sun(860,170,52,"#fff0c0")+hills(r,250,30,"#8a5a2a",.6)+
+    Array.from({length:14},(_,i)=>shieldShape(30+i*88,296,1.2,"#2a1a0c","#6a4a20")+`<line x1="${42+i*88}" y1="${250}" x2="${54+i*88}" y2="160" stroke="#2a1a0c" stroke-width="3"/>`).join("")+
+    `<g class="bob" style="transform-origin:860px 160px">${heraldShield(860,160,3.2,"#1a0f06","#ffe0a0",`<path d="M-14,-20 L14,-20 L14,-6 L4,-6 L4,20 L-4,20 L-4,-6 L-14,-6 Z" fill="#ffe0a0"/>`)}</g>`+hills(r,322,8,"#1a0f06",1)}),
+  "weapons/daggers": r=>({sky:["#08040c","#2e1426"], fx:"ash", acc:"#ffb0c0", art:
+    stars(r,90,"#ffe6ee")+glow(860,150,240,"#ff7a9a",.35)+`<path d="M900,40 A116,116 0 1,0 900,262 A90,90 0 1,1 900,40 Z" fill="#ffe2ea"/>`+
+    rooftops(r,316,"#0a0510","#ff9ab0")+
+    `<g transform="translate(850,152)"><g transform="rotate(38)">${sword(0,88,140,"#0a0510",null)}</g><g transform="rotate(-38)">${sword(0,88,140,"#0a0510",null)}</g>${glow(0,-6,24,"#fff",.8)}</g>`+
+    [0,1,2].map(i=>`<circle class="rise" style="animation-delay:${-i*2}s;animation-duration:6s;animation-direction:reverse" cx="${840+i*12}" cy="${190+i*20}" r="3" fill="#c4223f"/>`).join("")+fog(250,"#1a0a14",.6,"fog drift")}),
+  "weapons/greatsword": r=>({sky:["#1a0806","#c2401a"], fx:"ash", acc:"#ffcf8a", art:
+    sun(860,210,74,"#ffb070")+smoke(r,"#000",6,.35)+crags(r,262,40,"#3a140a",.7,90)+
+    Array.from({length:18},(_,i)=>{const x=20+i*70+r()*30; return `<line x1="${f1(x)}" y1="330" x2="${f1(x+(r()-.5)*44)}" y2="${f1(230+r()*40)}" stroke="#120604" stroke-width="3"/>`+(r()<.45?`<path class="flag" d="M${f1(x)},236 l22,6 l-6,6 l6,6 l-22,-4 Z" fill="#3a0a06"/>`:"");}).join("")+
+    `<path d="M700,${SH} C760,280 960,280 1020,${SH} Z" fill="#0c0403"/>`+
+    `<g transform="translate(860,300) rotate(4)"><path d="M-14,0 L-14,-226 L0,-254 L14,-226 L14,0 Z" fill="#0a0302"/><path d="M-50,-2 L50,-2 L44,12 L-44,12 Z" fill="#0a0302"/><rect x="-7" y="12" width="14" height="44" fill="#0a0302"/><circle cy="62" r="9" fill="#0a0302"/><path class="win" d="M0,-248 L0,-8" stroke="#ffd9a8" stroke-width="1.6"/></g>`}),
+  "weapons/bow": r=>({sky:["#08101a","#22405a"], fx:"motes", acc:"#e8fff0", art:
+    stars(r,140,"#fff")+bigMoon(860,140,112,"#f0fbff","#bfe8ff")+hills(r,262,30,"#102030",.8)+
+    `<path d="M720,${SH} L760,268 L820,252 L900,256 L960,272 L1000,${SH} Z" fill="#050b12"/>`+
+    `<g transform="translate(850,256)">${fig("archer",0,0,3,"#050b12")}<path d="M34,-112 C80,-82 80,-38 34,-12" stroke="#050b12" stroke-width="5" fill="none"/><line x1="34" y1="-112" x2="12" y2="-62" stroke="#dff2ff" stroke-width="1"/><line x1="12" y1="-62" x2="34" y2="-12" stroke="#dff2ff" stroke-width="1"/><line x1="12" y1="-62" x2="96" y2="-62" stroke="#050b12" stroke-width="3"/></g>`+
+    [0,1,2,3].map(i=>`<g class="arrow" style="animation-delay:${-i*.8}s;animation-duration:2.6s"><line x1="${960}" y1="${120+i*22}" x2="${1010}" y2="${116+i*22}" stroke="#e8fff0" stroke-width="2"/><path d="M1010,${116+i*22} l-8,-4 l0,8 Z" fill="#e8fff0"/></g>`).join("")+
+    `<g fill="none" stroke="#050b12" stroke-width="2">${Array.from({length:40},()=>{const x=r()*SW; return `<path class="sway" style="transform-origin:${f1(x)}px 340px" d="M${f1(x)},340 q${f1((r()-.5)*10)},-20 ${f1((r()-.5)*16)},-${f1(20+r()*20)}"/>`;}).join("")}</g>`}),
+  "weapons/halberd": r=>({sky:["#0a0c18","#2c3050"], fx:"ash", acc:"#ffd88a", art:
+    stars(r,80,"#fff")+bigMoon(1080,70,36,"#f2eedc","#c9c8ff")+
+    `<path d="M640,${SH} L640,90 L680,90 L680,70 L700,70 L700,90 L740,90 L740,70 L760,70 L760,90 L960,90 L960,70 L980,70 L980,90 L1020,90 L1020,70 L1040,70 L1040,90 L1080,90 L1080,${SH} Z" fill="#0a0c16"/>`+
+    glow(860,240,180,"#ffcf7a",.7)+`<path d="M780,${SH} L780,190 A80,80 0 0 1 940,190 L940,${SH} Z" fill="#ffb85a" opacity=".8"/>`+
+    `<g>${Array.from({length:7},(_,i)=>`<rect x="${790+i*22}" y="120" width="5" height="160" fill="#0a0c16"/>`).join("")}<rect x="780" y="150" width="160" height="4" fill="#0a0c16"/><rect x="780" y="200" width="160" height="4" fill="#0a0c16"/></g>`+
+    torch(740,200,"#ffb04a")+torch(980,200,"#ffb04a")+
+    [[750,1],[970,-1]].map(([x,d])=>`<g transform="translate(${x},332)"><path d="${SIL.knight}" transform="scale(1.9)" fill="#030408"/><g transform="rotate(${d*-6})"><rect x="${d*30-2}" y="-250" width="5" height="250" fill="#030408"/><path d="M${d*30},-250 l-7,22 l14,0 Z M${d*30+2},-226 l${d*30},10 l0,26 l${-d*30},-10 Z" fill="#030408"/></g></g>`).join("")}),
+  "weapons/twinblade": r=>({sky:["#140606","#5a1a12"], fx:"sparks", acc:"#ffb08a", art:
+    bigMoon(860,150,110,"#e84a3a","#ff6a4a").replace(/fill="#000"/g,'fill="#5a0a06"')+
+    `<g fill="none" stroke="#ffd0b0" opacity=".25">${Array.from({length:8},(_,i)=>`<path class="drift" style="animation-duration:${4+i}s" d="M${-100+i*30},${240+i*10} Q${300+i*40},${220+i*6} ${700+i*30},${250+i*8}"/>`).join("")}</g>`+
+    hills(r,286,24,"#2a0c08",.9)+`<path d="M760,${SH} C800,300 920,300 960,${SH} Z" fill="#0a0303"/>`+
+    `<g transform="translate(860,304)">${fig("spinner",0,0,3,"#0a0303")}</g>`+
+    `<g class="spin" style="transform-origin:860px 176px;animation-duration:1.6s">${[0,1,2].map(i=>`<path d="M${860-110+i*12},176 a${110-i*12},${110-i*12} 0 0 1 ${2*(110-i*12)},0" stroke="#ffd0b0" stroke-width="${2.5-i*.6}" fill="none" opacity="${.6-i*.15}"/>`).join("")}<rect x="750" y="173" width="220" height="6" rx="3" fill="#0a0303"/><path d="M750,176 L726,168 L738,176 L726,184 Z M970,176 L994,168 L982,176 L994,184 Z" fill="#0a0303"/></g>`}),
+  /* ---------- classes judged below standard ---------- */
+  "classes/berserker": r=>({sky:["#1a0804","#7a240c"], fx:"embers", acc:"#ff9a3d", art:
+    bigMoon(860,140,112,"#e8502a","#ff6a2b").replace(/fill="#000"/g,'fill="#6a1a08"')+smoke(r,"#000",4,.3)+crags(r,256,80,"#2a0e06",.9,90)+
+    `<path d="M700,${SH} L740,262 L800,244 L880,240 L960,256 L1010,${SH} Z" fill="#0c0302"/><g transform="translate(830,244)">${fig("wolf",0,0,2.3,"#0c0302")}</g>`+
+    brazier(560,316,"#0c0302")+brazier(1120,316,"#0c0302")}),
+  "classes/necromancer": r=>({sky:["#040b08","#14301f"], fx:"fireflies", acc:"#7dffa8", art:
+    stars(r,60,"#c8ffd8")+bigMoon(860,110,92,"#c8ffd8","#5dff94").replace(/fill="#000"/g,'fill="#1a4a2a"')+
+    `<path d="M600,${SH} C660,200 1060,200 1120,${SH} Z" fill="#061410"/><path d="M830,${SH} L830,272 A30,30 0 0 1 890,272 L890,${SH} Z" fill="#9dffbf" opacity=".75"/>`+glow(860,290,120,"#7dffa8",.5)+
+    souls(r,14,"#b0ffcc").replace(/translate\(([\d.]+),([\d.]+)\)/g,(m,x,y)=>`translate(${f1(+x+260)},${f1(+y)})`)+
+    [690,760,960,1030].map((x,i)=>`<g transform="translate(${x},322)">${fig("hood",0,0,2.1+(i%2)*.3,"#020604")}${glow(0,-82,10,"#7dffa8",1)}</g>`).join("")+graves(r,334,"#030805")}),
+  "classes/alchemist": r=>({sky:["#140e06","#4a3010"], fx:"motes", acc:"#ffc35a", art:
+    `<circle cx="860" cy="120" r="96" fill="#1a1206"/><circle cx="860" cy="120" r="90" fill="#2a3a5a"/>${moon(890,96,24,"#f2ecda","#c9c8ff")}<path d="M860,30 L860,210 M770,120 L950,120" stroke="#1a1206" stroke-width="6"/>`+
+    lanterns(r,6,"#ffbe55","#00000088")+`<rect x="0" y="292" width="${SW}" height="50" fill="#1a1006"/>`+
+    `<g transform="translate(860,292)">${glow(0,-70,160,"#7dff9a",.55)}<circle cx="0" cy="-58" r="58" fill="#0a0703"/><path d="M-58,-58 A58,58 0 0 0 58,-58 Z" fill="#7dff9a" opacity=".85"/><rect x="-12" y="-156" width="24" height="50" fill="#0a0703"/><path d="M8,-150 Q90,-210 170,-110" stroke="#0a0703" stroke-width="9" fill="none"/>${glow(0,0,70,"#ff7a2b",.5)}</g>`+
+    flasks(r,292,"#0a0703","#ff8ad8")+bubbles(r,28,"#9dffb0")}),
+  "classes/blood-maiden": r=>({sky:["#12050a","#4d1020"], fx:"petals", acc:"#ff3a5c", art:
+    bigMoon(860,120,88,"#c4283f","#ff3a5c").replace(/fill="#000"/g,'fill="#5a0a14"')+
+    `<path d="M700,${SH} L700,170 A160,160 0 0 1 1020,170 L1020,${SH} L990,${SH} L990,176 A130,130 0 0 0 730,176 L730,${SH} Z" fill="#160509"/>`+
+    `<g stroke="#160509" stroke-width="4">${Array.from({length:9},(_,i)=>i===4||i===3||i===5?"":`<line x1="${750+i*28}" y1="${SH}" x2="${750+i*28}" y2="${196-Math.sin((i+.5)/9*Math.PI)*60}"/>`).join("")}</g>`+
+    `<g transform="translate(860,336)">${glow(0,-90,110,"#ff3a5c",.45)}<path d="${SIL.maiden}" transform="scale(2.4)" fill="#0a0205"/></g>`+thorns(r,SH,"#1a070c","#c4223f","#6e0f1f")}),
+  titles: r=>({sky:["#140c08","#4a2c14"], fx:"motes", acc:"#ffd88a", art:
+    `<polygon points="820,-10 900,-10 960,${SH} 760,${SH}" fill="#ffe7a3" opacity=".12" ${BLUR(6)}/>`+glow(860,200,300,"#ffd88a",.4)+
+    bannersHung(r,"#5a1a1a","#f2c05a")+`<path d="M800,${SH} L810,250 L910,250 L920,${SH} Z" fill="#0c0806"/><rect x="796" y="244" width="128" height="10" fill="#0c0806"/>`+crownRelic(860,196,1,"#f2c05a","#ff5a6a")}),
+  crafting: r=>({sky:["#120a06","#3a2010"], fx:"sparks", acc:"#ffb054", art:
+    `<path d="M700,${SH} L700,120 Q860,40 1020,120 L1020,${SH} Z" fill="#140c08"/>`+glow(860,250,260,"#ff8a2b",.8)+`<path d="M770,${SH} L770,220 A90,70 0 0 1 950,220 L950,${SH} Z" fill="#ff9a3a"/>`+
+    [800,840,880,920].map((x,i)=>`<path class="fl" style="transform-origin:${x}px 330px;animation-duration:${.9+i*.2}s" d="M${x-26},330 C${x-30},290 ${x-6},270 ${x},${220+i%2*20} C${x+6},270 ${x+30},290 ${x+26},330 Z" fill="${i%2?"#fff3c4":"#ff7a2b"}"/>`).join("")+
+    `<rect x="700" y="110" width="320" height="16" fill="#0c0705"/>`+anvil(470,326,"#0a0604")+`<g ${BLUR(2)}><rect x="400" y="248" width="150" height="7" rx="3" fill="#ffb054"/></g><rect x="400" y="249" width="150" height="5" rx="2" fill="#ffe2a8"/>`+hills(r,328,6,"#0a0604",1)}),
+  "sets/monster": r=>({sky:["#0f0505","#4a1410"], fx:"embers", acc:"#ff6a4a", art:
+    smoke(r,"#000",6,.45)+glow(860,190,320,"#ff4a2a",.45)+hornedSkull(860,236,2.2,"#0a0303","#ff4a2a")+crags(r,320,30,"#060202",1,60)}),
+  "sets/overland": r=>({sky:["#1a1020","#d0784a"], fx:"motes", acc:"#ffd2a0", art:
+    sun(1000,206,40,"#ffd2a0")+crags(r,226,60,"#5a3a48",.6,100)+castle(r,920,1100,236,"#3a2836","#ffd27a")+hills(r,256,40,"#2a1e30",.95)+road(256,"#5a4040")+signpost(560,318,"#120c16")+hills(r,318,8,"#120c16",1)}),
+});
+Object.assign(SIL,{ cloaked:"M-26,0 C-22,-30 -18,-52 -14,-70 L-30,-86 L-26,-90 L-12,-80 C-10,-88 -8,-94 -6,-98 C-8,-106 -4,-114 0,-114 C4,-114 8,-106 6,-98 C8,-94 10,-88 12,-80 L26,-90 L30,-86 L14,-70 C18,-52 22,-30 26,0 L8,0 C6,-14 2,-24 0,-30 C-2,-24 -6,-14 -8,0 Z" });
+Object.assign(SCENES, {
+  "races/drakari": r=>({sky:["#1c0a08","#8a3412"], fx:"embers", acc:"#ff9a4a", art:
+    bigMoon(860,150,108,"#ffcf7a","#ff8a3a").replace(/fill="#000"/g,'fill="#a0501a"')+smoke(r,"#000",5,.25)+crags(r,240,110,"#3a160c",.85,90)+
+    `<g ${BLUR(1)}><path class="lava" d="M300,${SH} C340,300 380,290 420,270 S500,250 540,232" stroke="#ff6a2b" stroke-width="5" fill="none"/><path class="lava" style="animation-delay:-1s" d="M1000,${SH} C980,300 1010,282 1060,262" stroke="#ff6a2b" stroke-width="4" fill="none"/></g>`+
+    flyingDragon(850,196,1.75,"#140604")+`<g opacity=".7">${flyingDragon(500,96,.7,"#2a0f08")}</g>`+crags(r,312,56,"#140806",1,64)}),
+  "races/duskborn": r=>({sky:["#0a0a20","#3a2e66"], fx:"fireflies", acc:"#b6c3ff", art:
+    stars(r,120,"#e6e8ff")+bigMoon(860,108,74,"#eef0ff","#9aa6ff")+
+    `<g ${BLUR(2)} opacity=".6">${(()=>{let t="";for(let i=0;i<10;i++){const x=i*130+r()*50; if(Math.abs(x-860)<150) continue; t+=elfTree(r,x,236,130+r()*50,"#2a2560");}return t;})()}</g>`+
+    lake(236,"#110f30",860,150,"#dfe3ff")+
+    `<path d="M770,${SH} L784,280 L840,264 L904,270 L940,${SH} Z" fill="#06051a"/><g transform="translate(860,268)">${fig("elf",0,0,2.9,"#06051a")}<path d="M14,-138 L60,-184" stroke="#dfe4ff" stroke-width="2.4" class="win"/><path class="sway" style="transform-origin:-8px -154px" d="M-8,-154 C-40,-142 -54,-104 -62,-60" stroke="#06051a" stroke-width="8" fill="none"/></g>`+
+    elfTree(r,60,352,380,"#07061a","#b6c3ff")+elfTree(r,1170,352,360,"#07061a","#b6c3ff")}),
+  "races/ashkin": r=>({sky:["#170705","#5a1a0c"], fx:"embers", acc:"#ff7a2e", art:
+    bigMoon(860,116,84,"#c84a2a","#ff5a1f").replace(/fill="#000"/g,'fill="#4a0a04"')+smoke(r,"#000",7,.45)+
+    (()=>{let s="";for(let i=0;i<6;i++){const x=420+i*130+(r()-.5)*40; if(Math.abs(x-860)<60) continue; s+=`<path d="M${f1(x-16)},300 L${f1(x-8)},${f1(150+r()*60)} L${f1(x)},${f1(126+r()*40)} L${f1(x+10)},${f1(166+r()*50)} L${f1(x+18)},300 Z" fill="#1a0806"/>`;}return s;})()+
+    `<rect x="0" y="292" width="${SW}" height="60" fill="#120403"/><g ${BLUR(1)}>${Array.from({length:12},()=>{const x=r()*SW; return `<path class="lava" d="M${f1(x)},${f1(300+r()*30)} l${f1(30+r()*40)},${f1((r()-.5)*10)} l${f1(20+r()*30)},${f1((r()-.5)*10)}" stroke="#ff6a2b" stroke-width="2.5" fill="none"/>`;}).join("")}</g>`+
+    `<g transform="translate(860,316)">${glow(0,-90,160,"#ff5a1f",.6)}<path d="${SIL.cloaked}" transform="scale(1.9)" fill="#0a0302"/><path class="lava" d="M-4,-176 L2,-150 L-6,-124 L4,-96 L-2,-64 M12,-160 L8,-130 L16,-104 M-16,-140 L-24,-116" stroke="#ff8a3d" stroke-width="2.4" fill="none"/>${glow(-5,-200,7,"#ffb04a",1)}${glow(5,-200,7,"#ffb04a",1)}</g>`+
+    `<g class="smoke"><path d="M860,96 C836,66 890,46 866,14 C842,-16 896,-34 872,-64" stroke="#5a4a46" stroke-width="16" fill="none" opacity=".4" ${BLUR(4)}/></g>`}),
 });
 
 
