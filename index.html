@@ -1496,6 +1496,49 @@ SCENES["classes/berserker"] = r=>({sky:["#1c0604","#9a2e10"], fx:"embers", acc:"
   viking(850,274,1.08,"#0c0302","#ffd0a0")+
   brazier(620,326,"#0c0302")+hills(r,330,6,"#0c0302",1)});
 
+/* ---------- Berserker v2: anatomical Viking with rim light ---------- */
+function viking2(x, base, s, color, rim){
+  const M = d => d; // paths drawn in local units, feet at 0
+  const parts = (fill, extra) => {
+    const P = d => `<path d="${d}" fill="${fill}" ${extra}/>`;
+    const L = (d,w) => `<path d="${d}" fill="none" stroke="${fill}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" ${extra.replace(/stroke-width="[^"]*"/,"")}/>`;
+    const side = k => [
+      L(`M${42*k},-112 Q${58*k},-118 ${66*k},-130`,17), L(`M${66*k},-130 Q${72*k},-144 ${71*k},-158`,13),
+      P(`M${62*k},-164 L${80*k},-164 L${78*k},-152 L${64*k},-152 Z`),
+      L(`M${70*k},-152 L${88*k},-206`,4.5),
+      P(`M${86*k},-210 C${112*k},-224 ${126*k},-202 ${116*k},-178 C${108*k},-188 ${98*k},-192 ${84*k},-192 Z`),
+      P(`M${-12*k},-140 C${-26*k},-139 ${-40*k},-148 ${-44*k},-172 C${-34*k},-162 ${-24*k},-156 ${-11*k},-151 Z`),
+      P(`M${10*k},-58 C${14*k},-42 ${26*k},-26 ${34*k},-6 L${20*k},-4 C${14*k},-22 ${4*k},-36 ${0},-50 Z`),
+      P(`M${16*k},-8 L${40*k},-8 L${42*k},2 L${14*k},2 Z`),
+    ].join("");
+    return [
+      side(1), side(-1),
+      P(`M-44,-120 C-48,-96 -34,-72 -22,-58 L22,-58 C34,-72 48,-96 44,-120 C30,-130 -30,-130 -44,-120 Z`),
+      P(`M-24,-62 L24,-62 L31,-30 C10,-26 -10,-26 -31,-30 Z`),
+      P(`M-50,-114 L-44,-124 L-34,-129 L-20,-133 L-8,-135 L0,-136 L8,-135 L20,-133 L34,-129 L44,-124 L50,-114 L44,-108 L37,-113 L30,-106 L21,-111 L12,-104 L0,-109 L-12,-104 L-21,-111 L-30,-106 L-37,-113 L-44,-108 Z`),
+      P(`M-13,-133 C-16,-153 16,-153 13,-133 Z`),
+      P(`M-12,-136 C-14,-120 -10,-104 -3,-90 L0,-80 L3,-90 C10,-104 14,-120 12,-136 Z`),
+    ].join("");
+  };
+  const cloak = `<path class="sway slow" style="transform-origin:0px -118px" d="M-42,-118 C-48,-96 -50,-70 -48,-40 L-40,-46 L-34,-36 L-26,-44 L-18,-38 L-10,-46 L0,-40 L10,-46 L18,-38 L26,-44 L34,-36 L40,-46 L48,-40 C50,-70 48,-96 42,-118 Z" fill="#2a0d07"/>`;
+  return `<g transform="translate(${x},${base}) scale(${s})">`+cloak+
+    `<g opacity=".75" ${BLUR(1)}>${parts(rim, 'stroke="'+rim+'" stroke-width="5" stroke-linejoin="round"')}</g>`+
+    parts(color, "")+
+    `<path d="M-7,-139 L-3,-138 M3,-138 L7,-139" stroke="#ff7a3a" stroke-width="1.8"/>${glow(-5,-138,5,"#ff5a1f",.9)}${glow(5,-138,5,"#ff5a1f",.9)}`+
+    `<path d="M114,-180 C122,-196 112,-216 92,-216 M-114,-180 C-122,-196 -112,-216 -92,-216" stroke="${rim}" stroke-width="2" fill="none" class="win"/>`+
+  `</g>`;
+}
+SCENES["classes/berserker"] = r=>({sky:["#1c0604","#9a2e10"], fx:"embers", acc:"#ff9a3d", art:
+  glow(860,170,400,"#ff6a2b",.6)+`<circle cx="860" cy="168" r="118" fill="#e8502a"/><circle cx="860" cy="168" r="118" fill="#ffb04a" opacity=".22"/>`+smoke(r,"#000",5,.3)+
+  `<path d="M-20,${SH} L-20,150 L60,110 L150,140 L240,100 L330,150 L420,170 L520,220 L560,250 L560,${SH} Z" fill="#2a0c06"/>`+
+  `<path d="M1220,${SH} L1220,120 L1150,90 L1080,130 L1020,160 L980,210 L960,250 L960,${SH} Z" fill="#2a0c06"/>`+
+  `<rect x="0" y="250" width="${SW}" height="90" fill="#3a1208"/>`+
+  `<g>${Array.from({length:8},(_,i)=>`<rect class="shim" style="animation-delay:${-i*.4}s" x="${f1(800-60+i*3)}" y="${256+i*8}" width="${f1(120-i*10)}" height="2" rx="1" fill="#ffb04a" opacity="${f1(.5-i*.05)}"/>`).join("")}</g>`+
+  longship(1060,258,.6,"#120403","#5a140a","#c8402a")+
+  `<path d="M650,${SH} L690,286 L760,268 L840,262 L930,266 L990,284 L1020,${SH} Z" fill="#0c0302"/>`+
+  viking2(860,272,1.05,"#0c0302","#ffb070")+
+  brazier(610,326,"#0c0302")+hills(r,330,6,"#0c0302",1)});
+
 
 const CATS = {
   crafted:  {label:"Crafted",      title:"Crafted sets",      intro:"Crafted sets are made at their own station, in any armor weight and any slot, once you've researched the listed number of traits. Low-trait sets are levelling gear; the 6+ trait sets are built to last into the endgame."},
