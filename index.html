@@ -1570,7 +1570,7 @@ SIL.ninja = "M-17,0 L-13,-44 L-17,-56 Q-11,-64 -6,-63 L-6,-68 Q-7,-81 0,-82 Q7,-
 function ninja(x, base, s, color, eye){
   return `<g transform="translate(${x},${base}) scale(${s})">`+
     `<g class="sway" style="transform-origin:-5px -73px;animation-duration:1.4s"><path d="M-5,-73 C-16,-72 -24,-78 -36,-72 C-28,-74 -18,-70 -5,-70 Z M-5,-71 C-14,-66 -22,-68 -32,-60 C-24,-64 -16,-64 -5,-68 Z" fill="${color}"/></g>`+
-    `<path d="M-14,-46 L9,-82" stroke="${color}" stroke-width="2.2" stroke-linecap="round"/><path d="M6,-79 L12,-75 L13,-77 L7,-81 Z" fill="${color}"/><path d="M9,-82 L13,-89" stroke="${color}" stroke-width="2.8" stroke-linecap="round"/>`+
+    `<path d="M-36,-12 L9,-82" stroke="${color}" stroke-width="2.4" stroke-linecap="round"/><path class="win" d="M-35,-14 L-14,-46.5" stroke="#cfe8ff" stroke-width=".7" opacity=".85"/><path d="M6,-79 L12,-75 L13,-77 L7,-81 Z" fill="${color}"/><path d="M9,-82 L13,-89" stroke="${color}" stroke-width="2.8" stroke-linecap="round"/>`+
     `<path d="${SIL.ninja}" fill="${color}"/>`+
     `<path d="M-5,-74 L5,-74 L5,-72.6 L-5,-72.6 Z" fill="${eye}"/>${glow(-2.5,-73.3,4,eye,1)}${glow(2.5,-73.3,4,eye,1)}`+
     `<path d="M-6,-75.6 L6,-75.6" stroke="${color}" stroke-width="1"/>`+
@@ -1586,6 +1586,43 @@ SCENES["classes/shadowblade"] = r=>({sky:["#040912","#13253c"], fx:"motes", acc:
   pagodaRoof(860,300,180,"#03070e")+
   ninja(860,286,2.55,"#03070e","#9fe8ff")+
   fog(250,"#0a1a2a",.55,"fog drift")});
+
+/* ---------- Alchemist & Blood Maiden: knight silhouette language ---------- */
+SIL.alchRobe = "M-26,0 L-17,-46 L-20,-58 Q-13,-66 -6,-64 L-6,-70 Q0,-80 6,-70 L6,-64 Q13,-66 20,-58 L17,-46 L26,0 Z";
+SIL.gown = "M-32,0 C-25,-14 -17,-30 -12,-44 L-14,-56 Q-10,-62 -5,-62 L-5,-68 Q-7,-80 0,-82 Q7,-80 5,-68 L5,-62 Q10,-62 14,-56 L12,-44 C17,-30 25,-14 32,0 Z";
+function alchemist(x, base, s, color, potion){
+  return `<g transform="translate(${x},${base}) scale(${s})">`+
+    `<path d="${SIL.alchRobe}" fill="${color}"/>`+
+    `<ellipse cx="0" cy="-74" rx="14" ry="2.6" fill="${color}"/><path d="M-6,-75 L-4.5,-89 Q0,-92 4.5,-89 L6,-75 Z" fill="${color}"/>`+
+    `${glow(-2.6,-70.5,4,"#ffb04a",1)}${glow(2.6,-70.5,4,"#ffb04a",1)}<circle cx="-2.6" cy="-70.5" r="1.5" fill="#ffd27a"/><circle cx="2.6" cy="-70.5" r="1.5" fill="#ffd27a"/>`+
+    `<path d="M16,-58 Q24,-64 27,-80" stroke="${color}" stroke-width="5" stroke-linecap="round" fill="none"/>`+
+    `<g class="bob" style="animation-duration:3s">${glow(29,-90,34,potion,.9)}<path d="M27.5,-97 L30.5,-97 L30.5,-93 C35,-92 36,-84 29,-82 C22,-84 23,-92 27.5,-93 Z" fill="${color}"/><path d="M24.5,-88 C25,-84 33,-84 33.5,-88 Z" fill="${potion}"/></g>`+
+    [-10,-4,2,8].map((vx,i)=>`<rect x="${vx}" y="-42" width="3" height="6" rx="1" fill="${color}"/>${glow(vx+1.5,-38,4,["#ff8ad8","#7dff9a","#ffcf5a","#7fd0ff"][i],.9)}`).join("")+
+  `</g>`;
+}
+function maiden(x, base, s, color, blood){
+  return `<g transform="translate(${x},${base}) scale(${s})">`+
+    `<g class="sway slow" style="transform-origin:0px -60px"><path d="M-12,-44 C-20,-30 -30,-14 -40,-2 L-32,0 C-24,-16 -16,-30 -10,-42 Z M12,-44 C20,-30 30,-14 40,-2 L32,0 C24,-16 16,-30 10,-42 Z" fill="${color}" opacity=".85"/></g>`+
+    `<path d="${SIL.gown}" fill="${color}"/>`+
+    `${glow(-2.5,-71,3.5,blood,1)}${glow(2.5,-71,3.5,blood,1)}<rect x="-3.6" y="-71.6" width="2.4" height="1.2" fill="#ffb0be"/><rect x="1.2" y="-71.6" width="2.4" height="1.2" fill="#ffb0be"/>`+
+    `<path d="M13,-54 Q22,-58 30,-66" stroke="${color}" stroke-width="3.6" stroke-linecap="round" fill="none"/>`+
+    `<g>${glow(34,-72,30,blood,.85)}<circle cx="34" cy="-72" r="4.5" fill="#ff6a80"/><g class="spin" style="transform-origin:34px -72px;animation-duration:3s">${[0,1,2,3,4].map(i=>{const a=i/5*Math.PI*2; return `<path d="M${f1(34+Math.cos(a)*11)},${f1(-72+Math.sin(a)*11-2)} C${f1(34+Math.cos(a)*11+1.6)},${f1(-72+Math.sin(a)*11)} ${f1(34+Math.cos(a)*11+1.6)},${f1(-72+Math.sin(a)*11+2.4)} ${f1(34+Math.cos(a)*11)},${f1(-72+Math.sin(a)*11+2.4)} C${f1(34+Math.cos(a)*11-1.6)},${f1(-72+Math.sin(a)*11+2.4)} ${f1(34+Math.cos(a)*11-1.6)},${f1(-72+Math.sin(a)*11)} ${f1(34+Math.cos(a)*11)},${f1(-72+Math.sin(a)*11-2)} Z" fill="${blood}"/>`;}).join("")}</g></g>`+
+  `</g>`;
+}
+SCENES["classes/alchemist"] = r=>({sky:["#120c06","#3a2610"], fx:"motes", acc:"#9dffb0", art:
+  `<rect x="0" y="0" width="${SW}" height="${SH}" fill="#1a1108"/>`+
+  `<circle cx="860" cy="130" r="122" fill="#0c0804"/>`+glow(860,130,240,"#7fb0ff",.3)+`<circle cx="860" cy="130" r="112" fill="#1a2a4a"/>`+stars(r,40,"#fff").replace(/cx="([\d.]+)"/g,(m,x)=>`cx="${f1(760+ (+x%200))}"`).replace(/cy="([\d.]+)"/g,(m,y)=>`cy="${f1(40+(+y%170))}"`)+
+  moon(900,100,30,"#f2ecda","#c9c8ff")+`<path d="M860,8 L860,252 M738,130 L982,130" stroke="#0c0804" stroke-width="9"/><circle cx="860" cy="130" r="112" fill="none" stroke="#0c0804" stroke-width="10"/>`+
+  `<g>${[[150,60],[300,90],[1100,70],[1180,110]].map(([x,y])=>`<rect x="${x-70}" y="${y}" width="140" height="6" fill="#0c0804"/>`).join("")}</g>`+
+  flasks(r,302,"#0c0804","#ff8ad8").replace(/<path d="M(\d+)/g,"<path d=\"M$1")+lanterns(r,5,"#ffbe55","#0008")+
+  `<rect x="0" y="300" width="${SW}" height="44" fill="#0c0804"/>`+bubbles(r,22,"#9dffb0")+
+  `<g transform="translate(860,316)">${glow(0,-110,170,"#7dff9a",.35)}</g>`+alchemist(860,316,2.5,"#060402","#7dff9a")});
+SCENES["classes/blood-maiden"] = r=>({sky:["#12050a","#4d1020"], fx:"petals", acc:"#ff3a5c", art:
+  stars(r,60,"#ffd6de")+bigMoon(860,128,100,"#c4283f","#ff3a5c").replace(/fill="#000"/g,'fill="#5a0a14"')+
+  `<path d="M690,${SH} L690,150 A170,170 0 0 1 1030,150 L1030,${SH} L1000,${SH} L1000,158 A140,140 0 0 0 720,158 L720,${SH} Z" fill="#160509"/>`+
+  thorns(r,SH,"#1a070c","#c4223f","#6e0f1f")+
+  `<rect x="0" y="312" width="${SW}" height="40" fill="#0c0306"/>`+
+  `<g transform="translate(860,318)">${glow(0,-110,170,"#ff3a5c",.35)}</g>`+maiden(860,318,2.5,"#0a0205","#ff3a5c")});
 
 
 const CATS = {
